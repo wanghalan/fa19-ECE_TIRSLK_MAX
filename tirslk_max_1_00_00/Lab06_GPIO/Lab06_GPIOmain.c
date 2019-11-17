@@ -75,13 +75,12 @@ int main(void){
   Reflectance_Init();
   TExaS_Init(LOGICANALYZER_P7);
   while(1){
-    TExaS_Init(LOGICANALYZER_P7);
     Data = Reflectance_Read(1000);
 
     Position = Reflectance_Position(Data);
-    //Clock_Delay1ms(10);
+//    Clock_Delay1ms(10);
 
-    printf("Data: %d, Position: %d\n", Data, Position);
+//    printf("Data: %d, Position: %d\n", Data, Position);
   }
 }
 

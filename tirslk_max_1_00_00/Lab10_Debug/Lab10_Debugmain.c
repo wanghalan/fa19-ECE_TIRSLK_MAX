@@ -141,7 +141,7 @@ void PWM_LED(uint32_t percentage){
 
 //    P2->OUT^= 0X06; //Toggle sky blue LED
     P1->OUT^= 0x01; //toggle red LED
-    if (P1->OUT&= 0x01){ //red on
+    if (P2->OUT&= 0x02){ //red on
         SysTick->LOAD= H; //time while high
     }else{ //red off
         SysTick->LOAD= L; //time while low
@@ -156,35 +156,35 @@ void PWM_Init(void){
 }
 
 uint32_t Reflectance_Counter= 0;
-uint32_t position= 0;
+uint32_t Position= 0;
 uint32_t power_percentage= 0;
 uint32_t status= 0;
 uint32_t data=0;
 
 void Reflectance_Handler(void){
-    Reflectance_Counter%= 1000;
-    status= 1;
+    Reflectance_Counter%= 100;
+//    status= 1;
 
-//    P1->OUT&= ~0x01; //Red LED off
-    P1->OUT&= ~0x01;
-    P2->OUT&= ~0x02;
+    P1->OUT&= ~0x01; //Red LED OFF
+    P2->OUT&= ~0x02; //Green LED OFF
 
     if (Reflectance_Counter == 0){
-        status= 2;
+//        status= 2;
         Reflectance_Start();
-    }
-    if (Reflectance_Counter==9){
+    }else if (Reflectance_Counter==1){
         P7->DIR &= 0x00; //Set p7 to Input (0)
     }
     else if (Reflectance_Counter >= 99){
-        status= 3;
+        //status= 3;
         data= Reflectance_End();
-        position= Reflectance_Position(data);
+        Position= Reflectance_Position(data);
 
-        power_percentage = abs(position)*100/334;
-        P1->OUT|= 0x01;
-        if (position!= 0){
-            P2->OUT|= 0x02;
+        power_percentage = abs(Position)*100/334;
+        P1->OUT|= 0x01; //Red LED ON
+
+        if (Position!= 0){
+            P2->OUT|= 0x02; //Green LED ON
+//            PWM_LED(power_percentage);
         }
     }
 
@@ -208,7 +208,7 @@ int main(void){
   Reflectance_Init();
   Bump_Init();
 
-  SysTick_Init(10, 2); //initialize the sys tick cycle; change the period between the reflectance here
+  SysTick_Init(480, 2); //initialize the sys tick cycle; change the period between the reflectance here
   EnableInterrupts();
   while(1){
   }
