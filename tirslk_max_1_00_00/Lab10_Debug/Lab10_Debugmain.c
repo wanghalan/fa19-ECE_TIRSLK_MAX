@@ -162,32 +162,32 @@ uint32_t status= 0;
 uint32_t data=0;
 
 void Reflectance_Handler(void){
-    Reflectance_Counter%= 10;
+    Reflectance_Counter%= 1000;
     status= 1;
 
 //    P1->OUT&= ~0x01; //Red LED off
+    P1->OUT&= ~0x01;
+    P2->OUT&= ~0x02;
 
     if (Reflectance_Counter == 0){
         status= 2;
         Reflectance_Start();
     }
-//    if (Reflectance_Counter==1){
-//        P7->DIR &= 0x00; //Set p7 to Input (0)
-//    }
-    else if (Reflectance_Counter >= 10){
+    if (Reflectance_Counter==9){
+        P7->DIR &= 0x00; //Set p7 to Input (0)
+    }
+    else if (Reflectance_Counter >= 99){
         status= 3;
         data= Reflectance_End();
         position= Reflectance_Position(data);
 
-        //power_percentage = abs(position)*100/334;
-        PWM_LED(power_percentage);
+        power_percentage = abs(position)*100/334;
+        P1->OUT|= 0x01;
+        if (position!= 0){
+            P2->OUT|= 0x02;
+        }
     }
 
-    if (position== 0){
-        P2->OUT|= 0x06; //Toggle sky blue LED
-    }else{
-        P2->OUT|= 0x02; //Toggle greem
-    }
 
     Reflectance_Counter+= 1;
     //printf("Counter: %d, Status: %d, data: %d, Position: %d, Power Percentage: %d\n", Reflectance_Counter, status, data, position, power_percentage);
@@ -208,7 +208,7 @@ int main(void){
   Reflectance_Init();
   Bump_Init();
 
-  SysTick_Init(Total, 2); //initialize the sys tick cycle; change the period between the reflectance here
+  SysTick_Init(10, 2); //initialize the sys tick cycle; change the period between the reflectance here
   EnableInterrupts();
   while(1){
   }

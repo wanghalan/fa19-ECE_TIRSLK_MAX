@@ -183,8 +183,8 @@ void Reflectance_Start(void){
     P9->OUT |= 0x02; //Set p9.2 to HIGH
     P7->DIR |= ~0x00; //Set p7 to Output (1)
     P7->OUT |= ~0x00; //Set p7 all to HIGH
-    Clock_Delay1us(10);   // wait 10 us
-    P7->DIR &= 0x00; //Set p7 to Input (0)
+//    Clock_Delay1us(10);   // wait 10 us
+//    P7->DIR &= 0x00; //Set p7 to Input (0)
 }
 
 

@@ -79,7 +79,7 @@ int main(void){
     Data = Reflectance_Read(1000);
 
     Position = Reflectance_Position(Data);
-    Clock_Delay1ms(10);
+    //Clock_Delay1ms(10);
 
     printf("Data: %d, Position: %d\n", Data, Position);
   }
