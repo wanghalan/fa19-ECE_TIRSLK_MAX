@@ -155,27 +155,35 @@ void PWM_Init(void){
     H= High;
 }
 
+
 uint32_t Reflectance_Counter= 0;
 uint32_t Position= 0;
 uint32_t power_percentage= 0;
-uint32_t status= 0;
+uint32_t toggle_status= 0;
 uint32_t data=0;
+
+void Scaled_Green_LED(int percentage){
+    //Do PWD on a reflectance counter? Assuming between 0 and 100
+    if (toggle_status > 0){
+        if (percentage > Reflectance_Counter){
+            P2->OUT|= 0x02; //Green LED ON
+        }else{
+            P2->OUT&= ~0x02; //Green LED OFF
+        }
+    }
+}
 
 void Reflectance_Handler(void){
     Reflectance_Counter%= 100;
-//    status= 1;
 
     P1->OUT&= ~0x01; //Red LED OFF
-    P2->OUT&= ~0x02; //Green LED OFF
 
     if (Reflectance_Counter == 0){
-//        status= 2;
         Reflectance_Start();
     }else if (Reflectance_Counter==1){
         P7->DIR &= 0x00; //Set p7 to Input (0)
     }
     else if (Reflectance_Counter >= 99){
-        //status= 3;
         data= Reflectance_End();
         Position= Reflectance_Position(data);
 
@@ -183,12 +191,14 @@ void Reflectance_Handler(void){
         P1->OUT|= 0x01; //Red LED ON
 
         if (Position!= 0){
-            P2->OUT|= 0x02; //Green LED ON
-//            PWM_LED(power_percentage);
+            //P2->OUT|= 0x02; //Green LED ON
+            //PWM_LED(power_percentage);
+            toggle_status= 1;
+        }else{
+            toggle_status= 0;
         }
     }
-
-
+    Scaled_Green_LED(power_percentage);
     Reflectance_Counter+= 1;
     //printf("Counter: %d, Status: %d, data: %d, Position: %d, Power Percentage: %d\n", Reflectance_Counter, status, data, position, power_percentage);
 }
