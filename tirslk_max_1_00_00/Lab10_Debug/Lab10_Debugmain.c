@@ -160,7 +160,7 @@ uint32_t Reflectance_Counter= 0;
 uint32_t Position= 0;
 uint32_t power_percentage= 0;
 uint32_t toggle_status= 0;
-uint32_t data=0;
+uint32_t bump_data=0;
 
 void Scaled_Green_LED(int percentage){
     //Do PWD on a reflectance counter? Assuming between 0 and 100
@@ -173,10 +173,18 @@ void Scaled_Green_LED(int percentage){
     }
 }
 
+void Bump_LED(void){
+    if (bump_data!= 0){
+        P1->OUT|= 0x01; //Red LED ON
+    }else{
+        P1->OUT&= ~0x01; //Red LED OFF
+    }
+}
+
 void Reflectance_Handler(void){
     Reflectance_Counter%= 100;
 
-    P1->OUT&= ~0x01; //Red LED OFF
+    //P1->OUT&= ~0x01; //Red LED OFF
 
     if (Reflectance_Counter == 0){
         Reflectance_Start();
@@ -184,11 +192,10 @@ void Reflectance_Handler(void){
         P7->DIR &= 0x00; //Set p7 to Input (0)
     }
     else if (Reflectance_Counter >= 99){
-        data= Reflectance_End();
-        Position= Reflectance_Position(data);
-
+        Position= Reflectance_Position(Reflectance_End());
+        bump_data= Bump_Read();
         power_percentage = abs(Position)*100/334;
-        P1->OUT|= 0x01; //Red LED ON
+        //P1->OUT|= 0x01; //Red LED ON
 
         if (Position!= 0){
             //P2->OUT|= 0x02; //Green LED ON
@@ -199,6 +206,8 @@ void Reflectance_Handler(void){
         }
     }
     Scaled_Green_LED(power_percentage);
+    Bump_LED();
+
     Reflectance_Counter+= 1;
     //printf("Counter: %d, Status: %d, data: %d, Position: %d, Power Percentage: %d\n", Reflectance_Counter, status, data, position, power_percentage);
 }

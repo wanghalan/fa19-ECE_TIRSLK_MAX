@@ -70,7 +70,34 @@ void Bump_Init(void){
 // bit 0 Bump0
 uint8_t Bump_Read(void){
     // write this as part of Lab 10
+    // Negative logic bump sensors
+    // P4.7 Bump5, left side of robot
+    // P4.6 Bump4
+    // P4.5 Bump3
+    // P4.3 Bump2
+    // P4.2 Bump1
+    // P4.0 Bump0, right side of robot
+    uint8_t result= 0;
+    //result= P4->OUT & 0x87; //Hex representation of 110110111;
+    if (!P4->OUT & 0x01){//pin 0
+        result+= 1;
+    }
+    if (!P4->OUT & 0x04){//pin 2
+        result+= 2;
+    }
+    if (!P4->OUT & 0x08){//pin 3
+        result+= 4;
+    }
+    if (!P4->OUT & 0x20){//pin 5
+        result+= 8;
+    }
+    if (!P4->OUT & 0x40){//pin 6
+        result+= 16;
+    }
+    if (!P4->OUT & 0x80){//pin 7
+        result+= 32;
+    }
 
-    return 0; // replace this line
+    return result;
 }
 
