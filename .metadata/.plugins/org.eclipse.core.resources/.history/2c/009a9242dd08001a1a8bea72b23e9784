@@ -146,11 +146,10 @@ void PWM_Example(void){
 void PWM_Init(void){
     P1->DIR |= 0x01; //LED pin out
     P1->OUT |= 0x01; //red LED on
-    H= High;
 }
 
 void SysTick_Handler(void){ // every 1ms
-//    PWM_Example();
+    //PWM_Example();
 }
 
 
@@ -162,7 +161,7 @@ int main(void){
 
   SysTick_Init(High, 2); //initialize the sys tick cycle; change the period between the reflectance here
   EnableInterrupts();
-
+  H= High;
   while(1){
   }
 }

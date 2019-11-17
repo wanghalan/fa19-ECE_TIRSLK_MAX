@@ -143,14 +143,8 @@ void PWM_Example(void){
     SysTick->VAL= 0; //value written to counter clears
 }
 
-void PWM_Init(void){
-    P1->DIR |= 0x01; //LED pin out
-    P1->OUT |= 0x01; //red LED on
-    H= High;
-}
-
 void SysTick_Handler(void){ // every 1ms
-//    PWM_Example();
+
 }
 
 
@@ -158,11 +152,13 @@ int main(void){
   // write this as part of Lab 10
   Clock_Init48MHz();
   Debug_Init();
-  LaunchPad_Init();   // buttons and LEDs
-
+//  LaunchPad_Init();   // buttons and LEDs
+  P1->DIR |= 0x01; //LED pin out
+  P1->OUT |= 0x01; //red LED on
+  // Range is 48 to 480000
   SysTick_Init(High, 2); //initialize the sys tick cycle; change the period between the reflectance here
   EnableInterrupts();
-
+  H= High;
   while(1){
   }
 }

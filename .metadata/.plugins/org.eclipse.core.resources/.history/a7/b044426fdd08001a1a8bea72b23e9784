@@ -150,7 +150,7 @@ void PWM_Init(void){
 }
 
 void SysTick_Handler(void){ // every 1ms
-//    PWM_Example();
+    PWM_Example();
 }
 
 
