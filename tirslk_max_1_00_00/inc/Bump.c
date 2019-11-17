@@ -54,8 +54,8 @@ policies, either expressed or implied, of the FreeBSD Project.
 // pins 7,6,5,3,2,0
 void Bump_Init(void){
     // write this as part of Lab 10
-//    P4->DIR = 0xFF;       // make P7.7-P7.0 out
-    P4->DIR = 0x00;       // make P7.7-P7.0 in
+    P4->DIR = 0xFF;       // make P7.7-P7.0 out
+//    P4->DIR = 0x00;       // make P7.7-P7.0 in
     P4->OUT = 0xFF;       // prime for measurement
 //    Clock_Delay1us(10);   // wait 10 us
 
@@ -78,26 +78,29 @@ uint8_t Bump_Read(void){
     // P4.2 Bump1
     // P4.0 Bump0, right side of robot
     uint8_t result= 0;
-    //result= P4->OUT & 0x87; //Hex representation of 110110111;
-    if (!P4->OUT & 0x01){//pin 0
+    //result= P4->IN & ~0x87 ; //Hex representation of 110110111;
+
+//    BITBAND_PERI(P1OUT,0)=1;
+    //int bumps= P4->IN;
+
+    if (!(P4->IN & 0x01)){//pin 0
         result+= 1;
     }
-    if (!P4->OUT & 0x04){//pin 2
+    if (!(P4->IN & 0x04)){//pin 2
         result+= 2;
     }
-    if (!P4->OUT & 0x08){//pin 3
+    if (!(P4->IN & 0x08)){//pin 3
         result+= 4;
     }
-    if (!P4->OUT & 0x20){//pin 5
+    if (!(P4->IN & 0x20)){//pin 5
         result+= 8;
     }
-    if (!P4->OUT & 0x40){//pin 6
+    if (!(P4->IN & 0x40)){//pin 6
         result+= 16;
     }
-    if (!P4->OUT & 0x80){//pin 7
-        result+= 32;
+    if (!(P4->IN & 0x80)){//pin 7
+        result= 32;
     }
-
     return result;
 }
 
