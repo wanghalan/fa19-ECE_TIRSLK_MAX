@@ -116,9 +116,7 @@ uint8_t Reflectance_Read(uint32_t time){
 
     P7->DIR |= ~0x00; //Set p7 to Output (1)
     P7->OUT |= ~0x00; //Set p7 all to HIGH
-
     Clock_Delay1us(10);   // wait 10 us
-
     P7->DIR &= 0x00; //Set p7 to Input (0)
 
     Clock_Delay1us(time);
@@ -168,7 +166,7 @@ int32_t Reflectance_Position(uint8_t data){
         }
     }
 //    printf("Result: %d, total count:%d ", result, total_count);
-    return result/(total_count); // replace this line
+    return result/(total_count); //
 }
 
 
@@ -184,7 +182,7 @@ void Reflectance_Start(void){
     P5->OUT |= 0x04; //Set p5.3 to HIGH
     P9->OUT |= 0x02; //Set p9.2 to HIGH
     P7->DIR |= ~0x00; //Set p7 to Output (1)
-    P7->OUT |= ~0x00; //Set p7 all to HIGH; turn on the 8 IR LEDs
+    P7->OUT |= ~0x00; //Set p7 all to HIGH
     Clock_Delay1us(10);   // wait 10 us
     P7->DIR &= 0x00; //Set p7 to Input (0)
 }

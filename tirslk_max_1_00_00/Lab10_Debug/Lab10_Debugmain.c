@@ -71,7 +71,7 @@ policies, either expressed or implied, of the FreeBSD Project.
 #include "..\inc\FlashProgram.h"
 
 ////To help with debugging... many errors
-//#include <stdint.h>
+#include <stdint.h>
 #include "..\inc\TExaS.h"
 
 int starting;
@@ -80,17 +80,7 @@ int debug_array_x[256];
 int debug_array_y[256];
 int debug_array_element;
 
-const uint32_t PulseBuf[100]={
-    5000, 5308, 5614, 5918, 6219, 6514, 6804, 7086, 7361, 7626,
-    7880, 8123, 8354, 8572, 8776, 8964, 9137, 9294, 9434, 9556,
-    9660, 9746, 9813, 9861, 9890, 9900, 9890, 9861, 9813, 9746,
-    9660, 9556, 9434, 9294, 9137, 8964, 8776, 8572, 8354, 8123,
-    7880, 7626, 7361, 7086, 6804, 6514, 6219, 5918, 5614, 5308,
-    5000, 4692, 4386, 4082, 3781, 3486, 3196, 2914, 2639, 2374,
-    2120, 1877, 1646, 1428, 1224, 1036,  863,  706,  566,  444,
-     340,  254,  187,  139,  110,  100,  110,  139,  187,  254,
-     340,  444,  566,  706,  863, 1036, 1224, 1428, 1646, 1877,
-    2120, 2374, 2639, 2914, 3196, 3486, 3781, 4082, 4386, 4692};
+
 int H,L;
 uint32_t i=0;
 uint32_t Input;
@@ -143,14 +133,70 @@ void PWM_Example(void){
     SysTick->VAL= 0; //value written to counter clears
 }
 
+//Assumes opacity is between 0 and 1
+void PWM_LED(uint32_t percentage){
+    //Between 0 and 1, change the strength of the LED light
+    H= (Total * percentage) / 100;
+    L= Total- H;
+
+//    P2->OUT^= 0X06; //Toggle sky blue LED
+    P1->OUT^= 0x01; //toggle red LED
+    if (P1->OUT&= 0x01){ //red on
+        SysTick->LOAD= H; //time while high
+    }else{ //red off
+        SysTick->LOAD= L; //time while low
+    }
+    SysTick->VAL= 0; //value written to counter clears
+}
+
 void PWM_Init(void){
     P1->DIR |= 0x01; //LED pin out
     P1->OUT |= 0x01; //red LED on
     H= High;
 }
 
+uint32_t Reflectance_Counter= 0;
+uint32_t position= 0;
+uint32_t power_percentage= 0;
+uint32_t status= 0;
+uint32_t data=0;
+
+void Reflectance_Handler(void){
+    Reflectance_Counter%= 10;
+    status= 1;
+
+//    P1->OUT&= ~0x01; //Red LED off
+
+    if (Reflectance_Counter == 0){
+        status= 2;
+        Reflectance_Start();
+    }
+//    if (Reflectance_Counter==1){
+//        P7->DIR &= 0x00; //Set p7 to Input (0)
+//    }
+    else if (Reflectance_Counter >= 10){
+        status= 3;
+        data= Reflectance_End();
+        position= Reflectance_Position(data);
+
+        //power_percentage = abs(position)*100/334;
+        PWM_LED(power_percentage);
+    }
+
+    if (position== 0){
+        P2->OUT|= 0x06; //Toggle sky blue LED
+    }else{
+        P2->OUT|= 0x02; //Toggle greem
+    }
+
+    Reflectance_Counter+= 1;
+    //printf("Counter: %d, Status: %d, data: %d, Position: %d, Power Percentage: %d\n", Reflectance_Counter, status, data, position, power_percentage);
+}
+
 void SysTick_Handler(void){ // every 1ms
 //    PWM_Example();
+//    PWM_LED(2);
+    Reflectance_Handler();
 }
 
 
@@ -159,10 +205,11 @@ int main(void){
   Clock_Init48MHz();
   Debug_Init();
   LaunchPad_Init();   // buttons and LEDs
+  Reflectance_Init();
+  Bump_Init();
 
-  SysTick_Init(High, 2); //initialize the sys tick cycle; change the period between the reflectance here
+  SysTick_Init(Total, 2); //initialize the sys tick cycle; change the period between the reflectance here
   EnableInterrupts();
-
   while(1){
   }
 }
