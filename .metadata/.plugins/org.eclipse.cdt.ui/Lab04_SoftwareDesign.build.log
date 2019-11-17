@@ -1,0 +1,8 @@
+
+**** Build of configuration Debug for project Lab04_SoftwareDesign ****
+
+"C:\\ti\\ccs910\\ccs\\utils\\bin\\gmake" -k -j 8 all -O 
+ 
+gmake[1]: 'Lab04_SoftwareDesign.out' is up to date.
+
+**** Build Finished ****

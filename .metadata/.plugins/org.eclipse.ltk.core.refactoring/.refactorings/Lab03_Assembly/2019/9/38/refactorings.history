@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;Lab03_Assembly/convert2.asm&apos; to &apos;convert_backup.asm&apos;" description="Rename resource &apos;convert2.asm&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="convert2.asm" name="convert_backup.asm" stamp="1568808271832" updateReferences="true"/>
+</session>
