@@ -58,16 +58,24 @@ void Motor_InitSimple(void){
 // Returns right away
 // initialize P5.4 and P5.5 and make them outputs
 
-  // write this as part of Lab 12
+//    P5->SEL0 &= 0x00; //Clearing all the bits
+//    P5->SEL1 &= 0x00; //Clearing all the bits
+//    P5->DIR &= 0x00; //all the pins to input (0)
 
+  // write this as part of Lab 12
+    P5->OUT&= ~0x08; //Clear P5.4
+    P5->OUT&= ~0x10; //Clear P5.5
+
+    P5->DIR|= 0x08; //Set P5.4 to Output (1)
+    P5->DIR|= 0x10; //Set P5.5 to Output (1)
 }
 
 void Motor_StopSimple(void){
 // Stops both motors, puts driver to sleep
 // Returns right away
-  P1->OUT &= ~0xC0;
-  P2->OUT &= ~0xC0;   // off
-  P3->OUT &= ~0xC0;   // low current sleep mode
+    P1->OUT &= ~0xC0;
+    P2->OUT &= ~0xC0;   // off
+    P3->OUT &= ~0xC0;   // low current sleep mode
 }
 void Motor_ForwardSimple(uint16_t duty, uint32_t time){
 // Drives both motors forward at duty (100 to 9900)
@@ -76,6 +84,12 @@ void Motor_ForwardSimple(uint16_t duty, uint32_t time){
 // Returns after time*10ms or if a bumper switch is hit
 
   // write this as part of Lab 12
+    P2->OUT|= 0x06; //Green LED ON
+    P3->OUT |= 0xC0;   // low current sleep mode?
+
+    P5->DIR |= 0x18; //00011000 Change direction to forward
+    P1->OUT |= 0xC0;
+    P2->OUT |= 0xC0;   // On
 }
 void Motor_BackwardSimple(uint16_t duty, uint32_t time){
 // Drives both motors backward at duty (100 to 9900)
@@ -85,6 +99,10 @@ void Motor_BackwardSimple(uint16_t duty, uint32_t time){
 
   // write this as part of Lab 12
 }
+
+
+uint32_t counter= 0;
+
 void Motor_LeftSimple(uint16_t duty, uint32_t time){
 // Drives just the left motor forward at duty (100 to 9900)
 // Right motor is stopped (sleeping)
@@ -93,6 +111,21 @@ void Motor_LeftSimple(uint16_t duty, uint32_t time){
 // Returns after time*10ms or if a bumper switch is hit
 
   // write this as part of Lab 12
+    P2->OUT|= 0x02; //LED ON
+
+    if (counter== 0){
+        P3->OUT |= 0x40;   //Right low current sleep mode
+        P3->OUT |= 0x80;   //Enable 3.7 Left no sleep
+        P5->DIR &= ~0x02; //00011000 Change direction to forward, set equal to zero
+    }else{
+        if (counter > time){
+            P2->OUT |= 0x40;   //Setting PWM for 2.7
+            counter= 0;
+        }else{
+            P2->OUT &=~0x40; //Off
+            SysTick_Wait10ms(time);
+        }
+    }
 }
 void Motor_RightSimple(uint16_t duty, uint32_t time){
 // Drives just the right motor forward at duty (100 to 9900)

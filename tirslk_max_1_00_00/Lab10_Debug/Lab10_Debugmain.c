@@ -76,36 +76,73 @@ policies, either expressed or implied, of the FreeBSD Project.
 
 int starting;
 
-int debug_array_x[256];
-int debug_array_y[256];
-int debug_array_element;
+#define SIZE 100
+uint32_t Debug_Buffer[SIZE][2];
+unsigned int Debug_Cnt= 0;
 
 
 int H,L;
 uint32_t i=0;
 uint32_t Input;
 
+uint32_t Reflectance_Counter= 0;
+uint32_t Position= 0;
+uint32_t power_percentage= 0;
+uint32_t bump_data=0;
 
 void Debug_Init(void){
   // write this as part of Lab 10
-    debug_array_element= 0;
+    //debug_array_element= 0;
 //    debug_array_x= {0};
 //    debug_array_y= {0};
 }
-void Debug_Dump(uint8_t x, uint8_t y){
-  // write this as part of Lab 10
-    debug_array_x[debug_array_element]= x;
-    debug_array_y[debug_array_element]= y;
+void Debug_Dump(uint32_t x, uint32_t y){
+    if (Debug_Cnt< SIZE){
+        Debug_Buffer[Debug_Cnt][0]= x; //P1->IN;
+        Debug_Buffer[Debug_Cnt][1]= y; //P2->OUT;
+        Debug_Cnt++;
+        Debug_Cnt %= SIZE; //Roll over
 
-    debug_array_element+= 1;
-    debug_array_element%= 256;
+        Debug_FlashRecord(Debug_Buffer[Debug_Cnt]);
+    }
 }
+
+
+// Flash ROM addresses must be 4k byte aligned, e.g., 0x00020000, 0x00021000, 0x00022000...
+#define FLASH                   0x00020000  // location in flash to write; make sure no program code is in this block
+
 void Debug_FlashInit(void){ 
   // write this as part of Lab 10
 }
-void Debug_FlashRecord(uint16_t *pt){
+
+////------------Flash_WriteArray------------
+//// Write an array of 32-bit data to flash starting at given address.
+//// Parameter 'addr' must be in flash Bank 1.
+//// Input: source pointer to array of 32-bit data
+////        addr   4-byte aligned flash memory address to start writing
+////        count  number of 32-bit writes
+//// Output: number of successful writes; return value == count if completely successful
+//// Note: at 48 MHz, it takes 612 usec to write 10 words
+//// Note: This function is not interrupt safe.
+//int Flash_WriteArray(uint32_t *source, uint32_t addr, uint16_t count){
+//  uint16_t successfulWrites = 0;
+//  while((successfulWrites < count) && (Flash_Write(addr + 4*successfulWrites, source[successfulWrites]) == NOERROR)){
+//    successfulWrites = successfulWrites + 1;
+//  }
+//  return successfulWrites;
+//}
+
+void Debug_FlashRecord(uint64_t *pt){
   // write this as part of Lab 10
+    /* Example:
+     *     SuccessfulWrites = Flash_WriteArray(DataArray, FLASH + 12, 10); // use scope to measure J4.37 (TM4C123 PC4, MSP432 P5.6) high time (610 usec)
+     *     LaunchPad_Output(0);                           // red LED off; green LED off; blue LED off
+     */
+
+    Flash_WriteArray(pt, FLASH+16*(Reflectance_Counter/100), 10); //ugh just copying
 }
+
+
 
 volatile uint32_t Counts;
 int Step_Size= 1000;//rate of change of lights
@@ -155,12 +192,6 @@ void PWM_Init(void){
     H= High;
 }
 
-
-uint32_t Reflectance_Counter= 0;
-uint32_t Position= 0;
-uint32_t power_percentage= 0;
-uint32_t bump_data=0;
-
 void Scaled_Green_LED(int percentage){
     //Do PWD on a reflectance counter? Assuming between 0 and 100
     if (percentage> 0){
@@ -196,7 +227,7 @@ void Reflectance_Handler(void){
         Position= Reflectance_Position(Reflectance_End());
         bump_data= Bump_Read();
         power_percentage = abs(Position)*100/334;
-
+        Debug_Dump(Position, bump_data);
     }
     Scaled_Green_LED(power_percentage);
     Bump_LED(bump_data*100/64);
