@@ -53,6 +53,8 @@ policies, either expressed or implied, of the FreeBSD Project.
 // Right motor enable connected to P3.6 (J2.11)
 // *******Lab 12 solution*******
 
+uint16_t total_duty= 10000;
+
 void Motor_InitSimple(void){
 // Initializes the 6 GPIO lines and puts driver to sleep
 // Returns right away
@@ -63,11 +65,18 @@ void Motor_InitSimple(void){
 //    P5->DIR &= 0x00; //all the pins to input (0)
 
   // write this as part of Lab 12
-    P5->OUT&= ~0x08; //Clear P5.4
-    P5->OUT&= ~0x10; //Clear P5.5
 
-    P5->DIR|= 0x08; //Set P5.4 to Output (1)
-    P5->DIR|= 0x10; //Set P5.5 to Output (1)
+//    P2->SEL0 &= ~0xC0;
+//    P2->SEL1 |= 0xC0;
+
+    P2->DIR |= 0xFF;
+    P3->DIR |= 0xFF;
+    P5->DIR |= 0xFF;
+
+    P2->OUT&= 0x00;
+    P3->OUT&= 0x00;
+    P5->OUT&= 0x00;
+
 }
 
 void Motor_StopSimple(void){
@@ -77,20 +86,45 @@ void Motor_StopSimple(void){
     P2->OUT &= ~0xC0;   // off
     P3->OUT &= ~0xC0;   // low current sleep mode
 }
+
+uint16_t High;
+uint16_t Low;
+
 void Motor_ForwardSimple(uint16_t duty, uint32_t time){
-// Drives both motors forward at duty (100 to 9900)
+// Drives both motors forward at duty (100 to 9900); assumming 10000 is the max
+
+
+
 // Runs for time duration (units=10ms), and then stops
 // Stop the motors and return if any bumper switch is active
 // Returns after time*10ms or if a bumper switch is hit
 
   // write this as part of Lab 12
-    P2->OUT|= 0x06; //Green LED ON
-    P3->OUT |= 0xC0;   // low current sleep mode?
+    //SETTING UP FORWARD PINS
 
-    P5->DIR |= 0x18; //00011000 Change direction to forward
-    P1->OUT |= 0xC0;
-    P2->OUT |= 0xC0;   // On
+
+    P3-> OUT|= 0xC0; //NSleep equal to 1
+    P5-> OUT&= ~0x18; //PH= 0
+
+    if (duty>= 100 & duty<= 10000){
+
+        High= duty;
+        Low= total_duty - duty;
+
+        while(1){
+            P2->OUT^= 0x02; //LED off
+            P2->OUT |= 0xC0;   //Motor On
+            SysTick_Wait(High);
+
+            P2->OUT^= 0x02; //LED off
+            P2->OUT &= ~0xC0;   //Motor Off
+            SysTick_Wait(Low);
+
+
+        }
+    }
 }
+
 void Motor_BackwardSimple(uint16_t duty, uint32_t time){
 // Drives both motors backward at duty (100 to 9900)
 // Runs for time duration (units=10ms), and then stops
@@ -100,8 +134,6 @@ void Motor_BackwardSimple(uint16_t duty, uint32_t time){
   // write this as part of Lab 12
 }
 
-
-uint32_t counter= 0;
 
 void Motor_LeftSimple(uint16_t duty, uint32_t time){
 // Drives just the left motor forward at duty (100 to 9900)
@@ -113,19 +145,11 @@ void Motor_LeftSimple(uint16_t duty, uint32_t time){
   // write this as part of Lab 12
     P2->OUT|= 0x02; //LED ON
 
-    if (counter== 0){
-        P3->OUT |= 0x40;   //Right low current sleep mode
-        P3->OUT |= 0x80;   //Enable 3.7 Left no sleep
-        P5->DIR &= ~0x02; //00011000 Change direction to forward, set equal to zero
-    }else{
-        if (counter > time){
-            P2->OUT |= 0x40;   //Setting PWM for 2.7
-            counter= 0;
-        }else{
-            P2->OUT &=~0x40; //Off
-            SysTick_Wait10ms(time);
-        }
-    }
+    P3->OUT |= 0x40;   //Right low current sleep mode
+    P3->OUT |= 0x80;   //Enable 3.7 Left no sleep
+    P5->DIR &= ~0x02; //00011000 Change direction to forward, set equal to zero
+
+
 }
 void Motor_RightSimple(uint16_t duty, uint32_t time){
 // Drives just the right motor forward at duty (100 to 9900)

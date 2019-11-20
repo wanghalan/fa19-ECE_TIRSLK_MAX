@@ -6,13 +6,12 @@
 Building file: "C:/Users/Alan/Downloads/tirslk_max_1_00_00/tirslk_max_1_00_00/inc/Bump.c"
 Invoking: ARM Compiler
 "C:/ti/ccs910/ccs/tools/compiler/ti-cgt-arm_18.12.2.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/ti/ccs910/ccs/tools/compiler/ti-cgt-arm_18.12.2.LTS/include" --include_path="C:/ti/ccs910/ccs/ccs_base/arm/include" --include_path="C:/ti/ccs910/ccs/ccs_base/arm/include/CMSIS" --advice:power=all --define=__MSP432P401R__ --define=TARGET_IS_MSP432P4XX --define=ccs -g --c99 --gcc --diag_warning=225 --diag_wrap=off --display_error_number --abi=eabi --preproc_with_compile --preproc_dependency="Bump.d_raw"  "C:/Users/Alan/Downloads/tirslk_max_1_00_00/tirslk_max_1_00_00/inc/Bump.c"
+"C:/Users/Alan/Downloads/tirslk_max_1_00_00/tirslk_max_1_00_00/inc/Bump.c", line 87: remark #2623-D: (ULP 5.4) Detected an assignment to a type with size less than int. To avoid unnecessary sign extension, use int-sized types for local varaibles and convert to smaller types for static storage.
+"C:/Users/Alan/Downloads/tirslk_max_1_00_00/tirslk_max_1_00_00/inc/Bump.c", line 90: remark #2623-D: (ULP 5.4) Detected an assignment to a type with size less than int. To avoid unnecessary sign extension, use int-sized types for local varaibles and convert to smaller types for static storage.
+"C:/Users/Alan/Downloads/tirslk_max_1_00_00/tirslk_max_1_00_00/inc/Bump.c", line 93: remark #2623-D: (ULP 5.4) Detected an assignment to a type with size less than int. To avoid unnecessary sign extension, use int-sized types for local varaibles and convert to smaller types for static storage.
+"C:/Users/Alan/Downloads/tirslk_max_1_00_00/tirslk_max_1_00_00/inc/Bump.c", line 96: remark #2623-D: (ULP 5.4) Detected an assignment to a type with size less than int. To avoid unnecessary sign extension, use int-sized types for local varaibles and convert to smaller types for static storage.
+"C:/Users/Alan/Downloads/tirslk_max_1_00_00/tirslk_max_1_00_00/inc/Bump.c", line 99: remark #2623-D: (ULP 5.4) Detected an assignment to a type with size less than int. To avoid unnecessary sign extension, use int-sized types for local varaibles and convert to smaller types for static storage.
 Finished building: "C:/Users/Alan/Downloads/tirslk_max_1_00_00/tirslk_max_1_00_00/inc/Bump.c"
- 
-Building file: "../Lab09_SysTickmain.c"
-Invoking: ARM Compiler
-"C:/ti/ccs910/ccs/tools/compiler/ti-cgt-arm_18.12.2.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/ti/ccs910/ccs/tools/compiler/ti-cgt-arm_18.12.2.LTS/include" --include_path="C:/ti/ccs910/ccs/ccs_base/arm/include" --include_path="C:/ti/ccs910/ccs/ccs_base/arm/include/CMSIS" --advice:power=all --define=__MSP432P401R__ --define=TARGET_IS_MSP432P4XX --define=ccs -g --c99 --gcc --diag_warning=225 --diag_wrap=off --display_error_number --abi=eabi --preproc_with_compile --preproc_dependency="Lab09_SysTickmain.d_raw"  "../Lab09_SysTickmain.c"
-"../Lab09_SysTickmain.c", line 152: warning #225-D: function "H_Off" declared implicitly
-Finished building: "../Lab09_SysTickmain.c"
  
 Building target: "Lab09_SysTick.out"
 Invoking: ARM Linker

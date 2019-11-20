@@ -7630,3 +7630,656 @@ Caused by: org.json.JSONException: Module Closed
 	at com.ti.cloudagent.Agent.createSpecificModule(Agent.java:87)
 	at com.ti.cloudagent.Agent.createDeviceDetector(Agent.java:76)
 	... 16 more
+
+!ENTRY org.eclipse.core.resources 2 566 2019-11-18 00:14:40.263
+!MESSAGE null parent found while collapsing trees
+
+!ENTRY com.ti.ccstudio.debug 1 0 2019-11-18 00:28:45.660
+!MESSAGE DS_ERROR: CORTEX_M4_0: JTAG Communication Error: (Error -261 @ 0x0) Invalid response was received from the XDS110. (Emulation package 8.3.0.00003) 
+
+
+!ENTRY com.ti.ccstudio.debug 1 0 2019-11-18 00:28:45.689
+!MESSAGE DS_ERROR: CORTEX_M4_0: Failed to remove the debug state from the target before disconnecting.  There may still be breakpoint op-codes embedded in program memory.  It is recommended that you reset the emulator before you connect and reload your program before you continue debugging
+
+
+!ENTRY org.eclipse.ui.ide 4 4 2019-11-18 10:15:37.410
+!MESSAGE Problems saving workspace
+
+!ENTRY org.eclipse.ui.ide 4 1 2019-11-18 10:15:37.416
+!MESSAGE Problems occurred while trying to save the state of the workbench.
+!SUBENTRY 1 org.eclipse.core.resources 4 568 2019-11-18 10:15:37.416
+!MESSAGE Could not write workspace metadata 'C:/Users/Alan/Downloads/tirslk_max_1_00_00/.metadata/.plugins/org.eclipse.core.resources/.root/10.tree'.
+!STACK 0
+java.lang.NullPointerException
+	at org.eclipse.core.internal.watson.ElementTreeWriter.sortTrees(ElementTreeWriter.java:125)
+	at org.eclipse.core.internal.watson.ElementTreeWriter.writeDeltaChain(ElementTreeWriter.java:195)
+	at org.eclipse.core.internal.resources.SaveManager.writeTree(SaveManager.java:1974)
+	at org.eclipse.core.internal.resources.SaveManager.saveTree(SaveManager.java:1386)
+	at org.eclipse.core.internal.resources.SaveManager.save(SaveManager.java:1170)
+	at org.eclipse.core.internal.resources.Workspace.save(Workspace.java:2332)
+	at org.eclipse.ui.internal.ide.application.IDEWorkbenchAdvisor$5.run(IDEWorkbenchAdvisor.java:526)
+	at org.eclipse.jface.operation.ModalContext$ModalContextThread.run(ModalContext.java:119)
+
+!ENTRY org.eclipse.core.resources 2 10035 2019-11-18 10:15:37.726
+!MESSAGE The workspace will exit with unsaved changes in this session.
+!SESSION 2019-11-18 13:42:32.385 -----------------------------------------------
+eclipse.buildId=4.8.0.I20180611-0500
+java.version=1.8.0_144
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Framework arguments:  -product com.ti.ccstudio.branding.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product com.ti.ccstudio.branding.product
+
+!ENTRY org.eclipse.core.resources 2 10035 2019-11-18 13:42:35.307
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
+
+!ENTRY com.ti.common.core 1 0 2019-11-18 13:42:35.892
+!MESSAGE path=ccs_base/DebugServer
+
+!ENTRY com.ti.common.core 1 0 2019-11-18 13:42:35.892
+!MESSAGE debugServerDir=C:/ti/ccs910/ccs/ccs_base/DebugServer
+
+!ENTRY org.eclipse.launchbar.core 2 0 2019-11-18 13:42:56.061
+!MESSAGE Enablement expression is missing for descriptor type org.eclipse.cdt.debug.core.coreBuildDescriptorType
+
+!ENTRY org.eclipse.launchbar.core 2 0 2019-11-18 13:42:56.108
+!MESSAGE Enablement expression is missing for config provider for org.eclipse.cdt.debug.core.coreBuildDescriptorType
+
+!ENTRY org.eclipse.launchbar.core 2 0 2019-11-18 13:42:56.154
+!MESSAGE Enablement expression is missing for config provider for org.eclipse.cdt.debug.core.coreBuildDescriptorType
+
+!ENTRY com.ti.ccstudio.ui 1 0 2019-11-18 13:42:57.076
+!MESSAGE CCS IDE session started!
+	CCS build: 9.1.0.00010
+	CCS location: C:/ti/ccs910/ccs
+	Workspace location: C:/Users/Alan/Downloads/tirslk_max_1_00_00
+
+!ENTRY com.ti.dbgtrc.webapp.CloudTraceInterface 0 0 2019-11-18 13:42:57.388
+!MESSAGE constructor
+
+!ENTRY com.ti.dbgtrc.webapp.CloudTraceInterface 0 0 2019-11-18 13:42:57.388
+!MESSAGE done with directories
+
+!ENTRY com.ti.dbgtrc.webapp.CloudTraceInterface 0 0 2019-11-18 13:42:57.404
+!MESSAGE loading ti_logger
+
+!ENTRY com.ti.dbgtrc.webapp.CloudTraceInterface 0 0 2019-11-18 13:42:57.404
+!MESSAGE Platform os: win32
+
+!ENTRY com.ti.dbgtrc.webapp.CloudTraceInterface 0 0 2019-11-18 13:42:57.420
+!MESSAGE loading cToolsIF
+
+!ENTRY com.ti.dbgtrc.webapp.CloudTraceInterface 0 0 2019-11-18 13:42:57.467
+!MESSAGE loading cTools
+
+!ENTRY com.ti.dbgtrc.webapp.CloudTraceInterface 0 0 2019-11-18 13:42:57.498
+!MESSAGE loading TraceFactory
+
+!ENTRY com.ti.dbgtrc.webapp.CloudTraceInterface 0 0 2019-11-18 13:42:57.529
+!MESSAGE loading sqlite3
+
+!ENTRY com.ti.dbgtrc.webapp.CloudTraceInterface 0 0 2019-11-18 13:42:57.576
+!MESSAGE loading CloudTrace
+
+!ENTRY com.ti.dbgtrc.webapp.CloudTraceInterface 0 0 2019-11-18 13:42:57.670
+!MESSAGE CloudTrace interface loaded
+
+!ENTRY org.eclipse.core.resources 2 566 2019-11-18 14:07:40.490
+!MESSAGE null parent found while collapsing trees
+
+!ENTRY org.eclipse.core.resources 2 566 2019-11-18 14:13:50.881
+!MESSAGE null parent found while collapsing trees
+
+!ENTRY org.eclipse.core.resources 2 566 2019-11-18 14:19:05.281
+!MESSAGE null parent found while collapsing trees
+
+!ENTRY org.eclipse.core.resources 2 566 2019-11-18 14:27:16.647
+!MESSAGE null parent found while collapsing trees
+
+!ENTRY com.ti.ccstudio.debug 4 0 2019-11-18 15:01:55.208
+!MESSAGE An internal error was logged by 'com.ti.ccstudio.debug'.
+!STACK 0
+java.util.concurrent.ExecutionException: org.json.JSONException: Module Closed
+	at java.util.concurrent.CompletableFuture.reportGet(Unknown Source)
+	at java.util.concurrent.CompletableFuture.get(Unknown Source)
+	at com.ti.ccstudio.debug.service.ApplicationService.getConnectedDebugProbes(ApplicationService.java:295)
+	at com.ti.ccstudio.debug.service.ApplicationService.detectXDS110ConnectedProbes(ApplicationService.java:356)
+	at com.ti.ccstudio.debug.service.ApplicationService.initDebugger(ApplicationService.java:418)
+	at com.ti.ccstudio.debug.service.ApplicationService.access$0(ApplicationService.java:408)
+	at com.ti.ccstudio.debug.service.ApplicationService$ThreadContextCache.retrieve(ApplicationService.java:136)
+	at com.ti.ccstudio.debug.dsf.extensions.concurrent.DataCache.wait(DataCache.java:59)
+	at com.ti.ccstudio.debug.service.ApplicationService.getCpuBeingDebugged(ApplicationService.java:1057)
+	at com.ti.ccstudio.debug.launch.CCSLaunchDelegate$2.execute(CCSLaunchDelegate.java:139)
+	at org.eclipse.cdt.dsf.concurrent.Query.run(Query.java:177)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: org.json.JSONException: Module Closed
+	at com.ti.cloudagent.communication.JSONInterface.call(JSONInterface.java:54)
+	at com.ti.cloudagent.Agent.createModule(Agent.java:171)
+	at com.ti.cloudagent.Agent.lambda$createSpecificModule$4(Agent.java:96)
+	at java.util.concurrent.CompletableFuture.uniHandle(Unknown Source)
+	at java.util.concurrent.CompletableFuture.uniHandleStage(Unknown Source)
+	at java.util.concurrent.CompletableFuture.handle(Unknown Source)
+	at com.ti.cloudagent.Agent.createSpecificModule(Agent.java:87)
+	at com.ti.cloudagent.Agent.createDeviceDetector(Agent.java:76)
+	... 16 more
+
+!ENTRY com.ti.ccstudio.debug 4 0 2019-11-18 15:02:43.675
+!MESSAGE An internal error was logged by 'com.ti.ccstudio.debug'.
+!STACK 0
+java.util.concurrent.ExecutionException: org.json.JSONException: Module Closed
+	at java.util.concurrent.CompletableFuture.reportGet(Unknown Source)
+	at java.util.concurrent.CompletableFuture.get(Unknown Source)
+	at com.ti.ccstudio.debug.service.ApplicationService.getConnectedDebugProbes(ApplicationService.java:295)
+	at com.ti.ccstudio.debug.service.ApplicationService.detectXDS110ConnectedProbes(ApplicationService.java:356)
+	at com.ti.ccstudio.debug.service.ApplicationService.initDebugger(ApplicationService.java:418)
+	at com.ti.ccstudio.debug.service.ApplicationService.access$0(ApplicationService.java:408)
+	at com.ti.ccstudio.debug.service.ApplicationService$ThreadContextCache.retrieve(ApplicationService.java:136)
+	at com.ti.ccstudio.debug.dsf.extensions.concurrent.DataCache.wait(DataCache.java:59)
+	at com.ti.ccstudio.debug.service.ApplicationService.getCpuBeingDebugged(ApplicationService.java:1057)
+	at com.ti.ccstudio.debug.launch.CCSLaunchDelegate$2.execute(CCSLaunchDelegate.java:139)
+	at org.eclipse.cdt.dsf.concurrent.Query.run(Query.java:177)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: org.json.JSONException: Module Closed
+	at com.ti.cloudagent.communication.JSONInterface.call(JSONInterface.java:54)
+	at com.ti.cloudagent.Agent.createModule(Agent.java:171)
+	at com.ti.cloudagent.Agent.lambda$createSpecificModule$4(Agent.java:96)
+	at java.util.concurrent.CompletableFuture.uniHandle(Unknown Source)
+	at java.util.concurrent.CompletableFuture.uniHandleStage(Unknown Source)
+	at java.util.concurrent.CompletableFuture.handle(Unknown Source)
+	at com.ti.cloudagent.Agent.createSpecificModule(Agent.java:87)
+	at com.ti.cloudagent.Agent.createDeviceDetector(Agent.java:76)
+	... 16 more
+
+!ENTRY com.ti.ccstudio.debug 4 0 2019-11-18 15:18:18.329
+!MESSAGE An internal error was logged by 'com.ti.ccstudio.debug'.
+!STACK 0
+java.util.concurrent.ExecutionException: org.json.JSONException: Module Closed
+	at java.util.concurrent.CompletableFuture.reportGet(Unknown Source)
+	at java.util.concurrent.CompletableFuture.get(Unknown Source)
+	at com.ti.ccstudio.debug.service.ApplicationService.getConnectedDebugProbes(ApplicationService.java:295)
+	at com.ti.ccstudio.debug.service.ApplicationService.detectXDS110ConnectedProbes(ApplicationService.java:356)
+	at com.ti.ccstudio.debug.service.ApplicationService.initDebugger(ApplicationService.java:418)
+	at com.ti.ccstudio.debug.service.ApplicationService.access$0(ApplicationService.java:408)
+	at com.ti.ccstudio.debug.service.ApplicationService$ThreadContextCache.retrieve(ApplicationService.java:136)
+	at com.ti.ccstudio.debug.dsf.extensions.concurrent.DataCache.wait(DataCache.java:59)
+	at com.ti.ccstudio.debug.service.ApplicationService.getCpuBeingDebugged(ApplicationService.java:1057)
+	at com.ti.ccstudio.debug.launch.CCSLaunchDelegate$2.execute(CCSLaunchDelegate.java:139)
+	at org.eclipse.cdt.dsf.concurrent.Query.run(Query.java:177)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: org.json.JSONException: Module Closed
+	at com.ti.cloudagent.communication.JSONInterface.call(JSONInterface.java:54)
+	at com.ti.cloudagent.Agent.createModule(Agent.java:171)
+	at com.ti.cloudagent.Agent.lambda$createSpecificModule$4(Agent.java:96)
+	at java.util.concurrent.CompletableFuture.uniHandle(Unknown Source)
+	at java.util.concurrent.CompletableFuture.uniHandleStage(Unknown Source)
+	at java.util.concurrent.CompletableFuture.handle(Unknown Source)
+	at com.ti.cloudagent.Agent.createSpecificModule(Agent.java:87)
+	at com.ti.cloudagent.Agent.createDeviceDetector(Agent.java:76)
+	... 16 more
+
+!ENTRY com.ti.ccstudio.debug 4 0 2019-11-18 15:18:37.659
+!MESSAGE An internal error was logged by 'com.ti.ccstudio.debug'.
+!STACK 0
+java.util.concurrent.ExecutionException: org.json.JSONException: Module Closed
+	at java.util.concurrent.CompletableFuture.reportGet(Unknown Source)
+	at java.util.concurrent.CompletableFuture.get(Unknown Source)
+	at com.ti.ccstudio.debug.service.ApplicationService.getConnectedDebugProbes(ApplicationService.java:295)
+	at com.ti.ccstudio.debug.service.ApplicationService.detectXDS110ConnectedProbes(ApplicationService.java:356)
+	at com.ti.ccstudio.debug.service.ApplicationService.initDebugger(ApplicationService.java:418)
+	at com.ti.ccstudio.debug.service.ApplicationService.access$0(ApplicationService.java:408)
+	at com.ti.ccstudio.debug.service.ApplicationService$ThreadContextCache.retrieve(ApplicationService.java:136)
+	at com.ti.ccstudio.debug.dsf.extensions.concurrent.DataCache.wait(DataCache.java:59)
+	at com.ti.ccstudio.debug.service.ApplicationService.getCpuBeingDebugged(ApplicationService.java:1057)
+	at com.ti.ccstudio.debug.launch.CCSLaunchDelegate$2.execute(CCSLaunchDelegate.java:139)
+	at org.eclipse.cdt.dsf.concurrent.Query.run(Query.java:177)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: org.json.JSONException: Module Closed
+	at com.ti.cloudagent.communication.JSONInterface.call(JSONInterface.java:54)
+	at com.ti.cloudagent.Agent.createModule(Agent.java:171)
+	at com.ti.cloudagent.Agent.lambda$createSpecificModule$4(Agent.java:96)
+	at java.util.concurrent.CompletableFuture.uniHandle(Unknown Source)
+	at java.util.concurrent.CompletableFuture.uniHandleStage(Unknown Source)
+	at java.util.concurrent.CompletableFuture.handle(Unknown Source)
+	at com.ti.cloudagent.Agent.createSpecificModule(Agent.java:87)
+	at com.ti.cloudagent.Agent.createDeviceDetector(Agent.java:76)
+	... 16 more
+
+!ENTRY com.ti.ccstudio.debug 4 0 2019-11-18 15:44:18.927
+!MESSAGE An internal error was logged by 'com.ti.ccstudio.debug'.
+!STACK 0
+java.util.concurrent.ExecutionException: org.json.JSONException: Module Closed
+	at java.util.concurrent.CompletableFuture.reportGet(Unknown Source)
+	at java.util.concurrent.CompletableFuture.get(Unknown Source)
+	at com.ti.ccstudio.debug.service.ApplicationService.getConnectedDebugProbes(ApplicationService.java:295)
+	at com.ti.ccstudio.debug.service.ApplicationService.detectXDS110ConnectedProbes(ApplicationService.java:356)
+	at com.ti.ccstudio.debug.service.ApplicationService.initDebugger(ApplicationService.java:418)
+	at com.ti.ccstudio.debug.service.ApplicationService.access$0(ApplicationService.java:408)
+	at com.ti.ccstudio.debug.service.ApplicationService$ThreadContextCache.retrieve(ApplicationService.java:136)
+	at com.ti.ccstudio.debug.dsf.extensions.concurrent.DataCache.wait(DataCache.java:59)
+	at com.ti.ccstudio.debug.service.ApplicationService.getCpuBeingDebugged(ApplicationService.java:1057)
+	at com.ti.ccstudio.debug.launch.CCSLaunchDelegate$2.execute(CCSLaunchDelegate.java:139)
+	at org.eclipse.cdt.dsf.concurrent.Query.run(Query.java:177)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: org.json.JSONException: Module Closed
+	at com.ti.cloudagent.communication.JSONInterface.call(JSONInterface.java:54)
+	at com.ti.cloudagent.Agent.createModule(Agent.java:171)
+	at com.ti.cloudagent.Agent.lambda$createSpecificModule$4(Agent.java:96)
+	at java.util.concurrent.CompletableFuture.uniHandle(Unknown Source)
+	at java.util.concurrent.CompletableFuture.uniHandleStage(Unknown Source)
+	at java.util.concurrent.CompletableFuture.handle(Unknown Source)
+	at com.ti.cloudagent.Agent.createSpecificModule(Agent.java:87)
+	at com.ti.cloudagent.Agent.createDeviceDetector(Agent.java:76)
+	... 16 more
+
+!ENTRY com.ti.ccstudio.debug 4 0 2019-11-18 15:44:38.785
+!MESSAGE An internal error was logged by 'com.ti.ccstudio.debug'.
+!STACK 0
+java.util.concurrent.ExecutionException: org.json.JSONException: Module Closed
+	at java.util.concurrent.CompletableFuture.reportGet(Unknown Source)
+	at java.util.concurrent.CompletableFuture.get(Unknown Source)
+	at com.ti.ccstudio.debug.service.ApplicationService.getConnectedDebugProbes(ApplicationService.java:295)
+	at com.ti.ccstudio.debug.service.ApplicationService.detectXDS110ConnectedProbes(ApplicationService.java:356)
+	at com.ti.ccstudio.debug.service.ApplicationService.initDebugger(ApplicationService.java:418)
+	at com.ti.ccstudio.debug.service.ApplicationService.access$0(ApplicationService.java:408)
+	at com.ti.ccstudio.debug.service.ApplicationService$ThreadContextCache.retrieve(ApplicationService.java:136)
+	at com.ti.ccstudio.debug.dsf.extensions.concurrent.DataCache.wait(DataCache.java:59)
+	at com.ti.ccstudio.debug.service.ApplicationService.getCpuBeingDebugged(ApplicationService.java:1057)
+	at com.ti.ccstudio.debug.launch.CCSLaunchDelegate$2.execute(CCSLaunchDelegate.java:139)
+	at org.eclipse.cdt.dsf.concurrent.Query.run(Query.java:177)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: org.json.JSONException: Module Closed
+	at com.ti.cloudagent.communication.JSONInterface.call(JSONInterface.java:54)
+	at com.ti.cloudagent.Agent.createModule(Agent.java:171)
+	at com.ti.cloudagent.Agent.lambda$createSpecificModule$4(Agent.java:96)
+	at java.util.concurrent.CompletableFuture.uniHandle(Unknown Source)
+	at java.util.concurrent.CompletableFuture.uniHandleStage(Unknown Source)
+	at java.util.concurrent.CompletableFuture.handle(Unknown Source)
+	at com.ti.cloudagent.Agent.createSpecificModule(Agent.java:87)
+	at com.ti.cloudagent.Agent.createDeviceDetector(Agent.java:76)
+	... 16 more
+
+!ENTRY com.ti.ccstudio.debug 4 0 2019-11-18 16:06:21.010
+!MESSAGE An internal error was logged by 'com.ti.ccstudio.debug'.
+!STACK 0
+java.util.concurrent.ExecutionException: org.json.JSONException: Module Closed
+	at java.util.concurrent.CompletableFuture.reportGet(Unknown Source)
+	at java.util.concurrent.CompletableFuture.get(Unknown Source)
+	at com.ti.ccstudio.debug.service.ApplicationService.getConnectedDebugProbes(ApplicationService.java:295)
+	at com.ti.ccstudio.debug.service.ApplicationService.detectXDS110ConnectedProbes(ApplicationService.java:356)
+	at com.ti.ccstudio.debug.service.ApplicationService.initDebugger(ApplicationService.java:418)
+	at com.ti.ccstudio.debug.service.ApplicationService.access$0(ApplicationService.java:408)
+	at com.ti.ccstudio.debug.service.ApplicationService$ThreadContextCache.retrieve(ApplicationService.java:136)
+	at com.ti.ccstudio.debug.dsf.extensions.concurrent.DataCache.wait(DataCache.java:59)
+	at com.ti.ccstudio.debug.service.ApplicationService.getCpuBeingDebugged(ApplicationService.java:1057)
+	at com.ti.ccstudio.debug.launch.CCSLaunchDelegate$2.execute(CCSLaunchDelegate.java:139)
+	at org.eclipse.cdt.dsf.concurrent.Query.run(Query.java:177)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: org.json.JSONException: Module Closed
+	at com.ti.cloudagent.communication.JSONInterface.call(JSONInterface.java:54)
+	at com.ti.cloudagent.Agent.createModule(Agent.java:171)
+	at com.ti.cloudagent.Agent.lambda$createSpecificModule$4(Agent.java:96)
+	at java.util.concurrent.CompletableFuture.uniHandle(Unknown Source)
+	at java.util.concurrent.CompletableFuture.uniHandleStage(Unknown Source)
+	at java.util.concurrent.CompletableFuture.handle(Unknown Source)
+	at com.ti.cloudagent.Agent.createSpecificModule(Agent.java:87)
+	at com.ti.cloudagent.Agent.createDeviceDetector(Agent.java:76)
+	... 16 more
+
+!ENTRY com.ti.ccstudio.debug 4 0 2019-11-18 16:06:37.324
+!MESSAGE An internal error was logged by 'com.ti.ccstudio.debug'.
+!STACK 0
+java.util.concurrent.ExecutionException: org.json.JSONException: Module Closed
+	at java.util.concurrent.CompletableFuture.reportGet(Unknown Source)
+	at java.util.concurrent.CompletableFuture.get(Unknown Source)
+	at com.ti.ccstudio.debug.service.ApplicationService.getConnectedDebugProbes(ApplicationService.java:295)
+	at com.ti.ccstudio.debug.service.ApplicationService.detectXDS110ConnectedProbes(ApplicationService.java:356)
+	at com.ti.ccstudio.debug.service.ApplicationService.initDebugger(ApplicationService.java:418)
+	at com.ti.ccstudio.debug.service.ApplicationService.access$0(ApplicationService.java:408)
+	at com.ti.ccstudio.debug.service.ApplicationService$ThreadContextCache.retrieve(ApplicationService.java:136)
+	at com.ti.ccstudio.debug.dsf.extensions.concurrent.DataCache.wait(DataCache.java:59)
+	at com.ti.ccstudio.debug.service.ApplicationService.getCpuBeingDebugged(ApplicationService.java:1057)
+	at com.ti.ccstudio.debug.launch.CCSLaunchDelegate$2.execute(CCSLaunchDelegate.java:139)
+	at org.eclipse.cdt.dsf.concurrent.Query.run(Query.java:177)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: org.json.JSONException: Module Closed
+	at com.ti.cloudagent.communication.JSONInterface.call(JSONInterface.java:54)
+	at com.ti.cloudagent.Agent.createModule(Agent.java:171)
+	at com.ti.cloudagent.Agent.lambda$createSpecificModule$4(Agent.java:96)
+	at java.util.concurrent.CompletableFuture.uniHandle(Unknown Source)
+	at java.util.concurrent.CompletableFuture.uniHandleStage(Unknown Source)
+	at java.util.concurrent.CompletableFuture.handle(Unknown Source)
+	at com.ti.cloudagent.Agent.createSpecificModule(Agent.java:87)
+	at com.ti.cloudagent.Agent.createDeviceDetector(Agent.java:76)
+	... 16 more
+
+!ENTRY com.ti.ccstudio.debug 1 0 2019-11-18 16:06:57.235
+!MESSAGE DS_ERROR: CORTEX_M4_0: JTAG Communication Error: (Error -261 @ 0x0) Invalid response was received from the XDS110. (Emulation package 8.3.0.00003) 
+
+
+!ENTRY com.ti.ccstudio.debug 1 0 2019-11-18 16:06:57.310
+!MESSAGE DS_ERROR: CORTEX_M4_0: Failed to remove the debug state from the target before disconnecting.  There may still be breakpoint op-codes embedded in program memory.  It is recommended that you reset the emulator before you connect and reload your program before you continue debugging
+
+
+!ENTRY com.ti.ccstudio.debug 4 0 2019-11-18 16:18:42.080
+!MESSAGE An internal error was logged by 'com.ti.ccstudio.debug'.
+!STACK 0
+java.util.concurrent.ExecutionException: org.json.JSONException: Module Closed
+	at java.util.concurrent.CompletableFuture.reportGet(Unknown Source)
+	at java.util.concurrent.CompletableFuture.get(Unknown Source)
+	at com.ti.ccstudio.debug.service.ApplicationService.getConnectedDebugProbes(ApplicationService.java:295)
+	at com.ti.ccstudio.debug.service.ApplicationService.detectXDS110ConnectedProbes(ApplicationService.java:356)
+	at com.ti.ccstudio.debug.service.ApplicationService.initDebugger(ApplicationService.java:418)
+	at com.ti.ccstudio.debug.service.ApplicationService.access$0(ApplicationService.java:408)
+	at com.ti.ccstudio.debug.service.ApplicationService$ThreadContextCache.retrieve(ApplicationService.java:136)
+	at com.ti.ccstudio.debug.dsf.extensions.concurrent.DataCache.wait(DataCache.java:59)
+	at com.ti.ccstudio.debug.service.ApplicationService.getCpuBeingDebugged(ApplicationService.java:1057)
+	at com.ti.ccstudio.debug.launch.CCSLaunchDelegate$2.execute(CCSLaunchDelegate.java:139)
+	at org.eclipse.cdt.dsf.concurrent.Query.run(Query.java:177)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: org.json.JSONException: Module Closed
+	at com.ti.cloudagent.communication.JSONInterface.call(JSONInterface.java:54)
+	at com.ti.cloudagent.Agent.createModule(Agent.java:171)
+	at com.ti.cloudagent.Agent.lambda$createSpecificModule$4(Agent.java:96)
+	at java.util.concurrent.CompletableFuture.uniHandle(Unknown Source)
+	at java.util.concurrent.CompletableFuture.uniHandleStage(Unknown Source)
+	at java.util.concurrent.CompletableFuture.handle(Unknown Source)
+	at com.ti.cloudagent.Agent.createSpecificModule(Agent.java:87)
+	at com.ti.cloudagent.Agent.createDeviceDetector(Agent.java:76)
+	... 16 more
+
+!ENTRY com.ti.ccstudio.debug 4 0 2019-11-18 16:19:28.393
+!MESSAGE An internal error was logged by 'com.ti.ccstudio.debug'.
+!STACK 0
+java.util.concurrent.ExecutionException: org.json.JSONException: Module Closed
+	at java.util.concurrent.CompletableFuture.reportGet(Unknown Source)
+	at java.util.concurrent.CompletableFuture.get(Unknown Source)
+	at com.ti.ccstudio.debug.service.ApplicationService.getConnectedDebugProbes(ApplicationService.java:295)
+	at com.ti.ccstudio.debug.service.ApplicationService.detectXDS110ConnectedProbes(ApplicationService.java:356)
+	at com.ti.ccstudio.debug.service.ApplicationService.initDebugger(ApplicationService.java:418)
+	at com.ti.ccstudio.debug.service.ApplicationService.access$0(ApplicationService.java:408)
+	at com.ti.ccstudio.debug.service.ApplicationService$ThreadContextCache.retrieve(ApplicationService.java:136)
+	at com.ti.ccstudio.debug.dsf.extensions.concurrent.DataCache.wait(DataCache.java:59)
+	at com.ti.ccstudio.debug.service.ApplicationService.getCpuBeingDebugged(ApplicationService.java:1057)
+	at com.ti.ccstudio.debug.launch.CCSLaunchDelegate$2.execute(CCSLaunchDelegate.java:139)
+	at org.eclipse.cdt.dsf.concurrent.Query.run(Query.java:177)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: org.json.JSONException: Module Closed
+	at com.ti.cloudagent.communication.JSONInterface.call(JSONInterface.java:54)
+	at com.ti.cloudagent.Agent.createModule(Agent.java:171)
+	at com.ti.cloudagent.Agent.lambda$createSpecificModule$4(Agent.java:96)
+	at java.util.concurrent.CompletableFuture.uniHandle(Unknown Source)
+	at java.util.concurrent.CompletableFuture.uniHandleStage(Unknown Source)
+	at java.util.concurrent.CompletableFuture.handle(Unknown Source)
+	at com.ti.cloudagent.Agent.createSpecificModule(Agent.java:87)
+	at com.ti.cloudagent.Agent.createDeviceDetector(Agent.java:76)
+	... 16 more
+
+!ENTRY com.ti.ccstudio.debug 4 0 2019-11-18 16:20:32.698
+!MESSAGE An internal error was logged by 'com.ti.ccstudio.debug'.
+!STACK 0
+java.util.concurrent.ExecutionException: org.json.JSONException: Module Closed
+	at java.util.concurrent.CompletableFuture.reportGet(Unknown Source)
+	at java.util.concurrent.CompletableFuture.get(Unknown Source)
+	at com.ti.ccstudio.debug.service.ApplicationService.getConnectedDebugProbes(ApplicationService.java:295)
+	at com.ti.ccstudio.debug.service.ApplicationService.detectXDS110ConnectedProbes(ApplicationService.java:356)
+	at com.ti.ccstudio.debug.service.ApplicationService.initDebugger(ApplicationService.java:418)
+	at com.ti.ccstudio.debug.service.ApplicationService.access$0(ApplicationService.java:408)
+	at com.ti.ccstudio.debug.service.ApplicationService$ThreadContextCache.retrieve(ApplicationService.java:136)
+	at com.ti.ccstudio.debug.dsf.extensions.concurrent.DataCache.wait(DataCache.java:59)
+	at com.ti.ccstudio.debug.service.ApplicationService.getCpuBeingDebugged(ApplicationService.java:1057)
+	at com.ti.ccstudio.debug.launch.CCSLaunchDelegate$2.execute(CCSLaunchDelegate.java:139)
+	at org.eclipse.cdt.dsf.concurrent.Query.run(Query.java:177)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: org.json.JSONException: Module Closed
+	at com.ti.cloudagent.communication.JSONInterface.call(JSONInterface.java:54)
+	at com.ti.cloudagent.Agent.createModule(Agent.java:171)
+	at com.ti.cloudagent.Agent.lambda$createSpecificModule$4(Agent.java:96)
+	at java.util.concurrent.CompletableFuture.uniHandle(Unknown Source)
+	at java.util.concurrent.CompletableFuture.uniHandleStage(Unknown Source)
+	at java.util.concurrent.CompletableFuture.handle(Unknown Source)
+	at com.ti.cloudagent.Agent.createSpecificModule(Agent.java:87)
+	at com.ti.cloudagent.Agent.createDeviceDetector(Agent.java:76)
+	... 16 more
+
+!ENTRY com.ti.ccstudio.debug 4 0 2019-11-18 16:24:51.221
+!MESSAGE An internal error was logged by 'com.ti.ccstudio.debug'.
+!STACK 0
+java.util.concurrent.ExecutionException: org.json.JSONException: Module Closed
+	at java.util.concurrent.CompletableFuture.reportGet(Unknown Source)
+	at java.util.concurrent.CompletableFuture.get(Unknown Source)
+	at com.ti.ccstudio.debug.service.ApplicationService.getConnectedDebugProbes(ApplicationService.java:295)
+	at com.ti.ccstudio.debug.service.ApplicationService.detectXDS110ConnectedProbes(ApplicationService.java:356)
+	at com.ti.ccstudio.debug.service.ApplicationService.initDebugger(ApplicationService.java:418)
+	at com.ti.ccstudio.debug.service.ApplicationService.access$0(ApplicationService.java:408)
+	at com.ti.ccstudio.debug.service.ApplicationService$ThreadContextCache.retrieve(ApplicationService.java:136)
+	at com.ti.ccstudio.debug.dsf.extensions.concurrent.DataCache.wait(DataCache.java:59)
+	at com.ti.ccstudio.debug.service.ApplicationService.getCpuBeingDebugged(ApplicationService.java:1057)
+	at com.ti.ccstudio.debug.launch.CCSLaunchDelegate$2.execute(CCSLaunchDelegate.java:139)
+	at org.eclipse.cdt.dsf.concurrent.Query.run(Query.java:177)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: org.json.JSONException: Module Closed
+	at com.ti.cloudagent.communication.JSONInterface.call(JSONInterface.java:54)
+	at com.ti.cloudagent.Agent.createModule(Agent.java:171)
+	at com.ti.cloudagent.Agent.lambda$createSpecificModule$4(Agent.java:96)
+	at java.util.concurrent.CompletableFuture.uniHandle(Unknown Source)
+	at java.util.concurrent.CompletableFuture.uniHandleStage(Unknown Source)
+	at java.util.concurrent.CompletableFuture.handle(Unknown Source)
+	at com.ti.cloudagent.Agent.createSpecificModule(Agent.java:87)
+	at com.ti.cloudagent.Agent.createDeviceDetector(Agent.java:76)
+	... 16 more
+
+!ENTRY com.ti.ccstudio.debug 4 0 2019-11-18 16:42:45.234
+!MESSAGE An internal error was logged by 'com.ti.ccstudio.debug'.
+!STACK 0
+java.util.concurrent.ExecutionException: org.json.JSONException: Module Closed
+	at java.util.concurrent.CompletableFuture.reportGet(Unknown Source)
+	at java.util.concurrent.CompletableFuture.get(Unknown Source)
+	at com.ti.ccstudio.debug.service.ApplicationService.getConnectedDebugProbes(ApplicationService.java:295)
+	at com.ti.ccstudio.debug.service.ApplicationService.detectXDS110ConnectedProbes(ApplicationService.java:356)
+	at com.ti.ccstudio.debug.service.ApplicationService.initDebugger(ApplicationService.java:418)
+	at com.ti.ccstudio.debug.service.ApplicationService.access$0(ApplicationService.java:408)
+	at com.ti.ccstudio.debug.service.ApplicationService$ThreadContextCache.retrieve(ApplicationService.java:136)
+	at com.ti.ccstudio.debug.dsf.extensions.concurrent.DataCache.wait(DataCache.java:59)
+	at com.ti.ccstudio.debug.service.ApplicationService.getCpuBeingDebugged(ApplicationService.java:1057)
+	at com.ti.ccstudio.debug.launch.CCSLaunchDelegate$2.execute(CCSLaunchDelegate.java:139)
+	at org.eclipse.cdt.dsf.concurrent.Query.run(Query.java:177)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: org.json.JSONException: Module Closed
+	at com.ti.cloudagent.communication.JSONInterface.call(JSONInterface.java:54)
+	at com.ti.cloudagent.Agent.createModule(Agent.java:171)
+	at com.ti.cloudagent.Agent.lambda$createSpecificModule$4(Agent.java:96)
+	at java.util.concurrent.CompletableFuture.uniHandle(Unknown Source)
+	at java.util.concurrent.CompletableFuture.uniHandleStage(Unknown Source)
+	at java.util.concurrent.CompletableFuture.handle(Unknown Source)
+	at com.ti.cloudagent.Agent.createSpecificModule(Agent.java:87)
+	at com.ti.cloudagent.Agent.createDeviceDetector(Agent.java:76)
+	... 16 more
+
+!ENTRY com.ti.ccstudio.debug 4 0 2019-11-18 16:44:56.585
+!MESSAGE An internal error was logged by 'com.ti.ccstudio.debug'.
+!STACK 0
+java.util.concurrent.ExecutionException: org.json.JSONException: Module Closed
+	at java.util.concurrent.CompletableFuture.reportGet(Unknown Source)
+	at java.util.concurrent.CompletableFuture.get(Unknown Source)
+	at com.ti.ccstudio.debug.service.ApplicationService.getConnectedDebugProbes(ApplicationService.java:295)
+	at com.ti.ccstudio.debug.service.ApplicationService.detectXDS110ConnectedProbes(ApplicationService.java:356)
+	at com.ti.ccstudio.debug.service.ApplicationService.initDebugger(ApplicationService.java:418)
+	at com.ti.ccstudio.debug.service.ApplicationService.access$0(ApplicationService.java:408)
+	at com.ti.ccstudio.debug.service.ApplicationService$ThreadContextCache.retrieve(ApplicationService.java:136)
+	at com.ti.ccstudio.debug.dsf.extensions.concurrent.DataCache.wait(DataCache.java:59)
+	at com.ti.ccstudio.debug.service.ApplicationService.getCpuBeingDebugged(ApplicationService.java:1057)
+	at com.ti.ccstudio.debug.launch.CCSLaunchDelegate$2.execute(CCSLaunchDelegate.java:139)
+	at org.eclipse.cdt.dsf.concurrent.Query.run(Query.java:177)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: org.json.JSONException: Module Closed
+	at com.ti.cloudagent.communication.JSONInterface.call(JSONInterface.java:54)
+	at com.ti.cloudagent.Agent.createModule(Agent.java:171)
+	at com.ti.cloudagent.Agent.lambda$createSpecificModule$4(Agent.java:96)
+	at java.util.concurrent.CompletableFuture.uniHandle(Unknown Source)
+	at java.util.concurrent.CompletableFuture.uniHandleStage(Unknown Source)
+	at java.util.concurrent.CompletableFuture.handle(Unknown Source)
+	at com.ti.cloudagent.Agent.createSpecificModule(Agent.java:87)
+	at com.ti.cloudagent.Agent.createDeviceDetector(Agent.java:76)
+	... 16 more
+
+!ENTRY com.ti.ccstudio.debug 1 0 2019-11-18 21:02:52.550
+!MESSAGE DS_ERROR: CORTEX_M4_0: JTAG Communication Error: (Error -261 @ 0x0) Invalid response was received from the XDS110. (Emulation package 8.3.0.00003) 
+
+
+!ENTRY com.ti.ccstudio.debug 1 0 2019-11-18 21:02:52.592
+!MESSAGE DS_ERROR: CORTEX_M4_0: Failed to remove the debug state from the target before disconnecting.  There may still be breakpoint op-codes embedded in program memory.  It is recommended that you reset the emulator before you connect and reload your program before you continue debugging
+
+!SESSION 2019-11-20 11:11:16.826 -----------------------------------------------
+eclipse.buildId=4.8.0.I20180611-0500
+java.version=1.8.0_144
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Framework arguments:  -product com.ti.ccstudio.branding.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product com.ti.ccstudio.branding.product
+
+!ENTRY org.eclipse.core.resources 2 10035 2019-11-20 11:11:20.301
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
+
+!ENTRY com.ti.common.core 1 0 2019-11-20 11:11:21.309
+!MESSAGE path=ccs_base/DebugServer
+
+!ENTRY com.ti.common.core 1 0 2019-11-20 11:11:21.317
+!MESSAGE debugServerDir=C:/ti/ccs910/ccs/ccs_base/DebugServer
+
+!ENTRY org.eclipse.launchbar.core 2 0 2019-11-20 11:11:44.856
+!MESSAGE Enablement expression is missing for descriptor type org.eclipse.cdt.debug.core.coreBuildDescriptorType
+
+!ENTRY org.eclipse.launchbar.core 2 0 2019-11-20 11:11:44.888
+!MESSAGE Enablement expression is missing for config provider for org.eclipse.cdt.debug.core.coreBuildDescriptorType
+
+!ENTRY org.eclipse.launchbar.core 2 0 2019-11-20 11:11:44.903
+!MESSAGE Enablement expression is missing for config provider for org.eclipse.cdt.debug.core.coreBuildDescriptorType
+
+!ENTRY com.ti.ccstudio.ui 1 0 2019-11-20 11:11:45.825
+!MESSAGE CCS IDE session started!
+	CCS build: 9.1.0.00010
+	CCS location: C:/ti/ccs910/ccs
+	Workspace location: C:/Users/Alan/Downloads/tirslk_max_1_00_00
+
+!ENTRY com.ti.dbgtrc.webapp.CloudTraceInterface 0 0 2019-11-20 11:11:46.247
+!MESSAGE constructor
+
+!ENTRY com.ti.dbgtrc.webapp.CloudTraceInterface 0 0 2019-11-20 11:11:46.278
+!MESSAGE done with directories
+
+!ENTRY com.ti.dbgtrc.webapp.CloudTraceInterface 0 0 2019-11-20 11:11:46.278
+!MESSAGE loading ti_logger
+
+!ENTRY com.ti.dbgtrc.webapp.CloudTraceInterface 0 0 2019-11-20 11:11:46.293
+!MESSAGE Platform os: win32
+
+!ENTRY com.ti.dbgtrc.webapp.CloudTraceInterface 0 0 2019-11-20 11:11:46.309
+!MESSAGE loading cToolsIF
+
+!ENTRY com.ti.dbgtrc.webapp.CloudTraceInterface 0 0 2019-11-20 11:11:46.340
+!MESSAGE loading cTools
+
+!ENTRY com.ti.dbgtrc.webapp.CloudTraceInterface 0 0 2019-11-20 11:11:46.372
+!MESSAGE loading TraceFactory
+
+!ENTRY com.ti.dbgtrc.webapp.CloudTraceInterface 0 0 2019-11-20 11:11:46.418
+!MESSAGE loading sqlite3
+
+!ENTRY com.ti.dbgtrc.webapp.CloudTraceInterface 0 0 2019-11-20 11:11:46.450
+!MESSAGE loading CloudTrace
+
+!ENTRY com.ti.dbgtrc.webapp.CloudTraceInterface 0 0 2019-11-20 11:11:46.590
+!MESSAGE CloudTrace interface loaded
+
+!ENTRY com.ti.ccstudio.debug.server 4 214294189 2019-11-20 11:11:46.621
+!MESSAGE Unexpected CCS exit detected [11/18/19 1:42 PM]!!!
+
+!ENTRY org.eclipse.core.resources 2 566 2019-11-20 12:02:52.825
+!MESSAGE null parent found while collapsing trees
+
+!ENTRY org.eclipse.core.resources 2 566 2019-11-20 12:08:52.397
+!MESSAGE null parent found while collapsing trees

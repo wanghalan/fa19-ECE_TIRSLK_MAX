@@ -51,8 +51,6 @@ void (*TimerA1Task)(void);   // user function
 // With SMCLK 12 MHz, period has units 2us
 void TimerA1_Init(void(*task)(void), uint16_t period){
     // write this as part of Lab 13
-
-  
 }
 
 

@@ -109,7 +109,7 @@ void Debug_Dump(uint32_t x, uint32_t y){
 
 
 // Flash ROM addresses must be 4k byte aligned, e.g., 0x00020000, 0x00021000, 0x00022000...
-#define FLASH                   0x00020000  // location in flash to write; make sure no program code is in this block
+#define FLASH                   0x00020000  // location in flash to write; make sure no program code is in this block; 0x00020000 ~ 0x0003FFFF
 
 void Debug_FlashInit(void){ 
   // write this as part of Lab 10

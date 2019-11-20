@@ -1,7 +1,7 @@
 ******************************************************************************
-                  TI ARM Linker PC v18.12.1                    
+                  TI ARM Linker PC v18.12.2                    
 ******************************************************************************
->> Linked Wed Jul 31 21:54:35 2019
+>> Linked Mon Nov 18 14:38:50 2019
 
 OUTPUT FILE NAME:   <Odometry.out>
 ENTRY POINT SYMBOL: "_c_int00_noargs"  address: 00004afd
@@ -247,7 +247,7 @@ MODULE SUMMARY
     +--+-----------------------------+-------+---------+---------+
        Total:                        5370    11564     296    
                                                               
-    E:\ti\ccs900\ccs\tools\compiler\ti-cgt-arm_18.12.1.LTS\lib\rtsv7M4_T_le_v4SPD16_eabi.lib
+    C:\ti\ccs910\ccs\tools\compiler\ti-cgt-arm_18.12.2.LTS\lib\rtsv7M4_T_le_v4SPD16_eabi.lib
        defs.c.obj                    0       0         832    
        memory.c.obj                  676     0         16     
        trgmsg.c.obj                  108     0         576    

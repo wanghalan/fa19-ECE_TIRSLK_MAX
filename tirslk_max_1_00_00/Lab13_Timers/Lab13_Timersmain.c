@@ -98,7 +98,7 @@ void Task(void){
   Time = Time + 1;
   REDLED ^= 0x01;       // toggle P2.0
 }
-int Program13_2(void){
+int main(void){
   Clock_Init48MHz();
   LaunchPad_Init();  // built-in switches and LEDs
   TimerA1_Init(&Task,500);  // 1000 Hz
@@ -108,7 +108,7 @@ int Program13_2(void){
   }
 }
 
-int main(void){
+int main_(void){
     // write a main program that uses PWM to move the robot
     // like Program13_1, but uses TimerA1 to periodically
     // check the bump switches, stopping the robot on a collision

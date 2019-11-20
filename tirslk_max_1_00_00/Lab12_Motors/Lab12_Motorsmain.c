@@ -58,7 +58,7 @@ policies, either expressed or implied, of the FreeBSD Project.
 // Driver test
 void Pause(void){
   while(LaunchPad_Input()==0);  // wait for touch
-  //while(LaunchPad_Input());     // wait for release
+  while(LaunchPad_Input());     // wait for release
 }
 
 
@@ -79,12 +79,8 @@ int Program12_1(void){
   }
 }
 
-void SysTick_Handler(void){
-
-}
-
 // Voltage current and speed as a function of duty cycle
-int main(void){ //Program12_2(void){
+int main_(void){ //Program12_2(void){
   uint16_t duty;
   Clock_Init48MHz();
   LaunchPad_Init();   // built-in switches and LEDs
@@ -92,26 +88,29 @@ int main(void){ //Program12_2(void){
   Motor_InitSimple(); // initialization
 
   SysTick_Init(); //initialize the sys tick cycle; change the period between the reflectance here
-  //EnableInterrupts();
 
   while(1){
     for(duty=2000; duty<=8000; duty=duty+2000){
       Motor_StopSimple();   // measure current
-      //Pause();
+      Pause();
       Motor_LeftSimple(duty,6000);  // measure current
     }
   }
 }
 
-int Program12_3(void){
+int main(void){
   Clock_Init48MHz();
   LaunchPad_Init();   // built-in switches and LEDs
   Bump_Init();        // bump switches
   Motor_InitSimple(); // initialization
+  SysTick_Init();
+
   while(1){
 //    Pause();
-    Motor_ForwardSimple(9900,15000); // max speed 15 s
+    Motor_ForwardSimple(5000,15000); // max speed 15 s
+    //break;
   }
+  printf('Done!');
 }
 
 // does the robot move straight?
