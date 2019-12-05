@@ -66,16 +66,20 @@ policies, either expressed or implied, of the FreeBSD Project.
 
 // Driver test
 void TimedPause(uint32_t time){
+  //P2->OUT|=0x02;
   Clock_Delay1ms(time);          // run for a while and stop
   Motor_Stop();
   while(LaunchPad_Input()==0);  // wait for touch
   while(LaunchPad_Input());     // wait for release
+  //P2->OUT^=0x06;
 }
-int Program13_1(void){
+int main_0(void){
   Clock_Init48MHz();
   LaunchPad_Init(); // built-in switches and LEDs
   Bump_Init();      // bump switches
   Motor_Init();     // your function
+
+
   while(1){
     TimedPause(4000);
     Motor_Forward(7500,7500);  // your function
@@ -103,6 +107,7 @@ int main(void){
   LaunchPad_Init();  // built-in switches and LEDs
   TimerA1_Init(&Task,500);  // 1000 Hz
   EnableInterrupts();
+  //REDLED ^= 0x01;
   while(1){
     BLUELED ^= 0x01; // toggle P2.1
   }

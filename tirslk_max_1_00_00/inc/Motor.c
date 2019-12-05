@@ -64,7 +64,16 @@ policies, either expressed or implied, of the FreeBSD Project.
 // Output: none
 void Motor_Init(void){
   // write this as part of Lab 13
-  
+    //Setting up initial conditions for the motors to accept inputs
+    P2->DIR |= 0xFF;
+    P3->DIR |= 0xFF;
+    P5->DIR |= 0xFF;
+    P2->OUT&= 0x00;
+    P3->OUT&= 0x00;
+    P5->OUT&= 0x00;
+
+    //Set up the PWM interrupts, but do not initialize them
+
 }
 
 // ------------Motor_Stop------------
@@ -74,7 +83,9 @@ void Motor_Init(void){
 // Output: none
 void Motor_Stop(void){
   // write this as part of Lab 13
-  
+    P1->OUT &= ~0xC0;
+    P2->OUT &= ~0xC0;   // off
+    P3->OUT &= ~0xC0;   // low current sleep mode
 }
 
 // ------------Motor_Forward------------
@@ -87,7 +98,28 @@ void Motor_Stop(void){
 // Assumes: Motor_Init() has been called
 void Motor_Forward(uint16_t leftDuty, uint16_t rightDuty){ 
   // write this as part of Lab 13
-  
+    P3-> OUT|= 0xC0; //NSleep equal to 1
+    P5-> OUT&= ~0x18; //PH= 0
+
+//    if (duty>= 100 & duty<= 10000){
+//
+//        High= duty;
+//        Low= total_duty - duty;
+//
+//        while(1){
+//            if (Bump_Read()> 0){
+//                Motor_StopSimple();
+//            }
+//
+//            P2->OUT^= 0x02; //LED off
+//            P2->OUT |= 0xC0;   //Motor On
+//            SysTick_Wait(High);
+//
+//            P2->OUT^= 0x02; //LED off
+//            P2->OUT &= ~0xC0;   //Motor Off
+//            SysTick_Wait(Low);
+//        }
+//    }
 }
 
 // ------------Motor_Right------------
@@ -114,6 +146,10 @@ void Motor_Right(uint16_t leftDuty, uint16_t rightDuty){
 void Motor_Left(uint16_t leftDuty, uint16_t rightDuty){ 
   // write this as part of Lab 13
 
+    P2->OUT|= 0x02; //LED ON
+    P3->OUT |= 0x40;   //Right low current sleep mode
+    P3->OUT |= 0x80;   //Enable 3.7 Left no sleep
+    P5->DIR &= ~0x02; //00011000 Change direction to forward, set equal to zero
 }
 
 // ------------Motor_Backward------------

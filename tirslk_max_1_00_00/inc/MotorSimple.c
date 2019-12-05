@@ -112,6 +112,10 @@ void Motor_ForwardSimple(uint16_t duty, uint32_t time){
         Low= total_duty - duty;
 
         while(1){
+            if (Bump_Read()> 0){
+                Motor_StopSimple();
+            }
+
             P2->OUT^= 0x02; //LED off
             P2->OUT |= 0xC0;   //Motor On
             SysTick_Wait(High);
@@ -119,8 +123,6 @@ void Motor_ForwardSimple(uint16_t duty, uint32_t time){
             P2->OUT^= 0x02; //LED off
             P2->OUT &= ~0xC0;   //Motor Off
             SysTick_Wait(Low);
-
-
         }
     }
 }

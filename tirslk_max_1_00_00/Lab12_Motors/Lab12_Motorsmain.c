@@ -107,7 +107,7 @@ int main(void){
 
   while(1){
 //    Pause();
-    Motor_ForwardSimple(5000,15000); // max speed 15 s
+    Motor_ForwardSimple(9900,15000); // max speed 15 s
     //break;
   }
   printf('Done!');
