@@ -53,12 +53,12 @@ void TimerA1_Init(void(*task)(void), uint16_t period){
     // write this as part of Lab 13; referencing page 304
     TimerA1Task= task; //user function
     TIMER_A1->CTL &= ~0x0030; //halt timer A0
-    TIMER_A1->CTL &= 0x0280;
-    TIMER_A1->CCTL[0]= 0X0010;
+    TIMER_A1->CTL = 0x0280;
+    TIMER_A1->CCTL[0]= 0x0010;
     TIMER_A1->CCR[0]= (period-1);
-    TIMER_A0->EX0=0x0005; //configure for input clock divider .6
-    NVIC->IP[1]=(NVIC->IP[1]&0xFFFFFF00)|0x00000040; //priority 2
-    NVIC->ISER[0]=0x00000100; //enable interrupt 8 in NVIC
+    TIMER_A1->EX0=0x0005; //configure for input clock divider .6
+    NVIC->IP[2]=(NVIC->IP[2]&0xFF00FFFF)|0x00400000; //intterupt priority 10
+    NVIC->ISER[0]=0x00000400; //enable interrupt 10 in NVIC
     TIMER_A1->CTL |= 0x0014;
 }
 
@@ -69,13 +69,11 @@ void TimerA1_Init(void(*task)(void), uint16_t period){
 // Output: none
 void TimerA1_Stop(void){
     // write this as part of Lab 13
-
- 
 }
 
 
 void TA1_0_IRQHandler(void){
     // write this as part of Lab 13
-    TIMER_A1 -> CCTL[0] &= ~0x001;
+    TIMER_A1 -> CCTL[0] &= ~0x0001; //clearing the bit bit
     (*TimerA1Task)();
 }

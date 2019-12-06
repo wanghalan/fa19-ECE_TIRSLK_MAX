@@ -2,12 +2,15 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="SysTick" key="selection"/>
+		<item value="interruptVectors[]" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="interruptVectors[]"/>
+			<item value="InterruptVectors[]"/>
+			<item value="INTERRUPT"/>
 			<item value="SysTick"/>
 			<item value="heart"/>
 			<item value="Stateheart"/>

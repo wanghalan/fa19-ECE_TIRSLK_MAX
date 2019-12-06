@@ -97,12 +97,14 @@ int main_0(void){
 #define BLUELED (*((volatile uint8_t *)(0x42098068)))
 uint32_t Time;
 void Task(void){
+  //P2->OUT= 0x06;
   REDLED ^= 0x01;       // toggle P2.0
   REDLED ^= 0x01;       // toggle P2.0
   Time = Time + 1;
   REDLED ^= 0x01;       // toggle P2.0
 }
 int main(void){
+
   Clock_Init48MHz();
   LaunchPad_Init();  // built-in switches and LEDs
   TimerA1_Init(&Task,500);  // 1000 Hz
