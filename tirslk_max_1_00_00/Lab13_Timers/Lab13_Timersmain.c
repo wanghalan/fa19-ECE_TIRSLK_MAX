@@ -74,9 +74,15 @@ void TimedPause(uint32_t time){
   //P2->OUT^=0x06;
 }
 
+uint16_t stop= 0;
 void BumpCheck(void){
+    P2->OUT = 0x06;
     if (Bump_Read()>0){
-        Motor_Stop();
+        if (stop!= 1){
+            P2->OUT = 0x03;
+            Motor_Stop();
+            stop= 1;
+        }
     }
 }
 
@@ -129,6 +135,7 @@ int red_blue_purple_led(void){
   }
 }
 
+
 int main(void){
     // write a main program that uses PWM to move the robot
     // like Program13_1, but uses TimerA1 to periodically
@@ -140,14 +147,16 @@ int main(void){
     Motor_Init();     // your function
 
     EnableInterrupts();
-    TimerA1_Init(&BumpCheck,500);  // 1000 Hz
     PWM_Init34(15000, 5000, 5000); //10 ms period
+    TimerA1_Init(&BumpCheck,500);  // 1000 Hz
 
     while(1){
-        //P2->OUT= 0x01; //RED
-        TimedPause(500);
-        P2->OUT^= 0x02; //Green
-        Motor_Forward(5000,5000);  // your function
+        //P2->OUT= 0x01; //Green
+        //TimedPause(1000);
+        //P2->OUT= 0x02; //Green
+        if (stop== 0){
+            Motor_Forward(1000,1000);  // your function
+        }
     }
 }
 

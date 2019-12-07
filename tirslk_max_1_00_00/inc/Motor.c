@@ -84,8 +84,8 @@ void Motor_Init(void){
 void Motor_Stop(void){
   // write this as part of Lab 13
     P1->OUT &= ~0xC0;
-    P2->OUT &= ~0xC0;   // off
     P3->OUT &= ~0xC0;   // low current sleep mode
+    P2->OUT &= ~0xC0;   // off
 }
 
 // ------------Motor_Forward------------
