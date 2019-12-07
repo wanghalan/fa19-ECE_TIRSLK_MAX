@@ -72,7 +72,7 @@ void Motor_Init(void){
     P3->OUT&= 0x00;
     P5->OUT&= 0x00;
 
-    //Set up the PWM interrupts, but do not initialize them
+    //Set up the PWM interrupts, but do not initialize them?
 
 }
 
@@ -98,28 +98,13 @@ void Motor_Stop(void){
 // Assumes: Motor_Init() has been called
 void Motor_Forward(uint16_t leftDuty, uint16_t rightDuty){ 
   // write this as part of Lab 13
+
+    //Motor settings
     P3-> OUT|= 0xC0; //NSleep equal to 1
     P5-> OUT&= ~0x18; //PH= 0
 
-//    if (duty>= 100 & duty<= 10000){
-//
-//        High= duty;
-//        Low= total_duty - duty;
-//
-//        while(1){
-//            if (Bump_Read()> 0){
-//                Motor_StopSimple();
-//            }
-//
-//            P2->OUT^= 0x02; //LED off
-//            P2->OUT |= 0xC0;   //Motor On
-//            SysTick_Wait(High);
-//
-//            P2->OUT^= 0x02; //LED off
-//            P2->OUT &= ~0xC0;   //Motor Off
-//            SysTick_Wait(Low);
-//        }
-//    }
+    //PWM to P2.7 (left) and P2.6 (right)
+    P2->OUT |= 0xC0;   //Motor toggle
 }
 
 // ------------Motor_Right------------

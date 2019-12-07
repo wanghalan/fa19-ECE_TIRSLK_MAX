@@ -73,7 +73,7 @@ void TimedPause(uint32_t time){
   while(LaunchPad_Input());     // wait for release
   //P2->OUT^=0x06;
 }
-int main_0(void){
+int main(void){
   Clock_Init48MHz();
   LaunchPad_Init(); // built-in switches and LEDs
   Bump_Init();      // bump switches
@@ -103,7 +103,7 @@ void Task(void){
   Time = Time + 1;
   REDLED ^= 0x01;       // toggle P2.0
 }
-int main(void){
+int red_blue_purple_led(void){
 
   Clock_Init48MHz();
   LaunchPad_Init();  // built-in switches and LEDs
