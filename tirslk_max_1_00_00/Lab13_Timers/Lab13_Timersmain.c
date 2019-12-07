@@ -76,13 +76,11 @@ void TimedPause(uint32_t time){
 
 uint16_t stop= 0;
 void BumpCheck(void){
-    P2->OUT = 0x06;
+    //P2->OUT = 0x06;
     if (Bump_Read()>0){
-        if (stop!= 1){
-            P2->OUT = 0x03;
-            Motor_Stop();
-            stop= 1;
-        }
+        P2->OUT = 0x03;
+        Motor_Stop();
+        stop= 1;
     }
 }
 
@@ -151,10 +149,11 @@ int main(void){
     TimerA1_Init(&BumpCheck,500);  // 1000 Hz
 
     while(1){
-        //P2->OUT= 0x01; //Green
+
         //TimedPause(1000);
         //P2->OUT= 0x02; //Green
         if (stop== 0){
+            P2->OUT= 0x01; //Green
             Motor_Forward(1000,1000);  // your function
         }
     }
