@@ -81,13 +81,17 @@ int main(void){
 
 
   while(1){
-    TimedPause(4000);
+    TimedPause(500);
+    P2->OUT= 0x01; //RED
     Motor_Forward(7500,7500);  // your function
-    TimedPause(2000);
+    TimedPause(500);
+    P2->OUT= 0x02; //GREEN
     Motor_Backward(7500,7500); // your function
-    TimedPause(3000);
+    TimedPause(500);
+    P2->OUT= 0x03; //YELLOW
     Motor_Left(5000,5000);     // your function
-    TimedPause(3000);
+    TimedPause(500);
+    P2->OUT= 0x04;//BLUE
     Motor_Right(5000,5000);    // your function
   }
 }

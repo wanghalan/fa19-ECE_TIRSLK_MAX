@@ -101,7 +101,7 @@ void Motor_Forward(uint16_t leftDuty, uint16_t rightDuty){
 
     //Motor settings
     P3-> OUT|= 0xC0; //NSleep equal to 1
-    P5-> OUT&= ~0x18; //PH= 0
+    P5-> OUT&= ~0x30; //PH= 0
 
     //PWM to P2.7 (left) and P2.6 (right)
     P2->OUT |= 0xC0;   //Motor toggle
@@ -117,7 +117,12 @@ void Motor_Forward(uint16_t leftDuty, uint16_t rightDuty){
 // Assumes: Motor_Init() has been called
 void Motor_Right(uint16_t leftDuty, uint16_t rightDuty){ 
   // write this as part of Lab 13
-
+//    P3-> OUT|= 0xC0; //NSleep equal to 1
+//    P5-> OUT&= ~0x08; //PH= 0 //every thing to zero
+//    P5-> OUT|= 0x10; //PH= 0, backwards left left motor
+//
+//    //PWM to P2.7 (left) and P2.6 (right)
+//    P2->OUT |= 0xC0;   //Motor toggle
 }
 
 // ------------Motor_Left------------
@@ -129,12 +134,12 @@ void Motor_Right(uint16_t leftDuty, uint16_t rightDuty){
 // Output: none
 // Assumes: Motor_Init() has been called
 void Motor_Left(uint16_t leftDuty, uint16_t rightDuty){ 
-  // write this as part of Lab 13
-
-    P2->OUT|= 0x02; //LED ON
-    P3->OUT |= 0x40;   //Right low current sleep mode
-    P3->OUT |= 0x80;   //Enable 3.7 Left no sleep
-    P5->DIR &= ~0x02; //00011000 Change direction to forward, set equal to zero
+//    P3-> OUT|= 0xC0; //NSleep equal to 1
+//    P5-> OUT&= ~0x10; //PH= 0 //every thing to zero
+//    P5-> OUT|= 0x08; //PH= 0, backwards left left motor
+//
+//    //PWM to P2.7 (left) and P2.6 (right)
+//    P2->OUT |= 0xC0;   //Motor toggle
 }
 
 // ------------Motor_Backward------------
@@ -146,6 +151,10 @@ void Motor_Left(uint16_t leftDuty, uint16_t rightDuty){
 // Output: none
 // Assumes: Motor_Init() has been called
 void Motor_Backward(uint16_t leftDuty, uint16_t rightDuty){ 
-  // write this as part of Lab 13
+//  // write this as part of Lab 13
+    P3-> OUT|= 0xC0; //NSleep equal to 1
+    P5-> OUT|= 0x30; //PH= 1
 
+    //PWM to P2.7 (left) and P2.6 (right)
+    P2->OUT |= 0xC0;   //Motor toggle
 }
