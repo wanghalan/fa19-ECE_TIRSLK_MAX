@@ -156,5 +156,6 @@ void Motor_Backward(uint16_t leftDuty, uint16_t rightDuty){
     P5-> OUT|= 0x30; //PH= 1
 
     //PWM to P2.7 (left) and P2.6 (right)
+    //Need to some how trigger the thing based on the correct duty cycle...?
     P2->OUT |= 0xC0;   //Motor toggle
 }

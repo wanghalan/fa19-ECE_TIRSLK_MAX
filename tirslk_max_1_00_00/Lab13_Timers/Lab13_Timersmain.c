@@ -73,12 +73,21 @@ void TimedPause(uint32_t time){
   while(LaunchPad_Input());     // wait for release
   //P2->OUT^=0x06;
 }
+
+void BumpCheck(void){
+    if (Bump_Read()>0){
+        Motor_Stop();
+    }
+}
+
 int main(void){
   Clock_Init48MHz();
   LaunchPad_Init(); // built-in switches and LEDs
   Bump_Init();      // bump switches
   Motor_Init();     // your function
 
+  EnableInterrupts();
+  TimerA1_Init(&BumpCheck,500);  // 1000 Hz
 
   while(1){
     TimedPause(500);
@@ -107,6 +116,7 @@ void Task(void){
   Time = Time + 1;
   REDLED ^= 0x01;       // toggle P2.0
 }
+
 int red_blue_purple_led(void){
 
   Clock_Init48MHz();
@@ -123,10 +133,17 @@ int main_(void){
     // write a main program that uses PWM to move the robot
     // like Program13_1, but uses TimerA1 to periodically
     // check the bump switches, stopping the robot on a collision
- 
- 
-  while(1){
+
+    Clock_Init48MHz();
+    LaunchPad_Init(); // built-in switches and LEDs
+    Bump_Init();      // bump switches
+    Motor_Init();     // your function
+    PWM_Init12(10, 5, 5); //50% duty cycle
+
+    TimerA1_Init(&BumpCheck,500);  // 1000 Hz
+
+    while(1){
     
-  }
+    }
 }
 

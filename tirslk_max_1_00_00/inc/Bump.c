@@ -103,4 +103,3 @@ uint8_t Bump_Read(void){
     }
     return result;
 }
-
