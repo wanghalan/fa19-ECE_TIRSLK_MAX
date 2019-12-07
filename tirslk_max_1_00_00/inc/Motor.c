@@ -104,6 +104,8 @@ void Motor_Forward(uint16_t leftDuty, uint16_t rightDuty){
     P5-> OUT&= ~0x30; //PH= 0
 
     //PWM to P2.7 (left) and P2.6 (right)
+    PWM_Duty3(rightDuty);
+    PWM_Duty4(leftDuty);
     P2->OUT |= 0xC0;   //Motor toggle
 }
 
@@ -122,6 +124,8 @@ void Motor_Right(uint16_t leftDuty, uint16_t rightDuty){
     P5-> OUT|= 0x20;// right back
 
     //PWM to P2.7 (left) and P2.6 (right)
+    PWM_Duty3(rightDuty);
+    PWM_Duty4(leftDuty);
     P2->OUT |= 0xC0;   //Motor toggle
 }
 
@@ -139,6 +143,8 @@ void Motor_Left(uint16_t leftDuty, uint16_t rightDuty){
     P5-> OUT|= 0x10;// right back
 
     //PWM to P2.7 (left) and P2.6 (right)
+    PWM_Duty3(rightDuty);
+    PWM_Duty4(leftDuty);
     P2->OUT |= 0xC0;   //Motor toggle
 }
 
@@ -157,5 +163,7 @@ void Motor_Backward(uint16_t leftDuty, uint16_t rightDuty){
 
     //PWM to P2.7 (left) and P2.6 (right)
     //Need to some how trigger the thing based on the correct duty cycle...?
+    PWM_Duty3(rightDuty);
+    PWM_Duty4(leftDuty);\
     P2->OUT |= 0xC0;   //Motor toggle
 }

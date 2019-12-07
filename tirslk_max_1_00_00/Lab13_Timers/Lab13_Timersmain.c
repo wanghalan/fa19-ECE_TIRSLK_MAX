@@ -80,7 +80,7 @@ void BumpCheck(void){
     }
 }
 
-int main(void){
+int main_(void){ //Test motor
   Clock_Init48MHz();
   LaunchPad_Init(); // built-in switches and LEDs
   Bump_Init();      // bump switches
@@ -129,7 +129,7 @@ int red_blue_purple_led(void){
   }
 }
 
-int main_(void){
+int main(void){
     // write a main program that uses PWM to move the robot
     // like Program13_1, but uses TimerA1 to periodically
     // check the bump switches, stopping the robot on a collision
@@ -138,12 +138,16 @@ int main_(void){
     LaunchPad_Init(); // built-in switches and LEDs
     Bump_Init();      // bump switches
     Motor_Init();     // your function
-    PWM_Init12(10, 5, 5); //50% duty cycle
 
+    EnableInterrupts();
     TimerA1_Init(&BumpCheck,500);  // 1000 Hz
+    PWM_Init34(15000, 5000, 5000); //10 ms period
 
     while(1){
-    
+        //P2->OUT= 0x01; //RED
+        TimedPause(500);
+        P2->OUT^= 0x02; //Green
+        Motor_Forward(5000,5000);  // your function
     }
 }
 
