@@ -352,9 +352,14 @@ void Nokia5110_OutString(char *ptr){int i;
 // Inputs: n  16-bit unsigned number
 // Outputs: none
 // Assumes: LCD is in default horizontal addressing mode (V = 0)
-void Nokia5110_OutUDec(uint16_t n){
+void Nokia5110_OutUDec(uint16_t n){int i;
 // you write this as part of Lab 11
-
+    char buf[5];
+    char* s= sprintf(buf, "% 5u",n);
+    printf(s);
+    for (i=0; i< 5; i=i+1){
+        Nokia5110_OutChar(buf[i]);
+    }
 }
 
 //********Nokia5110_OutSDec*****************
@@ -365,7 +370,6 @@ void Nokia5110_OutUDec(uint16_t n){
 // Assumes: LCD is in default horizontal addressing mode (V = 0)
 void Nokia5110_OutSDec(int16_t n){
 // you write this as part of Lab 11
-
 
 }
 //********Nokia5110_OutUFix1*****************

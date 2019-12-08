@@ -140,7 +140,7 @@ void Motor_Right(uint16_t leftDuty, uint16_t rightDuty){
 void Motor_Left(uint16_t leftDuty, uint16_t rightDuty){ 
     P3-> OUT|= 0xC0; //NSleep equal to 1
     P5-> OUT&= ~0x30; //PH= 0
-    P5-> OUT|= 0x10;// right back
+    P5-> OUT|= 0x10;// left back
 
     //PWM to P2.7 (left) and P2.6 (right)
     PWM_Duty3(rightDuty);
@@ -159,7 +159,7 @@ void Motor_Left(uint16_t leftDuty, uint16_t rightDuty){
 void Motor_Backward(uint16_t leftDuty, uint16_t rightDuty){ 
 //  // write this as part of Lab 13
     P3-> OUT|= 0xC0; //NSleep equal to 1
-    P5-> OUT|= 0x30; //PH= 1
+    P5-> OUT|= 0x30; //PH= 1; both back
 
     //PWM to P2.7 (left) and P2.6 (right)
     //Need to some how trigger the thing based on the correct duty cycle...?

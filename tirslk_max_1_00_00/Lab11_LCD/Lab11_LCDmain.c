@@ -147,7 +147,9 @@ void main(void){
     Nokia5110_Init();
     Nokia5110_ClearBuffer();
     //Testcommandwrite();
-    Nokia5110_OutString("I am almost home free!");
+    //Nokia5110_OutString("I am almost home free!");
+    Nokia5110_DisplayBuffer();
+    Nokia5110_OutUDec(3);
 }
 
 void main_(void){
