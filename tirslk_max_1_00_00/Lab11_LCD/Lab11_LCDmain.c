@@ -149,7 +149,20 @@ void main(void){
     //Testcommandwrite();
     //Nokia5110_OutString("I am almost home free!");
     Nokia5110_DisplayBuffer();
-    Nokia5110_OutUDec(3);
+//    Nokia5110_OutUDec(0);
+//    Nokia5110_OutUDec(12);
+//    Nokia5110_OutUDec(345);
+//    Nokia5110_OutUDec(6789);
+    Nokia5110_SetCursor(0,2);  // left, third row
+    Nokia5110_OutString("D= ");
+    Nokia5110_OutUDec(0);
+    Nokia5110_OutString(" mm");
+
+    Nokia5110_SetCursor(3,2);  // spot for number
+    Nokia5110_OutUDec(123);
+
+    Nokia5110_SetCursor(3,2);  // spot for number
+    Nokia5110_OutSDec(-4567);
 }
 
 void main_(void){
