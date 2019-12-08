@@ -1,17 +1,17 @@
 ******************************************************************************
                   TI ARM Linker PC v18.12.2                    
 ******************************************************************************
->> Linked Sat Dec  7 01:03:15 2019
+>> Linked Sun Dec  8 11:01:18 2019
 
 OUTPUT FILE NAME:   <Lab11_LCD.out>
-ENTRY POINT SYMBOL: "_c_int00_noargs"  address: 00001029
+ENTRY POINT SYMBOL: "_c_int00_noargs"  address: 000010b5
 
 
 MEMORY CONFIGURATION
 
          name            origin    length      used     unused   attr    fill
 ----------------------  --------  ---------  --------  --------  ----  --------
-  MAIN                  00000000   00040000  0000187a  0003e786  R  X
+  MAIN                  00000000   00040000  0000191a  0003e6e6  R  X
   INFO                  00200000   00004000  00000000  00004000  R  X
   SRAM_CODE             01000000   00010000  00000414  0000fbec  RW X
   SRAM_DATA             20000000   00010000  00000414  0000fbec  RW  
@@ -21,11 +21,11 @@ SEGMENT ALLOCATION MAP
 
 run origin  load origin   length   init length attrs members
 ----------  ----------- ---------- ----------- ----- -------
-00000000    00000000    00001880   00001880    r-x
+00000000    00000000    00001920   00001920    r-x
   00000000    00000000    000000e4   000000e4    r-- .intvecs
-  000000e4    000000e4    00000fb8   00000fb8    r-x .text
-  0000109c    0000109c    000007a6   000007a6    r-- .const
-  00001848    00001848    00000038   00000038    r-- .cinit
+  000000e4    000000e4    00001058   00001058    r-x .text
+  0000113c    0000113c    000007a6   000007a6    r-- .const
+  000018e8    000018e8    00000038   00000038    r-- .cinit
 20000000    20000000    00000214   00000000    rw-
   20000000    20000000    000001f8   00000000    rw- .bss
   200001f8    200001f8    0000001c   00000000    rw- .data
@@ -41,34 +41,35 @@ section   page    origin      length       input sections
 .intvecs   0    00000000    000000e4     
                   00000000    000000e4     startup_msp432p401r_ccs.obj (.intvecs:retain)
 
-.text      0    000000e4    00000fb8     
-                  000000e4    00000728     Nokia5110.obj (.text)
-                  0000080c    0000032c     system_msp432p401r.obj (.text)
-                  00000b38    000001e0     Clock.obj (.text)
-                  00000d18    000001c8     Lab11_LCDmain.obj (.text)
-                  00000ee0    0000009c     rtsv7M4_T_le_v4SPD16_eabi.lib : memcpy_t2.asm.obj (.text)
-                  00000f7c    00000068                                   : copy_decompress_lzss.c.obj (.text:decompress:lzss:__TI_decompress_lzss)
-                  00000fe4    00000044                                   : autoinit.c.obj (.text:__TI_auto_init_nobinit_nopinit:__TI_auto_init_nobinit_nopinit)
-                  00001028    00000034                                   : boot_cortex_m.c.obj (.text:_c_int00_noargs:_c_int00_noargs)
-                  0000105c    0000001c                                   : copy_zero_init.c.obj (.text:decompress:ZI:__TI_zero_init_nomemset:__TI_zero_init_nomemset)
-                  00001078    0000000e                                   : copy_decompress_none.c.obj (.text:decompress:none:__TI_decompress_none)
-                  00001086    0000000e     startup_msp432p401r_ccs.obj (.text)
-                  00001094    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : pre_init.c.obj (.text:_system_pre_init)
-                  00001098    00000004                                   : exit.c.obj (.text:abort:abort)
+.text      0    000000e4    00001058     
+                  000000e4    00000788     Nokia5110.obj (.text)
+                  0000086c    0000032c     system_msp432p401r.obj (.text)
+                  00000b98    000001f4     Lab11_LCDmain.obj (.text)
+                  00000d8c    000001e0     Clock.obj (.text)
+                  00000f6c    0000009c     rtsv7M4_T_le_v4SPD16_eabi.lib : memcpy_t2.asm.obj (.text)
+                  00001008    00000068                                   : copy_decompress_lzss.c.obj (.text:decompress:lzss:__TI_decompress_lzss)
+                  00001070    00000044                                   : autoinit.c.obj (.text:__TI_auto_init_nobinit_nopinit:__TI_auto_init_nobinit_nopinit)
+                  000010b4    00000034                                   : boot_cortex_m.c.obj (.text:_c_int00_noargs:_c_int00_noargs)
+                  000010e8    0000001c                                   : copy_zero_init.c.obj (.text:decompress:ZI:__TI_zero_init_nomemset:__TI_zero_init_nomemset)
+                  00001104    00000014                                   : strlen.c.obj (.text:strlen)
+                  00001118    0000000e                                   : copy_decompress_none.c.obj (.text:decompress:none:__TI_decompress_none)
+                  00001126    0000000e     startup_msp432p401r_ccs.obj (.text)
+                  00001134    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : pre_init.c.obj (.text:_system_pre_init)
+                  00001138    00000004                                   : exit.c.obj (.text:abort:abort)
 
-.const     0    0000109c    000007a6     
-                  0000109c    000004f7     Lab11_LCDmain.obj (.const:.string:ti)
-                  00001593    000001e0     Nokia5110.obj (.const:ASCII)
-                  00001773    000000c7     Lab11_LCDmain.obj (.const:.string:Enemy)
-                  0000183a    00000008     Nokia5110.obj (.const:.string:Masks)
+.const     0    0000113c    000007a6     
+                  0000113c    000004f7     Lab11_LCDmain.obj (.const:.string:ti)
+                  00001633    000001e0     Nokia5110.obj (.const:ASCII)
+                  00001813    000000c7     Lab11_LCDmain.obj (.const:.string:Enemy)
+                  000018da    00000008     Nokia5110.obj (.const:.string:Masks)
 
-.cinit     0    00001848    00000038     
-                  00001848    0000000d     (.cinit..data.load) [load image, compression = lzss]
-                  00001855    00000003     --HOLE-- [fill = 0]
-                  00001858    0000000c     (__TI_handler_table)
-                  00001864    00000004     --HOLE-- [fill = 0]
-                  00001868    00000008     (.cinit..bss.load) [load image, compression = zero_init]
-                  00001870    00000010     (__TI_cinit_table)
+.cinit     0    000018e8    00000038     
+                  000018e8    0000000d     (.cinit..data.load) [load image, compression = lzss]
+                  000018f5    00000003     --HOLE-- [fill = 0]
+                  000018f8    0000000c     (__TI_handler_table)
+                  00001904    00000004     --HOLE-- [fill = 0]
+                  00001908    00000008     (.cinit..bss.load) [load image, compression = zero_init]
+                  00001910    00000010     (__TI_cinit_table)
 
 .init_array 
 *          0    00000000    00000000     UNINITIALIZED
@@ -91,13 +92,13 @@ MODULE SUMMARY
        Module                        code   ro data   rw data
        ------                        ----   -------   -------
     .\
-       Nokia5110.obj                 1832   488       1008   
-       Lab11_LCDmain.obj             456    1470      0      
+       Nokia5110.obj                 1928   488       1008   
+       Lab11_LCDmain.obj             500    1470      0      
        system_msp432p401r.obj        812    0         8      
        Clock.obj                     480    0         48     
        startup_msp432p401r_ccs.obj   14     228       0      
     +--+-----------------------------+------+---------+---------+
-       Total:                        3594   2186      1064   
+       Total:                        3734   2186      1064   
                                                              
     C:\ti\ccs910\ccs\tools\compiler\ti-cgt-arm_18.12.2.LTS\lib\rtsv7M4_T_le_v4SPD16_eabi.lib
        memcpy_t2.asm.obj             156    0         0      
@@ -105,28 +106,29 @@ MODULE SUMMARY
        autoinit.c.obj                68     0         0      
        boot_cortex_m.c.obj           52     0         0      
        copy_zero_init.c.obj          28     0         0      
+       strlen.c.obj                  20     0         0      
        copy_decompress_none.c.obj    14     0         0      
        exit.c.obj                    4      0         0      
        pre_init.c.obj                4      0         0      
     +--+-----------------------------+------+---------+---------+
-       Total:                        430    0         0      
+       Total:                        450    0         0      
                                                              
        Stack:                        0      0         1024   
        Linker Generated:             0      49        0      
     +--+-----------------------------+------+---------+---------+
-       Grand Total:                  4024   2235      2088   
+       Grand Total:                  4184   2235      2088   
 
 
 LINKER GENERATED COPY TABLES
 
-__TI_cinit_table @ 00001870 records: 2, size/record: 8, table size: 16
-	.data: load addr=00001848, load size=0000000d bytes, run addr=200001f8, run size=0000001c bytes, compression=lzss
-	.bss: load addr=00001868, load size=00000008 bytes, run addr=20000000, run size=000001f8 bytes, compression=zero_init
+__TI_cinit_table @ 00001910 records: 2, size/record: 8, table size: 16
+	.data: load addr=000018e8, load size=0000000d bytes, run addr=200001f8, run size=0000001c bytes, compression=lzss
+	.bss: load addr=00001908, load size=00000008 bytes, run addr=20000000, run size=000001f8 bytes, compression=zero_init
 
 
 LINKER GENERATED HANDLER TABLE
 
-__TI_handler_table @ 00001858 records: 3, size/record: 4, table size: 12
+__TI_handler_table @ 000018f8 records: 3, size/record: 4, table size: 12
 	index: 0, handler: __TI_decompress_lzss
 	index: 1, handler: __TI_decompress_none
 	index: 2, handler: __TI_zero_init
@@ -136,127 +138,129 @@ GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name
 
 address   name                          
 -------   ----                          
-00001093  ADC14_IRQHandler              
-00001093  AES256_IRQHandler             
-00001093  BusFault_Handler              
-00001099  C$$EXIT                       
-00001093  COMP_E0_IRQHandler            
-00001093  COMP_E1_IRQHandler            
+00001133  ADC14_IRQHandler              
+00001133  AES256_IRQHandler             
+00001133  BusFault_Handler              
+00001139  C$$EXIT                       
+00001133  COMP_E0_IRQHandler            
+00001133  COMP_E1_IRQHandler            
 20000200  CPMwait                       
-00001093  CS_IRQHandler                 
+00001133  CS_IRQHandler                 
 200001f8  ClockFrequency                
-00000c8d  Clock_Delay1ms                
-00000c63  Clock_Delay1us                
-00000c4f  Clock_GetFreq                 
-00000b39  Clock_Init48MHz               
+00000ee1  Clock_Delay1ms                
+00000eb7  Clock_Delay1us                
+00000ea3  Clock_GetFreq                 
+00000d8d  Clock_Init48MHz               
 2000020c  Crystalstable                 
-00001093  DMA_ERR_IRQHandler            
-00001093  DMA_INT0_IRQHandler           
-00001093  DMA_INT1_IRQHandler           
-00001093  DMA_INT2_IRQHandler           
-00001093  DMA_INT3_IRQHandler           
-00001093  DebugMon_Handler              
-00001093  Default_Handler               
-00001093  EUSCIA0_IRQHandler            
-00001093  EUSCIA1_IRQHandler            
-00001093  EUSCIA2_IRQHandler            
-00001093  EUSCIA3_IRQHandler            
-00001093  EUSCIB0_IRQHandler            
-00001093  EUSCIB1_IRQHandler            
-00001093  EUSCIB2_IRQHandler            
-00001093  EUSCIB3_IRQHandler            
-00001773  Enemy                         
-00001093  FLCTL_IRQHandler              
-00001093  FPU_IRQHandler                
-00001093  HardFault_Handler             
+00001133  DMA_ERR_IRQHandler            
+00001133  DMA_INT0_IRQHandler           
+00001133  DMA_INT1_IRQHandler           
+00001133  DMA_INT2_IRQHandler           
+00001133  DMA_INT3_IRQHandler           
+00001133  DebugMon_Handler              
+00001133  Default_Handler               
+00001133  EUSCIA0_IRQHandler            
+00001133  EUSCIA1_IRQHandler            
+00001133  EUSCIA2_IRQHandler            
+00001133  EUSCIA3_IRQHandler            
+00001133  EUSCIB0_IRQHandler            
+00001133  EUSCIB1_IRQHandler            
+00001133  EUSCIB2_IRQHandler            
+00001133  EUSCIB3_IRQHandler            
+00001813  Enemy                         
+00001133  FLCTL_IRQHandler              
+00001133  FPU_IRQHandler                
+00001133  HardFault_Handler             
 20000208  IFlags                        
-0000183a  Masks                         
-00001093  MemManage_Handler             
-00001093  NMI_Handler                   
-0000053b  Nokia5110_Clear               
-00000785  Nokia5110_ClearBuffer         
-000007b9  Nokia5110_ClrPxl              
-000007af  Nokia5110_DisplayBuffer       
-00000567  Nokia5110_DrawFullImage       
-00000107  Nokia5110_Init                
-000001b1  Nokia5110_OutChar             
-0000038f  Nokia5110_OutHex7             
-00000207  Nokia5110_OutSDec             
-000002a1  Nokia5110_OutSFix1            
-000001f1  Nokia5110_OutString           
-000001fb  Nokia5110_OutUDec             
-0000040d  Nokia5110_OutUDec16           
-000004a9  Nokia5110_OutUDec2            
-00000213  Nokia5110_OutUFix1            
-000003c5  Nokia5110_OutUHex7            
-000005a1  Nokia5110_PrintBMP            
-000004ff  Nokia5110_SetCursor           
-000007df  Nokia5110_SetPxl              
-00001093  PCM_IRQHandler                
-00001093  PORT1_IRQHandler              
-00001093  PORT2_IRQHandler              
-00001093  PORT3_IRQHandler              
-00001093  PORT4_IRQHandler              
-00001093  PORT5_IRQHandler              
-00001093  PORT6_IRQHandler              
-00001093  PSS_IRQHandler                
-00001093  PendSV_Handler                
+000018da  Masks                         
+00001133  MemManage_Handler             
+00001133  NMI_Handler                   
+0000059b  Nokia5110_Clear               
+000007e5  Nokia5110_ClearBuffer         
+00000819  Nokia5110_ClrPxl              
+0000080f  Nokia5110_DisplayBuffer       
+000005c7  Nokia5110_DrawFullImage       
+0000013b  Nokia5110_Init                
+000001e5  Nokia5110_OutChar             
+000003e1  Nokia5110_OutHex7             
+00000259  Nokia5110_OutSDec             
+000002f3  Nokia5110_OutSFix1            
+00000225  Nokia5110_OutString           
+0000024d  Nokia5110_OutUDec             
+0000046d  Nokia5110_OutUDec16           
+00000509  Nokia5110_OutUDec2            
+00000265  Nokia5110_OutUFix1            
+00000425  Nokia5110_OutUHex7            
+00000601  Nokia5110_PrintBMP            
+0000055f  Nokia5110_SetCursor           
+0000083f  Nokia5110_SetPxl              
+00001133  PCM_IRQHandler                
+00001133  PORT1_IRQHandler              
+00001133  PORT2_IRQHandler              
+00001133  PORT3_IRQHandler              
+00001133  PORT4_IRQHandler              
+00001133  PORT5_IRQHandler              
+00001133  PORT6_IRQHandler              
+00001133  PSS_IRQHandler                
+00001133  PendSV_Handler                
 20000204  Postwait                      
 200001fc  Prewait                       
-00001093  RTC_C_IRQHandler              
-00001087  Reset_Handler                 
-00001093  SVC_Handler                   
+00001133  RTC_C_IRQHandler              
+00001127  Reset_Handler                 
+00001133  SVC_Handler                   
 20000000  Screen                        
-00001093  SysTick_Handler               
+00001133  SysTick_Handler               
 20000210  SystemCoreClock               
-0000080d  SystemCoreClockUpdate         
-00000a81  SystemInit                    
-00001093  T32_INT1_IRQHandler           
-00001093  T32_INT2_IRQHandler           
-00001093  T32_INTC_IRQHandler           
-00001093  TA0_0_IRQHandler              
-00001093  TA0_N_IRQHandler              
-00001093  TA1_0_IRQHandler              
-00001093  TA1_N_IRQHandler              
-00001093  TA2_0_IRQHandler              
-00001093  TA2_N_IRQHandler              
-00001093  TA3_0_IRQHandler              
-00001093  TA3_N_IRQHandler              
-000000f1  Testcommandwrite              
-00001093  UsageFault_Handler            
+0000086d  SystemCoreClockUpdate         
+00000ae1  SystemInit                    
+00001133  T32_INT1_IRQHandler           
+00001133  T32_INT2_IRQHandler           
+00001133  T32_INTC_IRQHandler           
+00001133  TA0_0_IRQHandler              
+00001133  TA0_N_IRQHandler              
+00001133  TA1_0_IRQHandler              
+00001133  TA1_N_IRQHandler              
+00001133  TA2_0_IRQHandler              
+00001133  TA2_N_IRQHandler              
+00001133  TA3_0_IRQHandler              
+00001133  TA3_N_IRQHandler              
+0000010b  Testcommandwrite              
+00001133  UsageFault_Handler            
 4000480c  WDTCTL_SYM                    
-00001093  WDT_A_IRQHandler              
+00001133  WDT_A_IRQHandler              
 20010000  __STACK_END                   
 00000200  __STACK_SIZE                  
-00001870  __TI_CINIT_Base               
-00001880  __TI_CINIT_Limit              
-00001858  __TI_Handler_Table_Base       
-00001864  __TI_Handler_Table_Limit      
-00000fe5  __TI_auto_init_nobinit_nopinit
-00000f7d  __TI_decompress_lzss          
-00001079  __TI_decompress_none          
+00001910  __TI_CINIT_Base               
+00001920  __TI_CINIT_Limit              
+000018f8  __TI_Handler_Table_Base       
+00001904  __TI_Handler_Table_Limit      
+00001071  __TI_auto_init_nobinit_nopinit
+00001009  __TI_decompress_lzss          
+00001119  __TI_decompress_none          
 ffffffff  __TI_pprof_out_hndl           
 ffffffff  __TI_prof_data_size           
 ffffffff  __TI_prof_data_start          
 00000000  __TI_static_base__            
-0000105d  __TI_zero_init_nomemset       
-00000ee1  __aeabi_memcpy                
-00000ee1  __aeabi_memcpy4               
-00000ee1  __aeabi_memcpy8               
+000010e9  __TI_zero_init_nomemset       
+00000f6d  __aeabi_memcpy                
+00000f6d  __aeabi_memcpy4               
+00000f6d  __aeabi_memcpy8               
 ffffffff  __binit__                     
 ffffffff  __c_args__                    
 UNDEFED   __mpu_init                    
 2000fe00  __stack                       
-00001029  _c_int00_noargs               
+000010b5  _c_int00_noargs               
 UNDEFED   _system_post_cinit            
-00001095  _system_pre_init              
-00001099  abort                         
+00001135  _system_pre_init              
+00001139  abort                         
 ffffffff  binit                         
-00000c55  delay                         
+00000ea9  delay                         
 00000000  interruptVectors              
-00000d19  main                          
-00000ee1  memcpy                        
-0000109c  ti                            
+00000b99  main                          
+00000baf  main_                         
+00000f6d  memcpy                        
+00001105  strlen                        
+0000113c  ti                            
 
 
 GLOBAL SYMBOLS: SORTED BY Symbol Address 
@@ -265,106 +269,108 @@ address   name
 -------   ----                          
 00000000  __TI_static_base__            
 00000000  interruptVectors              
-000000f1  Testcommandwrite              
-00000107  Nokia5110_Init                
-000001b1  Nokia5110_OutChar             
-000001f1  Nokia5110_OutString           
-000001fb  Nokia5110_OutUDec             
+0000010b  Testcommandwrite              
+0000013b  Nokia5110_Init                
+000001e5  Nokia5110_OutChar             
 00000200  __STACK_SIZE                  
-00000207  Nokia5110_OutSDec             
-00000213  Nokia5110_OutUFix1            
-000002a1  Nokia5110_OutSFix1            
-0000038f  Nokia5110_OutHex7             
-000003c5  Nokia5110_OutUHex7            
-0000040d  Nokia5110_OutUDec16           
-000004a9  Nokia5110_OutUDec2            
-000004ff  Nokia5110_SetCursor           
-0000053b  Nokia5110_Clear               
-00000567  Nokia5110_DrawFullImage       
-000005a1  Nokia5110_PrintBMP            
-00000785  Nokia5110_ClearBuffer         
-000007af  Nokia5110_DisplayBuffer       
-000007b9  Nokia5110_ClrPxl              
-000007df  Nokia5110_SetPxl              
-0000080d  SystemCoreClockUpdate         
-00000a81  SystemInit                    
-00000b39  Clock_Init48MHz               
-00000c4f  Clock_GetFreq                 
-00000c55  delay                         
-00000c63  Clock_Delay1us                
-00000c8d  Clock_Delay1ms                
-00000d19  main                          
-00000ee1  __aeabi_memcpy                
-00000ee1  __aeabi_memcpy4               
-00000ee1  __aeabi_memcpy8               
-00000ee1  memcpy                        
-00000f7d  __TI_decompress_lzss          
-00000fe5  __TI_auto_init_nobinit_nopinit
-00001029  _c_int00_noargs               
-0000105d  __TI_zero_init_nomemset       
-00001079  __TI_decompress_none          
-00001087  Reset_Handler                 
-00001093  ADC14_IRQHandler              
-00001093  AES256_IRQHandler             
-00001093  BusFault_Handler              
-00001093  COMP_E0_IRQHandler            
-00001093  COMP_E1_IRQHandler            
-00001093  CS_IRQHandler                 
-00001093  DMA_ERR_IRQHandler            
-00001093  DMA_INT0_IRQHandler           
-00001093  DMA_INT1_IRQHandler           
-00001093  DMA_INT2_IRQHandler           
-00001093  DMA_INT3_IRQHandler           
-00001093  DebugMon_Handler              
-00001093  Default_Handler               
-00001093  EUSCIA0_IRQHandler            
-00001093  EUSCIA1_IRQHandler            
-00001093  EUSCIA2_IRQHandler            
-00001093  EUSCIA3_IRQHandler            
-00001093  EUSCIB0_IRQHandler            
-00001093  EUSCIB1_IRQHandler            
-00001093  EUSCIB2_IRQHandler            
-00001093  EUSCIB3_IRQHandler            
-00001093  FLCTL_IRQHandler              
-00001093  FPU_IRQHandler                
-00001093  HardFault_Handler             
-00001093  MemManage_Handler             
-00001093  NMI_Handler                   
-00001093  PCM_IRQHandler                
-00001093  PORT1_IRQHandler              
-00001093  PORT2_IRQHandler              
-00001093  PORT3_IRQHandler              
-00001093  PORT4_IRQHandler              
-00001093  PORT5_IRQHandler              
-00001093  PORT6_IRQHandler              
-00001093  PSS_IRQHandler                
-00001093  PendSV_Handler                
-00001093  RTC_C_IRQHandler              
-00001093  SVC_Handler                   
-00001093  SysTick_Handler               
-00001093  T32_INT1_IRQHandler           
-00001093  T32_INT2_IRQHandler           
-00001093  T32_INTC_IRQHandler           
-00001093  TA0_0_IRQHandler              
-00001093  TA0_N_IRQHandler              
-00001093  TA1_0_IRQHandler              
-00001093  TA1_N_IRQHandler              
-00001093  TA2_0_IRQHandler              
-00001093  TA2_N_IRQHandler              
-00001093  TA3_0_IRQHandler              
-00001093  TA3_N_IRQHandler              
-00001093  UsageFault_Handler            
-00001093  WDT_A_IRQHandler              
-00001095  _system_pre_init              
-00001099  C$$EXIT                       
-00001099  abort                         
-0000109c  ti                            
-00001773  Enemy                         
-0000183a  Masks                         
-00001858  __TI_Handler_Table_Base       
-00001864  __TI_Handler_Table_Limit      
-00001870  __TI_CINIT_Base               
-00001880  __TI_CINIT_Limit              
+00000225  Nokia5110_OutString           
+0000024d  Nokia5110_OutUDec             
+00000259  Nokia5110_OutSDec             
+00000265  Nokia5110_OutUFix1            
+000002f3  Nokia5110_OutSFix1            
+000003e1  Nokia5110_OutHex7             
+00000425  Nokia5110_OutUHex7            
+0000046d  Nokia5110_OutUDec16           
+00000509  Nokia5110_OutUDec2            
+0000055f  Nokia5110_SetCursor           
+0000059b  Nokia5110_Clear               
+000005c7  Nokia5110_DrawFullImage       
+00000601  Nokia5110_PrintBMP            
+000007e5  Nokia5110_ClearBuffer         
+0000080f  Nokia5110_DisplayBuffer       
+00000819  Nokia5110_ClrPxl              
+0000083f  Nokia5110_SetPxl              
+0000086d  SystemCoreClockUpdate         
+00000ae1  SystemInit                    
+00000b99  main                          
+00000baf  main_                         
+00000d8d  Clock_Init48MHz               
+00000ea3  Clock_GetFreq                 
+00000ea9  delay                         
+00000eb7  Clock_Delay1us                
+00000ee1  Clock_Delay1ms                
+00000f6d  __aeabi_memcpy                
+00000f6d  __aeabi_memcpy4               
+00000f6d  __aeabi_memcpy8               
+00000f6d  memcpy                        
+00001009  __TI_decompress_lzss          
+00001071  __TI_auto_init_nobinit_nopinit
+000010b5  _c_int00_noargs               
+000010e9  __TI_zero_init_nomemset       
+00001105  strlen                        
+00001119  __TI_decompress_none          
+00001127  Reset_Handler                 
+00001133  ADC14_IRQHandler              
+00001133  AES256_IRQHandler             
+00001133  BusFault_Handler              
+00001133  COMP_E0_IRQHandler            
+00001133  COMP_E1_IRQHandler            
+00001133  CS_IRQHandler                 
+00001133  DMA_ERR_IRQHandler            
+00001133  DMA_INT0_IRQHandler           
+00001133  DMA_INT1_IRQHandler           
+00001133  DMA_INT2_IRQHandler           
+00001133  DMA_INT3_IRQHandler           
+00001133  DebugMon_Handler              
+00001133  Default_Handler               
+00001133  EUSCIA0_IRQHandler            
+00001133  EUSCIA1_IRQHandler            
+00001133  EUSCIA2_IRQHandler            
+00001133  EUSCIA3_IRQHandler            
+00001133  EUSCIB0_IRQHandler            
+00001133  EUSCIB1_IRQHandler            
+00001133  EUSCIB2_IRQHandler            
+00001133  EUSCIB3_IRQHandler            
+00001133  FLCTL_IRQHandler              
+00001133  FPU_IRQHandler                
+00001133  HardFault_Handler             
+00001133  MemManage_Handler             
+00001133  NMI_Handler                   
+00001133  PCM_IRQHandler                
+00001133  PORT1_IRQHandler              
+00001133  PORT2_IRQHandler              
+00001133  PORT3_IRQHandler              
+00001133  PORT4_IRQHandler              
+00001133  PORT5_IRQHandler              
+00001133  PORT6_IRQHandler              
+00001133  PSS_IRQHandler                
+00001133  PendSV_Handler                
+00001133  RTC_C_IRQHandler              
+00001133  SVC_Handler                   
+00001133  SysTick_Handler               
+00001133  T32_INT1_IRQHandler           
+00001133  T32_INT2_IRQHandler           
+00001133  T32_INTC_IRQHandler           
+00001133  TA0_0_IRQHandler              
+00001133  TA0_N_IRQHandler              
+00001133  TA1_0_IRQHandler              
+00001133  TA1_N_IRQHandler              
+00001133  TA2_0_IRQHandler              
+00001133  TA2_N_IRQHandler              
+00001133  TA3_0_IRQHandler              
+00001133  TA3_N_IRQHandler              
+00001133  UsageFault_Handler            
+00001133  WDT_A_IRQHandler              
+00001135  _system_pre_init              
+00001139  C$$EXIT                       
+00001139  abort                         
+0000113c  ti                            
+00001813  Enemy                         
+000018da  Masks                         
+000018f8  __TI_Handler_Table_Base       
+00001904  __TI_Handler_Table_Limit      
+00001910  __TI_CINIT_Base               
+00001920  __TI_CINIT_Limit              
 20000000  Screen                        
 200001f8  ClockFrequency                
 200001fc  Prewait                       
@@ -385,4 +391,4 @@ ffffffff  binit
 UNDEFED   __mpu_init                    
 UNDEFED   _system_post_cinit            
 
-[121 symbols]
+[123 symbols]

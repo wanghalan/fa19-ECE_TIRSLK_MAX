@@ -143,6 +143,14 @@ const uint8_t Enemy[] = {
 };
 
 void main(void){
+    Clock_Init48MHz();                   // set system clock to 48 MHz
+    Nokia5110_Init();
+    Nokia5110_ClearBuffer();
+    //Testcommandwrite();
+    Nokia5110_OutString("I am almost home free!");
+}
+
+void main_(void){
   uint32_t count = 0;
   Clock_Init48MHz();                   // set system clock to 48 MHz
   Nokia5110_Init();

@@ -226,7 +226,10 @@ static const uint8_t ASCII[][5] = {
 // 4) Wait for SPI to be idle (after transmission complete)
 void static commandwrite(uint8_t command){
 // you write this as part of Lab 11
-
+    while((EUSCI_A3->IFG&0x002)==0){}//TXBUF Empty
+    //printf("Empty?\n");
+    P9->OUT &= ~0x40;
+    EUSCI_A3->TXBUF= command; //DATA out
 
 }
 void Testcommandwrite(void){
@@ -246,8 +249,9 @@ void Testcommandwrite(void){
 // Note: takes 2us to output a byte
 void static datawrite(uint8_t data){
 // you write this as part of Lab 11
-
-
+    while((EUSCI_A3->IFG&0x002)==0){}//TXBUF Empty
+    P9->OUT |= 0x40;
+    EUSCI_A3->TXBUF= data; //DATA out
 }
 
 //********Nokia5110_Init*****************
@@ -334,10 +338,12 @@ void Nokia5110_OutChar(char data){int i;
 // Inputs: ptr  pointer to NULL-terminated ASCII string
 // Outputs: none
 // Assumes: LCD is in default horizontal addressing mode (V = 0)
-void Nokia5110_OutString(char *ptr){
+void Nokia5110_OutString(char *ptr){int i;
+
 // you write this as part of Lab 11
-
-
+    for (i=0; i< strlen(ptr); i=i+1){
+        Nokia5110_OutChar(ptr[i]);
+    }
 }
 
 //********Nokia5110_OutUDec*****************
