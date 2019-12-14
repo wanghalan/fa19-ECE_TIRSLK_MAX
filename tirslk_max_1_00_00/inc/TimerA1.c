@@ -62,13 +62,13 @@ void TimerA1_Init(void(*task)(void), uint16_t period){
     TIMER_A1->CTL |= 0x0014;
 }
 
-
 // ------------TimerA1_Stop------------
 // Deactivate the interrupt running a user task periodically.
 // Input: none
 // Output: none
 void TimerA1_Stop(void){
     // write this as part of Lab 13
+    TIMER_A1->CTL &= ~0x0030; //halt timer A0
 }
 
 

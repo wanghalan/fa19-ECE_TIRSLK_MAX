@@ -74,17 +74,17 @@ void TimedPause(uint32_t time){
   //P2->OUT^=0x06;
 }
 
-uint16_t stop= 0;
+uint16_t stop_flag= 0;
 void BumpCheck(void){
     //P2->OUT = 0x06;
     if (Bump_Read()>0){
         P2->OUT = 0x03;
         Motor_Stop();
-        stop= 1;
+        stop_flag= 1;
     }
 }
 
-int main_(void){ //Test motor
+int main(void){ //Test motor
   Clock_Init48MHz();
   LaunchPad_Init(); // built-in switches and LEDs
   Bump_Init();      // bump switches
@@ -94,18 +94,20 @@ int main_(void){ //Test motor
   TimerA1_Init(&BumpCheck,500);  // 1000 Hz
 
   while(1){
-    TimedPause(500);
-    P2->OUT= 0x01; //RED
-    Motor_Forward(7500,7500);  // your function
-    TimedPause(500);
-    P2->OUT= 0x02; //GREEN
-    Motor_Backward(7500,7500); // your function
-    TimedPause(500);
-    P2->OUT= 0x03; //YELLOW
-    Motor_Left(5000,5000);     // your function
-    TimedPause(500);
-    P2->OUT= 0x04;//BLUE
-    Motor_Right(5000,5000);    // your function
+      if (stop_flag== 0){
+        TimedPause(500);
+        P2->OUT= 0x01; //RED
+        Motor_Forward(7500,7500);  // your function
+        TimedPause(500);
+        P2->OUT= 0x02; //GREEN
+        Motor_Backward(7500,7500); // your function
+        TimedPause(500);
+        P2->OUT= 0x03; //YELLOW
+        Motor_Left(5000,5000);     // your function
+        TimedPause(500);
+        P2->OUT= 0x04;//BLUE
+        Motor_Right(5000,5000);    // your function
+      }
   }
 }
 
@@ -134,7 +136,7 @@ int red_blue_purple_led(void){
 }
 
 
-int main(void){
+int main_(void){
     // write a main program that uses PWM to move the robot
     // like Program13_1, but uses TimerA1 to periodically
     // check the bump switches, stopping the robot on a collision
@@ -152,7 +154,7 @@ int main(void){
 
         //TimedPause(1000);
         //P2->OUT= 0x02; //Green
-        if (stop== 0){
+        if (stop_flag== 0){
             P2->OUT= 0x01; //Green
             Motor_Forward(1000,1000);  // your function
         }

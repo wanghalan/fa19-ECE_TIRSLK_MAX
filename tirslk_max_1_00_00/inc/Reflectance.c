@@ -54,7 +54,7 @@ policies, either expressed or implied, of the FreeBSD Project.
 
 #include <stdint.h>
 #include "msp432.h"
-#include "..\inc\Clock.h"
+#include "..\tirslk_max_1_00_00\inc\Clock.h"
 
 int W[8]= {334,238,142,48,-48,-142,-238,-334};
 int HexPos[8]={0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80};

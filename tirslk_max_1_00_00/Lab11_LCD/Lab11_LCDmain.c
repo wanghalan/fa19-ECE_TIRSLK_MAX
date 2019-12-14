@@ -142,7 +142,7 @@ const uint8_t Enemy[] = {
  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF
 };
 
-void main(void){
+void main_(void){
     Clock_Init48MHz();                   // set system clock to 48 MHz
     Nokia5110_Init();
     Nokia5110_ClearBuffer();
@@ -158,70 +158,76 @@ void main(void){
     Nokia5110_OutUDec(0);
     Nokia5110_OutString(" mm");
 
+    Nokia5110_ClearBuffer();
     Nokia5110_SetCursor(3,2);  // spot for number
     Nokia5110_OutUDec(123);
 
+    Nokia5110_ClearBuffer();
     Nokia5110_SetCursor(3,2);  // spot for number
     Nokia5110_OutSDec(-4567);
 }
 
-void main_(void){
+void main(void){
   uint32_t count = 0;
   Clock_Init48MHz();                   // set system clock to 48 MHz
   Nokia5110_Init();
   Nokia5110_ClearBuffer();
-  for(count=0; count<21; count=count+1){
-    for(int i=0; i<3; i=i+1){
-      for(int j=0; j<3; j=j+1){
-        // 16x10 enemy; 5 empty columns to left, 1 empty row below
-        Nokia5110_PrintBMP(5+21*j+count, 10+11*i, Enemy, 0);
-      }
-    }
-    Nokia5110_DisplayBuffer();
-    Clock_Delay1ms(250);               // delay ~0.25 sec at 48 MHz
-  }
-
-  count = 0;
-  do{
-  // three step process: clear, build, display
-    Nokia5110_ClearBuffer();
-    Nokia5110_PrintBMP(count, 47, ti, 0);
-    Nokia5110_DisplayBuffer();
-    Clock_Delay1ms(40);                // delay ~0.04 sec at 48 MHz
-    count = count+1;
-  }while(count<36);
-  do{
-  // three step process: clear, build, display
-    Nokia5110_ClearBuffer();
-    Nokia5110_PrintBMP(count, 47, ti, 0);
-    Nokia5110_DisplayBuffer();
-    Clock_Delay1ms(40);                // delay ~0.04 sec at 48 MHz
-//    if(count == 24){while(1);}         // pause for a picture
-    count = count-1;
-  }while(count>0);
-  do{
-  // three step process: clear, build, display
-    Nokia5110_ClearBuffer();
-    Nokia5110_PrintBMP(count, 47, ti, 0);
-    Nokia5110_DisplayBuffer();
-    Clock_Delay1ms(40);                // delay ~0.04 sec at 48 MHz
-    count = count+1;
-  }while(count<18);
-  Clock_Delay1ms(100);                 // delay 1 sec at 48 MHz
-
-  Nokia5110_Clear();
-  Nokia5110_SetCursor(0,2);
-  Nokia5110_OutString("D= ");
-  Nokia5110_OutUDec(1234);
-  Nokia5110_OutString(" mm");
+//  for(count=0; count<21; count=count+1){
+//    for(int i=0; i<3; i=i+1){
+//      for(int j=0; j<3; j=j+1){
+//        // 16x10 enemy; 5 empty columns to left, 1 empty row below
+//        Nokia5110_PrintBMP(5+21*j+count, 10+11*i, Enemy, 0);
+//      }
+//    }
+//    Nokia5110_DisplayBuffer();
+//    Clock_Delay1ms(250);               // delay ~0.25 sec at 48 MHz
+//  }
+//
+//  count = 0;
+//  do{
+//  // three step process: clear, build, display
+//    Nokia5110_ClearBuffer();
+//    Nokia5110_PrintBMP(count, 47, ti, 0);
+//    Nokia5110_DisplayBuffer();
+//    Clock_Delay1ms(40);                // delay ~0.04 sec at 48 MHz
+//    count = count+1;
+//  }while(count<36);
+//  do{
+//  // three step process: clear, build, display
+//    Nokia5110_ClearBuffer();
+//    Nokia5110_PrintBMP(count, 47, ti, 0);
+//    Nokia5110_DisplayBuffer();
+//    Clock_Delay1ms(40);                // delay ~0.04 sec at 48 MHz
+////    if(count == 24){while(1);}         // pause for a picture
+//    count = count-1;
+//  }while(count>0);
+//  do{
+//  // three step process: clear, build, display
+//    Nokia5110_ClearBuffer();
+//    Nokia5110_PrintBMP(count, 47, ti, 0);
+//    Nokia5110_DisplayBuffer();
+//    Clock_Delay1ms(40);                // delay ~0.04 sec at 48 MHz
+//    count = count+1;
+//  }while(count<18);
+//  Clock_Delay1ms(100);                 // delay 1 sec at 48 MHz
+//
+//  Nokia5110_Clear();
+//  Nokia5110_SetCursor(0,2);
+//  Nokia5110_OutString("D= ");
+//  Nokia5110_OutUDec(1234);
+//  Nokia5110_OutString(" mm");
 
   Nokia5110_OutString("************* LCD Test *************Letter: Num:------- ---- ");
   Nokia5110_OutChar(127);              // print UT sign
   count = 0;
   while(1){
-    Nokia5110_SetCursor(5, 5);         // five leading spaces, bottom row
+    Nokia5110_SetCursor(0, 5);         // five leading spaces, bottom row
     Nokia5110_OutChar((count%26)+'A');
     Nokia5110_OutChar(' ');
+//    Nokia5110_OutChar(' ');
+//    Nokia5110_OutChar(' ');
+//    Nokia5110_OutChar(' ');
+//    Nokia5110_OutChar(' ');
     Nokia5110_OutUDec(1<<(count&0x0F));
     Clock_Delay1ms(500);               // delay ~0.5 sec at 48 MHz
     count = count + 1;

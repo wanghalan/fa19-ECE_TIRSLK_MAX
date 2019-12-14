@@ -90,19 +90,21 @@ uint32_t Position= 0;
 uint32_t power_percentage= 0;
 uint32_t bump_data=0;
 
-void Debug_Init(void){
+void Debug_Init(void){int i;int j;
   // write this as part of Lab 10
-    //debug_array_element= 0;
-//    debug_array_x= {0};
-//    debug_array_y= {0};
+    for(i=0; i<SIZE; i++) {
+       for(j=0;j<2;j++) {
+           Debug_Buffer[i][j]= 0;
+       }
+    }
 }
+
 void Debug_Dump(uint32_t x, uint32_t y){
     if (Debug_Cnt< SIZE){
         Debug_Buffer[Debug_Cnt][0]= x; //P1->IN;
         Debug_Buffer[Debug_Cnt][1]= y; //P2->OUT;
         Debug_Cnt++;
         Debug_Cnt %= SIZE; //Roll over
-
         Debug_FlashRecord(Debug_Buffer[Debug_Cnt]);
     }
 }
@@ -138,8 +140,10 @@ void Debug_FlashRecord(uint64_t *pt){
      *     SuccessfulWrites = Flash_WriteArray(DataArray, FLASH + 12, 10); // use scope to measure J4.37 (TM4C123 PC4, MSP432 P5.6) high time (610 usec)
      *     LaunchPad_Output(0);                           // red LED off; green LED off; blue LED off
      */
-
-    Flash_WriteArray(pt, FLASH+16*(Reflectance_Counter/100), 10); //ugh just copying
+    uint16_t successfulWrites = 0;
+    successfulWrites= Flash_WriteArray(pt, FLASH+12, 10); //ugh just copying
+    LaunchPad_Output(0);                           // red LED off; green LED off; blue LED off
+    P2->OUT= successfulWrites;
 }
 
 
@@ -293,7 +297,7 @@ int Program10_2(void){ uint16_t i;
 }
 
 
-int Program10_3(void){ uint16_t i;
+int main_(void){ uint16_t i;
   Clock_Init48MHz();
   LaunchPad_Init(); // built-in switches and LEDs
   for(i=0;i<SIZE;i++){
