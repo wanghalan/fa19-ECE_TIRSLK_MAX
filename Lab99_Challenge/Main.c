@@ -87,8 +87,8 @@ typedef const struct State State_t;
 #define Right     &fsm[2]
 #define Left2      &fsm[3]
 #define Right2     &fsm[4]
-#define E_Left      &fsm[5]
-#define E_Right     &fsm[6]
+#define E_Right      &fsm[5]
+#define E_Left     &fsm[6]
 #define Rec_Center &fsm[7]
 #define Stop &fsm[8]
 
@@ -98,14 +98,14 @@ State_t fsm[9]={ //Keeping each state string to 6 characters
   {"Left 1", 0x02, 500, { E_Right,  Left2, Right,  Center }},  // Left, green
   {"Right1", 0x03, 500, { E_Left, Left,   Right2, Center }},   // Right, yellow
 
-  {"Left 2", 0x04, 500, { E_Left, Left,   Right, Center }},   // Right2, blue
-  {"Right2", 0x04, 500, { E_Right, Left,   Right, Center }},   // Left2, blue
+  {"Left 2", 0x04, 500, { E_Right, Left,   Right, Center }},   // Right2, blue
+  {"Right2", 0x04, 500, { E_Left, Left,   Right, Center }},   // Left2, blue
 
   {"ERight", 0x05, 500, { Rec_Center, Left,   Right, Center }},   // E_Right, pink
   {"E Left", 0x05, 500, { Rec_Center, Left,   Right, Center }},   // E_Left, pink
 
   {"RecCen", 0x06, 500, { Stop, Left,   Right, Center }},   // Recover_Center, sky blue
-  {"Stop  ", 0x07, 500, { Stop, Stop,   Stop, Stop }},   // Stop, white
+  {"-Stop-", 0x07, 500, { Stop, Stop,   Stop, Stop }},   // Stop, white
 };
 
 State_t *Spt;  // pointer to the current state
@@ -152,10 +152,23 @@ void Reflectance_Handler(void){
     else if (Reflectance_Counter >= 99){
         Position= Reflectance_Position(Reflectance_End());
     }
-    Scaled_Green_LED(abs(Position)*100/334); //power percentage; if distance = 0, LED will turn off
+    //Scaled_Green_LED(abs(Position)*100/334); //power percentage; if distance = 0, LED will turn off
 
     Reflectance_Counter+= 1;
     //printf("Counter: %d, Status: %d, data: %d, Position: %d, Power Percentage: %d\n", Reflectance_Counter, status, data, position, power_percentage);
+}
+
+void BumpCheck(void){
+    //P2->OUT = 0x06;
+    if (Bump_Read()>0){
+        //P2->OUT = 0x03;
+        Motor_Stop();
+        stop_flag= 1; //This way it won't keep going
+        Nokia5110_SetCursor(0, 5);
+        Nokia5110_OutString("-BUMP-");
+    }else{
+        stop_flag= 0;
+    }
 }
 
 int main(void){ uint32_t heart=0; //FMS check
@@ -166,37 +179,33 @@ int main(void){ uint32_t heart=0; //FMS check
   Nokia5110_Clear();
 
 
-  TExaS_Init(LOGICANALYZER);  // optional
-  Spt = Center;
-  //Nokia5110_OutString("************* LCD Test *************Letter: Num:------- ---- ");
-  //Nokia5110_SetCursor(0, 5);         // five leading spaces, bottom row
-  //Nokia5110_OutString("State: ");
-  while(1){
-    Output = Spt->out;            // set output from FSM
-    LaunchPad_Output(Output);     // do output to two motors
-    TExaS_Set(Input<<2|Output);   // optional, send data to logic analyzer
-    Clock_Delay1ms(Spt->delay);   // wait
-    Input = LaunchPad_Input();    // read sensors
-    Spt = Spt->next[Input];       // next depends on input and state
-    heart = heart^1;
-    LaunchPad_LED(heart);         // optional, debugging heartbeat
+  Bump_Init();
+  Motor_Init();
+  Reflectance_Init();
 
-    Nokia5110_SetCursor(0, 5);         // five leading spaces, bottom row
-    Nokia5110_OutString(Spt->name);
+  PWM_Init34(15000, 5000, 5000); //10 ms period motor set up
+  TimerA1_Init(&BumpCheck,500);  // 1000 Hz bump check
+  TimerA2_Init(&Reflectance_Handler,480);  // Can't use timer A0, because it is being used for the motor PWM; reflectance checking
+
+  EnableInterrupts();
+
+  Spt = Center;
+  while(1){
+    if (stop_flag== 0){
+        Output = Spt->out;            // set output from FSM
+        LaunchPad_Output(Output);     // do output to two motors
+        TExaS_Set(Input<<2|Output);   // optional, send data to logic analyzer
+        Clock_Delay1ms(Spt->delay);   // wait
+        Input = LaunchPad_Input();    // read sensors
+        Spt = Spt->next[Input];       // next depends on input and state
+        heart = heart^1;
+        LaunchPad_LED(heart);         // optional, debugging heartbeat
+
+        Nokia5110_SetCursor(0, 5);         // five leading spaces, bottom row
+        Nokia5110_OutString(Spt->name);
+    }
   }
 }
-
-void BumpCheck(void){
-    //P2->OUT = 0x06;
-    if (Bump_Read()>0){
-        //P2->OUT = 0x03;
-        Motor_Stop();
-        stop_flag= 1; //This way it won't keep going
-    }else{
-        //stop_flag= 0;
-    }
-}
-
 
 
 int main_(void){
@@ -209,9 +218,6 @@ int main_(void){
     Bump_Init();      // bump switches
     Motor_Init();
     Reflectance_Init();
-    Nokia5110_Init();
-    Nokia5110_ClearBuffer();
-    Nokia5110_DisplayBuffer();
 
     PWM_Init34(15000, 5000, 5000); //10 ms period
     TimerA1_Init(&BumpCheck,500);  // 1000 Hz
