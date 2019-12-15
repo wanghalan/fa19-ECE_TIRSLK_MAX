@@ -73,39 +73,45 @@ uint16_t stop_flag= 0; //Whether or not to stop the motors
 uint32_t Reflectance_Counter= 0; //?
 uint32_t Position= 0; //Position as detected by the line sensor
 
+//typedef void (*MotorFunctions)();
+
 // Linked data structure
 struct State {
   char *name;
+  char uid;
   uint32_t out;                // 2-bit output
   uint32_t delay;              // time to delay in 1ms
   const struct State *next[4]; // Next if 2-bit input is 0-3
 };
 typedef const struct State State_t;
-
+#define NULL (0)
 #define Center    &fsm[0]
 #define Left      &fsm[1]
 #define Right     &fsm[2]
+
 #define Left2      &fsm[3]
 #define Right2     &fsm[4]
+
 #define E_Right      &fsm[5]
 #define E_Left     &fsm[6]
+
 #define Rec_Center &fsm[7]
 #define Stop &fsm[8]
 
 
 State_t fsm[9]={ //Keeping each state string to 6 characters
-  {"Center", 0x01, 500, { Right, Left, Right,  Center }},  // Center, red
-  {"Left 1", 0x02, 500, { E_Right,  Left2, Right,  Center }},  // Left, green
-  {"Right1", 0x03, 500, { E_Left, Left,   Right2, Center }},   // Right, yellow
+  {"Center", 'c', 0x01, 500, { Right, Left, Right,  Center }},  // Center, red
+  {"Left 1", 'l', 0x02, 500, { E_Right,  Left2, Right,  Center }},  // Left, green
+  {"Right1", 'r', 0x03, 500, { E_Left, Left,   Right2, Center }},   // Right, yellow
 
-  {"Left 2", 0x04, 500, { E_Right, Left,   Right, Center }},   // Right2, blue
-  {"Right2", 0x04, 500, { E_Left, Left,   Right, Center }},   // Left2, blue
+  {"Left 2", 'L', 0x04, 500, { E_Right, Left,   Right, Center }},   // Left 2, blue
+  {"Right2", 'R', 0x04, 500, { E_Left, Left,   Right, Center }},   // Right 2, blue
 
-  {"ERight", 0x05, 500, { Rec_Center, Left,   Right, Center }},   // E_Right, pink
-  {"E Left", 0x05, 500, { Rec_Center, Left,   Right, Center }},   // E_Left, pink
+  {"ERight", 'E', 0x05, 500, { Rec_Center, Left,   Right, Center }},   // E_Right, pink
+  {"E Left", 'Q', 0x05, 500, { Rec_Center, Left,   Right, Center }},   // E_Left, pink
 
-  {"RecCen", 0x06, 500, { Stop, Left,   Right, Center }},   // Recover_Center, sky blue
-  {"-Stop-", 0x07, 500, { Stop, Stop,   Stop, Stop }},   // Stop, white
+  {"RecCen", 'C', 0x06, 500, { Stop, Left,   Right, Center }},   // Recover_Center, sky blue
+  {"-Stop-", 's', 0x07, 500, { Stop, Stop,   Stop, Stop }},   // Stop, white
 };
 
 State_t *Spt;  // pointer to the current state
@@ -128,17 +134,6 @@ void TimedPause(uint32_t time){
   //P2->OUT^=0x06;
 }
 
-void Scaled_Green_LED(int percentage){
-    //Do PWD on a reflectance counter? Assuming between 0 and 100
-    if (percentage> 0){
-        if (percentage > Reflectance_Counter){
-            P2->OUT|= 0x02; //Green LED ON
-        }else{
-            P2->OUT&= ~0x02; //Green LED OFF
-        }
-    }
-}
-
 void Reflectance_Handler(void){
     Reflectance_Counter%= 100;
 
@@ -152,7 +147,10 @@ void Reflectance_Handler(void){
     else if (Reflectance_Counter >= 99){
         Position= Reflectance_Position(Reflectance_End());
     }
-    //Scaled_Green_LED(abs(Position)*100/334); //power percentage; if distance = 0, LED will turn off
+    Nokia5110_SetCursor(0, 4);         // five leading spaces, bottom row
+    Nokia5110_OutString("Pos: ");
+    Nokia5110_SetCursor(7, 4);
+    Nokia5110_OutUDec(Position);
 
     Reflectance_Counter+= 1;
     //printf("Counter: %d, Status: %d, data: %d, Position: %d, Power Percentage: %d\n", Reflectance_Counter, status, data, position, power_percentage);
@@ -170,6 +168,9 @@ void BumpCheck(void){
         stop_flag= 0;
     }
 }
+
+uint32_t speedMax= 14998;
+uint32_t speedMin= 0;
 
 int main(void){ uint32_t heart=0; //FMS check
   Clock_Init48MHz();
@@ -193,8 +194,50 @@ int main(void){ uint32_t heart=0; //FMS check
   while(1){
     if (stop_flag== 0){
         Output = Spt->out;            // set output from FSM
+
+        switch(Spt->uid) {
+           case 'c': //0 to 14,998
+              Motor_Forward(speedMax, speedMax);
+              break;
+
+           case 'C':
+              Motor_Forward(speedMax/2, speedMax/2);
+              break;
+
+           case 'l': //Left 1
+              Motor_Forward(speedMax/2, speedMax);
+              break;
+
+           case 'r': //Right 1
+              Motor_Forward(speedMax, speedMax/2);
+              break;
+
+           case 'L': //Left 2
+              Motor_Left(speedMax, speedMin);
+              break;
+
+           case 'R': //Right 2
+              Motor_Right(speedMin, speedMax);
+              break;
+
+           case 'Q': //E Left
+              Motor_Right(speedMax, speedMax);
+              break;
+
+           case 'E': //E RIght
+              Motor_Right(speedMax, speedMax);
+              break;
+
+           case 's':
+               Motor_Stop();
+               break;
+           default :
+               Motor_Stop();
+        }
+
         LaunchPad_Output(Output);     // do output to two motors
         TExaS_Set(Input<<2|Output);   // optional, send data to logic analyzer
+
         Clock_Delay1ms(Spt->delay);   // wait
         Input = LaunchPad_Input();    // read sensors
         Spt = Spt->next[Input];       // next depends on input and state
