@@ -51,6 +51,11 @@
 			<locationURI>copy_PARENT/inc/Motor.c</locationURI>
 		</link>
 		<link>
+			<name>Nokia5110.c</name>
+			<type>1</type>
+			<locationURI>copy_PARENT/inc/Nokia5110.c</locationURI>
+		</link>
+		<link>
 			<name>PWM.c</name>
 			<type>1</type>
 			<locationURI>copy_PARENT/inc/PWM.c</locationURI>

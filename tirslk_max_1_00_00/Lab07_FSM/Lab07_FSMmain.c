@@ -68,7 +68,6 @@ typedef const struct State State_t;
 #define Center    &fsm[0]
 #define Left      &fsm[1]
 #define Right     &fsm[2]
-
 #define Left2      &fsm[3]
 #define Right2     &fsm[4]
 #define E_Left      &fsm[5]
@@ -76,7 +75,6 @@ typedef const struct State State_t;
 #define Rec_Center &fsm[7]
 #define Stop &fsm[8]
 
-// student starter code
 
 State_t fsm[9]={
   {0x01, 500, { Right, Left,   Right,  Center }},  // Center, red

@@ -66,12 +66,56 @@ policies, either expressed or implied, of the FreeBSD Project.
 #include "..\tirslk_max_1_00_00\inc\TimerA2.h"
 #include "..\tirslk_max_1_00_00\inc\TExaS.h"
 #include "..\tirslk_max_1_00_00\inc\Reflectance.h"
-
+#include "..\tirslk_max_1_00_00\inc\Nokia5110.h"
 
 
 uint16_t stop_flag= 0; //Whether or not to stop the motors
 uint32_t Reflectance_Counter= 0; //?
 uint32_t Position= 0; //Position as detected by the line sensor
+
+// Linked data structure
+struct State {
+  uint32_t out;                // 2-bit output
+  uint32_t delay;              // time to delay in 1ms
+  const struct State *next[4]; // Next if 2-bit input is 0-3
+};
+typedef const struct State State_t;
+
+#define Center    &fsm[0]
+#define Left      &fsm[1]
+#define Right     &fsm[2]
+#define Left2      &fsm[3]
+#define Right2     &fsm[4]
+#define E_Left      &fsm[5]
+#define E_Right     &fsm[6]
+#define Rec_Center &fsm[7]
+#define Stop &fsm[8]
+
+
+State_t fsm[9]={
+  {0x01, 500, { Right, Left,   Right,  Center }},  // Center, red
+  {0x02, 500, { E_Right,  Left2, Right,  Center }},  // Left, green
+  {0x03, 500, { E_Left, Left,   Right2, Center }},   // Right, yellow
+
+  {0x04, 500, { E_Left, Left,   Right, Center }},   // Right2, blue
+  {0x04, 500, { E_Right, Left,   Right, Center }},   // Left2, blue
+
+  {0x05, 500, { Rec_Center, Left,   Right, Center }},   // E_Right, pink
+  {0x05, 500, { Rec_Center, Left,   Right, Center }},   // E_Left, pink
+
+  {0x06, 500, { Stop, Left,   Right, Center }},   // Recover_Center, sky blue
+  {0x07, 500, { Stop, Stop,   Stop, Stop }},   // Stop, white
+};
+
+State_t *Spt;  // pointer to the current state
+uint32_t Input;
+uint32_t Output;
+/*Run FSM continuously
+1) Output depends on State (LaunchPad LED)
+2) Wait depends on State
+3) Input (LaunchPad buttons)
+4) Next depends on (Input,State)
+ */
 
 // Driver test
 void TimedPause(uint32_t time){
@@ -113,6 +157,28 @@ void Reflectance_Handler(void){
     //printf("Counter: %d, Status: %d, data: %d, Position: %d, Power Percentage: %d\n", Reflectance_Counter, status, data, position, power_percentage);
 }
 
+int main(void){ uint32_t heart=0; //FMS check
+  Clock_Init48MHz();
+  LaunchPad_Init();
+  Nokia5110_Init();
+  Nokia5110_ClearBuffer();
+  TExaS_Init(LOGICANALYZER);  // optional
+  Spt = Center;
+  //Nokia5110_OutString("************* LCD Test *************Letter: Num:------- ---- ");
+  while(1){
+    Output = Spt->out;            // set output from FSM
+    LaunchPad_Output(Output);     // do output to two motors
+    TExaS_Set(Input<<2|Output);   // optional, send data to logic analyzer
+    Clock_Delay1ms(Spt->delay);   // wait
+    Input = LaunchPad_Input();    // read sensors
+    Spt = Spt->next[Input];       // next depends on input and state
+    heart = heart^1;
+    LaunchPad_LED(heart);         // optional, debugging heartbeat
+    Nokia5110_SetCursor(0, 5);         // five leading spaces, bottom row
+    Nokia5110_OutUDec(Output);
+  }
+}
+
 void BumpCheck(void){
     //P2->OUT = 0x06;
     if (Bump_Read()>0){
@@ -125,7 +191,8 @@ void BumpCheck(void){
 }
 
 
-int main(void){
+
+int main_(void){
     // write a main program that uses PWM to move the robot
     // like Program13_1, but uses TimerA1 to periodically
     // check the bump switches, stopping the robot on a collision
@@ -148,7 +215,8 @@ int main(void){
         //P2->OUT= 0x02; //Green
         if (stop_flag== 0){
             //P2->OUT= 0x01; //Red
-            Motor_Forward(1000,1000);  // your function
+            Spt = Spt->next[Input]; // next depends on input and state
+            //Motor_Forward(1000,1000);  // your function
         }
     }
 }
