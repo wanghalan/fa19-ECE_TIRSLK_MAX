@@ -75,6 +75,7 @@ uint32_t Position= 0; //Position as detected by the line sensor
 
 // Linked data structure
 struct State {
+  char *name;
   uint32_t out;                // 2-bit output
   uint32_t delay;              // time to delay in 1ms
   const struct State *next[4]; // Next if 2-bit input is 0-3
@@ -92,19 +93,19 @@ typedef const struct State State_t;
 #define Stop &fsm[8]
 
 
-State_t fsm[9]={
-  {0x01, 500, { Right, Left,   Right,  Center }},  // Center, red
-  {0x02, 500, { E_Right,  Left2, Right,  Center }},  // Left, green
-  {0x03, 500, { E_Left, Left,   Right2, Center }},   // Right, yellow
+State_t fsm[9]={ //Keeping each state string to 6 characters
+  {"Center", 0x01, 500, { Right, Left, Right,  Center }},  // Center, red
+  {"Left 1", 0x02, 500, { E_Right,  Left2, Right,  Center }},  // Left, green
+  {"Right1", 0x03, 500, { E_Left, Left,   Right2, Center }},   // Right, yellow
 
-  {0x04, 500, { E_Left, Left,   Right, Center }},   // Right2, blue
-  {0x04, 500, { E_Right, Left,   Right, Center }},   // Left2, blue
+  {"Left 2", 0x04, 500, { E_Left, Left,   Right, Center }},   // Right2, blue
+  {"Right2", 0x04, 500, { E_Right, Left,   Right, Center }},   // Left2, blue
 
-  {0x05, 500, { Rec_Center, Left,   Right, Center }},   // E_Right, pink
-  {0x05, 500, { Rec_Center, Left,   Right, Center }},   // E_Left, pink
+  {"ERight", 0x05, 500, { Rec_Center, Left,   Right, Center }},   // E_Right, pink
+  {"E Left", 0x05, 500, { Rec_Center, Left,   Right, Center }},   // E_Left, pink
 
-  {0x06, 500, { Stop, Left,   Right, Center }},   // Recover_Center, sky blue
-  {0x07, 500, { Stop, Stop,   Stop, Stop }},   // Stop, white
+  {"RecCen", 0x06, 500, { Stop, Left,   Right, Center }},   // Recover_Center, sky blue
+  {"Stop  ", 0x07, 500, { Stop, Stop,   Stop, Stop }},   // Stop, white
 };
 
 State_t *Spt;  // pointer to the current state
@@ -162,9 +163,14 @@ int main(void){ uint32_t heart=0; //FMS check
   LaunchPad_Init();
   Nokia5110_Init();
   Nokia5110_ClearBuffer();
+  Nokia5110_Clear();
+
+
   TExaS_Init(LOGICANALYZER);  // optional
   Spt = Center;
   //Nokia5110_OutString("************* LCD Test *************Letter: Num:------- ---- ");
+  //Nokia5110_SetCursor(0, 5);         // five leading spaces, bottom row
+  //Nokia5110_OutString("State: ");
   while(1){
     Output = Spt->out;            // set output from FSM
     LaunchPad_Output(Output);     // do output to two motors
@@ -174,8 +180,9 @@ int main(void){ uint32_t heart=0; //FMS check
     Spt = Spt->next[Input];       // next depends on input and state
     heart = heart^1;
     LaunchPad_LED(heart);         // optional, debugging heartbeat
+
     Nokia5110_SetCursor(0, 5);         // five leading spaces, bottom row
-    Nokia5110_OutUDec(Output);
+    Nokia5110_OutString(Spt->name);
   }
 }
 
@@ -200,8 +207,11 @@ int main_(void){
     Clock_Init48MHz();
     LaunchPad_Init(); // built-in switches and LEDs
     Bump_Init();      // bump switches
-    Motor_Init();     // your function
+    Motor_Init();
     Reflectance_Init();
+    Nokia5110_Init();
+    Nokia5110_ClearBuffer();
+    Nokia5110_DisplayBuffer();
 
     PWM_Init34(15000, 5000, 5000); //10 ms period
     TimerA1_Init(&BumpCheck,500);  // 1000 Hz
