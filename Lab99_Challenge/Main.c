@@ -165,35 +165,30 @@ void Reflectance_Handler(void){uint8_t data= 0;
     Reflectance_Counter%= ref_latency;
 
     if (Reflectance_Counter == 0){
+        P2->OUT= 0x01;//Check that something is being shined
         Reflectance_Start();
     }else if (Reflectance_Counter==1){
+        P2->OUT&= ~0x01;//close it
         P7->DIR &= 0x00; //Set p7 to Input (0)
     }
     else if (Reflectance_Counter >= ref_latency- 1){
-        //Position= Reflectance_Position(Reflectance_End());
-
         data= Reflectance_End();
-        //total_bit_count+= countSetBits(data);
         Position= Reflectance_Position(data);
-        Threshold_Position_Finding(Position);
-
-        Nokia5110_SetCursor(7, 4);
-        Nokia5110_OutSDec(Position);
-
-//        //For debugging purposes
-        Nokia5110_SetCursor(0, 3);         // five leading spaces, bottom row
-        Nokia5110_OutString(Reflectance_String(data));
+        Threshold_Position_Finding(Position); //C'mon gimme that sum
+//
+//        Nokia5110_SetCursor(0, 3);         // five leading spaces, bottom row
+//        Nokia5110_OutString(Reflectance_String(data));
+        Reflectance_Counter= -1; //what a great bug
     }
     Reflectance_Counter+= 1;
 }
 
 const uint32_t threshold_min= 100;
 const uint32_t threshold_max= 200;
-const uint16_t threshold_step= 5;
+const uint16_t threshold_step= 10;
 
-int sum_position= 0;
-uint32_t sum_num_pos= 0;
-int big_boy_pos= 0;
+int32_t sum_position= 0;
+int32_t sum_num_pos= 0;
 
 void Threshold_pos_reset(void){
     ref_latency= threshold_min;
@@ -213,9 +208,13 @@ void Threshold_Position_Finding(uint32_t position){
 
     ref_latency+= threshold_step;
 
+
     if (ref_latency >= threshold_max){
-        big_boy_pos= sum_position/sum_num_pos;
-        Reflectance_to_input(big_boy_pos);
+        if (sum_num_pos== 0){
+            Reflectance_to_input(-999);
+        }else{
+            Reflectance_to_input(sum_position/sum_num_pos);
+        }
         Threshold_pos_reset();
     }
 
@@ -384,9 +383,10 @@ int main(void){
   Spt = Center;
 
   while(1){
-      Nokia5110_SetCursor(0, 4);
-      Nokia5110_OutString("Pos: ");
-      Nokia5110_OutSDec(big_boy_pos);
+//      Nokia5110_SetCursor(0, 4);
+//      Nokia5110_OutString("Pos: ");
+//      Nokia5110_SetCursor(7, 4);
+//      Nokia5110_OutSDec(big_boy_pos);
   }
 }
 
