@@ -75,8 +75,8 @@ int32_t Position= 0; //Position as detected by the line sensor
 
 
 
-uint32_t speedMax= 3000;//Test speed //14998; max speed
-uint32_t speedMin= 1500;
+uint32_t speedMax= 2000;//Test speed //14998; max speed
+uint32_t speedMin= 1000;
 uint32_t failure_count= 0; //once failure count exceeds a value, then stop
 uint32_t failure_threshold= 1000;
 
@@ -142,7 +142,7 @@ void TimedPause(uint32_t time){
   //P2->OUT^=0x06;
 }
 
-uint16_t center_thresh= 48; //7; 190
+uint16_t center_thresh= 97; //7; 190
 //uint16_t *position_stream[3];
 uint16_t position_counter= 0;
 uint16_t position_total= 0;
@@ -158,9 +158,9 @@ void Reflectance_to_input(int16_t position){
 //    }
     if (position > -center_thresh && position < center_thresh){
         Input= 3;
-    }else if (position <= -center_thresh && position >= -334){
+    }else if (position <= -center_thresh && position >= -190){
         Input= 2;
-    }else if (position >= center_thresh && position <= 334){
+    }else if (position >= center_thresh && position <= 190){
         Input= 1;
     }else{
         Input= 0;
@@ -179,20 +179,38 @@ void Position_To_Movement(int16_t position){
 //        position_counter= 0;
 //        position_total= 0;
 //    }
-    if (position > -center_thresh && position < center_thresh){
-        Motor_Forward(speedMax, speedMax);
-    }else if (position <= -center_thresh && position >= -190){ //Right
-        Motor_Forward(speedMax, speedMin);
-    }else if (position >= center_thresh && position <= 190){ //Left
-        Motor_Forward(speedMin, speedMax);
-    }else if (position < -190){
-        Motor_Right(speedMax, speedMax);
-    }else if (position > 190){
-        Motor_Right(speedMax, speedMax);
+    if (stop_flag== 0){
+        if (position==-999 || (position > -center_thresh && position < center_thresh)){
+            Motor_Forward(speedMax, speedMax);
+
+            Nokia5110_SetCursor(0, 5);
+            Nokia5110_OutString("-FORW-");
+
+        }else if (position <= -center_thresh && position >= -193){ //Right
+            Motor_Forward(speedMin, speedMax);
+            Nokia5110_SetCursor(0, 5);
+            Nokia5110_OutString("-LEFT-");
+        }else if (position >= center_thresh && position <= 193){ //Left
+            Motor_Forward(speedMax, speedMin);
+            Nokia5110_SetCursor(0, 5);
+            Nokia5110_OutString("-RIGHT-");
+        }else if (position < -190){
+            Motor_Right(speedMax, speedMax);
+            Nokia5110_SetCursor(0, 5);
+            Nokia5110_OutString("-MLEFT-");
+        }else if (position > 190){
+            Motor_Right(speedMax, speedMax);
+            Nokia5110_SetCursor(0, 5);
+            Nokia5110_OutString("-MRIGHT-");
+        }
+
+        Nokia5110_SetCursor(0, 4);         // five leading spaces, bottom row
+        Nokia5110_OutString("Pos: ");
+        Nokia5110_OutSDec(Position);
     }
 }
 
-uint32_t ref_latency= 10; //140; //160 for table, 295 for the groundfrom testing
+uint32_t ref_latency= 140; //140; //160 for table, 295 for the groundfrom testing
 uint32_t tmp_ref_latency= 0; //160 for table, 295 for the groundfrom testing
 
 
@@ -290,7 +308,7 @@ void Reflectance_Handler_old(void){uint8_t data= 0; uint32_t bit_count=0;
 void Reflectance_Handler(void){uint8_t data= 0; uint32_t bit_count=0; //The new one
     Reflectance_Counter%= ref_latency;
     if (Reflectance_Counter == 0){
-        //P2->OUT= 0x01;//Check that something is being shined
+        P2->OUT= 0x01;//Check that something is being shined
         Reflectance_Start();
         P7->DIR &= 0x00; //Set p7 to Input (0)
     }
@@ -301,7 +319,9 @@ void Reflectance_Handler(void){uint8_t data= 0; uint32_t bit_count=0; //The new 
         position_total+= Position;
 
         //Reflectance_to_input(position_total/ref_latency);
-        Position_To_Movement(position_total/ref_latency);
+//        Position_To_Movement(position_total/ref_latency);
+//        Position_To_Movement(Position);
+        Reflectance_to_input(Position);
 
         Nokia5110_SetCursor(0, 3);         // five leading spaces, bottom row
         Nokia5110_OutString("L: ");
@@ -310,7 +330,8 @@ void Reflectance_Handler(void){uint8_t data= 0; uint32_t bit_count=0; //The new 
         Nokia5110_SetCursor(0, 4);         // five leading spaces, bottom row
         Nokia5110_OutString("Pos: ");
         Nokia5110_OutSDec(Position);
-    }else if (Reflectance_Counter> ref_latency/2){
+    }
+    else if (Reflectance_Counter> ref_latency){
         data= Reflectance_End();
         Position= Reflectance_Position(data);
         position_total+= Position;
@@ -322,7 +343,7 @@ void Reflectance_Handler(void){uint8_t data= 0; uint32_t bit_count=0; //The new 
 
 void BumpCheck(void){
     //P2->OUT = 0x06;
-    if (Bump_Read()>0){
+    if (Bump_Read()>0 && stop_flag!= 1){
         //P2->OUT = 0x03;
         Motor_Stop();
         stop_flag= 1; //This way it won't keep going
@@ -351,7 +372,7 @@ void hand_tuning_module(void){uint8_t touch= 0;//TEST MODE
 }
 
 
-int main(void){
+int main_t(void){
     Clock_Init48MHz();
     LaunchPad_Init();
     Nokia5110_Init();
@@ -376,17 +397,18 @@ int main(void){
 
     Spt = Center;
 
-
+    stop_flag= 1;
     while (LaunchPad_Input()!= 3){
         //Motor_Right(speedMax, speedMax);
     }
     TimerA1_Init(&BumpCheck,480);  // 1000 Hz bump check
+    stop_flag= 0;
     while(1){
 
     }
 }
 
-int main__(void){ uint32_t heart=0; //FMS check
+int main(void){ uint32_t heart=0; //FMS check
     Clock_Init48MHz();
     LaunchPad_Init();
     Nokia5110_Init();
@@ -402,7 +424,7 @@ int main__(void){ uint32_t heart=0; //FMS check
     //TimerA1_Init(&BumpCheck,500);  // 1000 Hz bump check
 
     TimerA1_Init(&hand_tuning_module, 48000);
-    TimerA2_Init(&Reflectance_Handler,4800);  // Can't use timer A0, because it is being used for the motor PWM; reflectance checking
+    TimerA2_Init(&Reflectance_Handler,480);  // Can't use timer A0, because it is being used for the motor PWM; reflectance checking
 
     EnableInterrupts();
 
