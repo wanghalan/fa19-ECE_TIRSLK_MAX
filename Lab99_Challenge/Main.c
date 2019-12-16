@@ -159,36 +159,60 @@ uint32_t average(uint32_t *array){uint16_t i=0; uint16_t n= 0;uint16_t sum= 0;
     }
     return sum / n;
 }
+const uint32_t errorThreshold= 3; //Once it passes the error threshold, then it really is zero
+uint32_t error_count= 0;
 
-uint32_t total_bit_count= 0;
-void Reflectance_Handler(void){uint8_t data= 0;
+const uint32_t threshold_min= 50;
+const uint32_t threshold_max= 300;
+const uint16_t threshold_step= 10;
+
+int32_t sum_position= 0;
+int32_t sum_num_pos= 0;
+
+uint32_t Try_Tune_Reflectance(uint8_t data){uint32_t count=0;
+    count= countSetBits(data);
+    if (count < 2){
+        ref_latency-= threshold_step;
+    }else if (count>6){
+        ref_latency+= threshold_step;
+    }
+
+    return count;
+}
+
+void Reflectance_Handler(void){uint8_t data= 0; uint32_t bit_count=0;
     Reflectance_Counter%= ref_latency;
 
     if (Reflectance_Counter == 0){
-        //P2->OUT= 0x01;//Check that something is being shined
+        P2->OUT= 0x01;//Check that something is being shined
         Reflectance_Start();
     }else if (Reflectance_Counter==1){
-        //P2->OUT&= ~0x01;//close it
+        P2->OUT&= ~0x01;//close it
         P7->DIR &= 0x00; //Set p7 to Input (0)
     }
     else if (Reflectance_Counter >= ref_latency- 1){
         data= Reflectance_End();
         Position= Reflectance_Position(data);
-        //Threshold_Position_Finding(Position); //C'mon gimme that sum
-        P2->OUT= 0x02;
+        //Threshold_Position_Finding(Position); //C'mon gimme that sum!
+
+        bit_count= Try_Tune_Reflectance(data);
+        if (error_count< errorThreshold){
+            if (bit_count< 2 || bit_count>7){
+                error_count++;
+            }else{
+                error_count= 0;
+            }
+        }
+        if (error_count==0){
+            Reflectance_to_input(Position);
+            SetFSM();
+        }
 
         Nokia5110_SetCursor(0, 3);         // five leading spaces, bottom row
         Nokia5110_OutString(Reflectance_String(data));
     }
     Reflectance_Counter+= 1;
 }
-
-const uint32_t threshold_min= 50;
-const uint32_t threshold_max= 300;
-const uint16_t threshold_step= 5;
-
-int32_t sum_position= 0;
-int32_t sum_num_pos= 0;
 
 void Threshold_pos_reset(void){
     ref_latency= threshold_min;
@@ -208,7 +232,6 @@ void Threshold_Position_Finding(uint32_t position){
 
     ref_latency+= threshold_step;
 
-
     if (ref_latency >= threshold_max){
         if (sum_num_pos== 0){
             Reflectance_to_input(-999);
@@ -217,7 +240,6 @@ void Threshold_Position_Finding(uint32_t position){
         }
         Threshold_pos_reset();
     }
-
 }
 
 void BumpCheck(void){
