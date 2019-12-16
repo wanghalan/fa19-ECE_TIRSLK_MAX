@@ -1,25 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.GotoLineAction$GotoLineDialog_dialogBounds">
+		<item value="852" key="DIALOG_X_ORIGIN"/>
+		<item value="595" key="DIALOG_Y_ORIGIN"/>
+	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="interruptVectors[]" key="selection"/>
+		<item value="center_" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
-			<item value="interruptVectors[]"/>
-			<item value="InterruptVectors[]"/>
-			<item value="INTERRUPT"/>
-			<item value="SysTick"/>
-			<item value="heart"/>
-			<item value="Stateheart"/>
-			<item value="State"/>
-			<item value="fsm"/>
-			<item value="0x06"/>
-			<item value="line_result"/>
-			<item value="Counts"/>
-			<item value="DutyBuf"/>
+			<item value="center_"/>
+			<item value="center_threshold"/>
+			<item value="Output"/>
+			<item value="position_stream"/>
+			<item value="position"/>
+			<item value="av"/>
+			<item value="Reflectance_to_input"/>
+			<item value="data_stream"/>
+			<item value="SetFSM"/>
+			<item value="setFMS"/>
+			<item value="FSM"/>
+			<item value="set"/>
+			<item value="data"/>
+			<item value="140"/>
+			<item value="ref_latency"/>
 		</list>
 		<list key="replacehistory">
 		</list>

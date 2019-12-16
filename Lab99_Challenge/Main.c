@@ -110,8 +110,8 @@ State_t fsm[9]={ //Keeping each state string to 6 characters
   {"ERight", 'E', 0x05, 500, { Rec_Center, Left,   Right, Center }},   // E_Right, pink
   {"E Left", 'Q', 0x05, 500, { Rec_Center, Left,   Right, Center }},   // E_Left, pink
 
-  {"RecCen", 'C', 0x06, 500, { Rec_Center, Left,   Right, Center }},   // Recover_Center, sky blue
-  {"-Stop-", 's', 0x07, 500, { Stop, Stop,   Stop, Stop }},   // Stop, white
+  {"RecCen", 'C', 0x06, 500, { Stop , Left,   Right, Center }},   // Recover_Center, sky blue
+  {"-Stop-", 's', 0x07, 500, { Stop, Stop,  Stop, Center }},   // Stop, white
 };
 
 State_t *Spt;  // pointer to the current state
@@ -135,7 +135,7 @@ void TimedPause(uint32_t time){
   //P2->OUT^=0x06;
 }
 
-uint16_t center_thresh= 96; //190
+uint16_t center_thresh= 7; //190
 //uint16_t *position_stream[3];
 uint16_t position_counter= 0;
 uint16_t position_total= 0;
@@ -249,6 +249,9 @@ void Reflectance_Handler(void){uint8_t data= 0; uint32_t bit_count=0;
         Nokia5110_OutString("L: ");
         Nokia5110_OutString(Reflectance_String(data));
         P2->OUT= ~0x06;
+        Nokia5110_SetCursor(0, 4);         // five leading spaces, bottom row
+        Nokia5110_OutString("Pos: ");
+        Nokia5110_OutSDec(Position);
     }
     Reflectance_Counter+= 1;
 }
@@ -285,7 +288,7 @@ void hand_tuning_module(void){uint8_t touch= 0;//TEST MODE
 }
 
 
-uint32_t speedMax= 3000;//Test speed //14998; max speed
+uint32_t speedMax= 2000;//Test speed //14998; max speed
 uint32_t speedMin= 0;
 uint32_t failure_count= 0; //once failure count exceeds a value, then stop
 uint32_t failure_threshold= 1000;
@@ -319,6 +322,7 @@ int main(void){ uint32_t heart=0; //FMS check
 
 
     while (LaunchPad_Input()!= 3){
+        //Motor_Right(speedMax, speedMax);
     }
 
     Nokia5110_SetCursor(0, 0);         // five leading spaces, bottom row
@@ -344,31 +348,27 @@ int main(void){ uint32_t heart=0; //FMS check
             switch(Spt->uid) {
                case 'c': //0 to 14,998
                   Motor_Forward(speedMax, speedMax);
-                  failure_count= 0;
                   break;
 
                case 'C':
-                   Motor_Backward(speedMax/4, speedMax/4);
+                   Motor_Backward(speedMax/2, speedMax/2);
                    break;
 
                case 'r': //Right 1
-                  Motor_Forward(speedMax/4, speedMax);
-                  failure_count= 0;
+                  Motor_Forward(speedMax-10, speedMax);
                   break;
 
                case 'R': //Right 2
-                   Motor_Forward(speedMax/4, speedMax);
-                   failure_count= 0;
+                   Motor_Forward(speedMax-20, speedMax);
                   break;
 
                case 'l': //Left 1
-                  Motor_Forward(speedMax/4, speedMax);
+                  Motor_Forward(speedMax-10, speedMax);
                   failure_count= 0;
                   break;
 
                case 'L': //Left 2
-                   Motor_Forward(speedMax/4, speedMax);
-                   failure_count= 0;
+                   Motor_Forward(speedMax-20, speedMax);
                   break;
 
                case 'Q': //E Left
@@ -379,9 +379,10 @@ int main(void){ uint32_t heart=0; //FMS check
                   Motor_Right(speedMax, speedMax);
                   break;
 
-//               case 's':
+               case 's':
 //                   Motor_Stop();
-//                   break;
+                   Motor_Right(speedMax/2, speedMax/2);
+                   break;
 //               default :
 //                   Motor_Stop();
 //                   break;
