@@ -71,7 +71,7 @@ policies, either expressed or implied, of the FreeBSD Project.
 
 uint16_t stop_flag= 0; //Whether or not to stop the motors
 uint32_t Reflectance_Counter= 0; //?
-uint32_t Position= 0; //Position as detected by the line sensor
+int32_t Position= 0; //Position as detected by the line sensor
 
 //typedef void (*MotorFunctions)();
 
@@ -134,26 +134,22 @@ void TimedPause(uint32_t time){
   //P2->OUT^=0x06;
 }
 
-void Reflectance_to_input(uint16_t position){
-    if (position > -95 && position < 95){
+void Reflectance_to_input(int16_t position){
+    if (position > -190 && position < 190){
         Input= 3;
-    }else if (position <= -95 && position >= -334){
+    }else if (position <= -190 && position >= -334){
         Input= 2;
-    }else if (position >= 95 && position <= 334){
+    }else if (position >= 190 && position <= 334){
         Input= 1;
     }else{
         Input= 0;
     }
-//    Nokia5110_OutString("In:  ");
-//    Nokia5110_OutUDec(Input);
-//    Nokia5110_SetCursor(0, 1);         // five leading spaces, bottom row
-//    Nokia5110_SetCursor(7, 1);
 }
 
-uint32_t ref_latency= 160; //tuning for the surface
+uint32_t ref_latency= 140; //160 for table, 295 for the groundfrom testing
 
 uint32_t snail_counter= 0;
-uint32_t snail_trail[10];
+uint32_t snail_trail[5];
 
 uint32_t average(uint32_t *array){uint16_t i=0; uint16_t n= 0;uint16_t sum= 0;
     n= sizeof(array);
@@ -163,7 +159,7 @@ uint32_t average(uint32_t *array){uint16_t i=0; uint16_t n= 0;uint16_t sum= 0;
     return sum / n;
 }
 
-void Reflectance_Handler(void){uint8_t data= 0;
+void Reflectance_Handler_extra(void){uint8_t data= 0;
     Reflectance_Counter%= ref_latency;
     if (Reflectance_Counter == 0){
         Reflectance_Start();
@@ -176,20 +172,48 @@ void Reflectance_Handler(void){uint8_t data= 0;
         data= Reflectance_End();
         Position= Reflectance_Position(data);
 
-        //snail_trail[snail_counter]= Position;
-        //snail_counter++;
+        snail_trail[snail_counter]= Position;
+        snail_counter++;
 
-        if (snail_counter> 10){
-//            snail_counter= 0;
-//            Reflectance_to_input(average(snail_trail));
-//
-//            Nokia5110_SetCursor(0, 4);
-//            Nokia5110_OutString("Pos: ");
-//            Nokia5110_SetCursor(7, 4);
-//            Nokia5110_OutSDec(Position);
+        if (snail_counter> 5){
+            snail_counter= 0;
+            Reflectance_to_input(average(snail_trail));
 
-            //P2->OUT= 0x02;
+            Nokia5110_SetCursor(0, 4);
+            Nokia5110_OutString("Pos: ");
+            Nokia5110_SetCursor(7, 4);
+            Nokia5110_OutSDec(Position);
         }
+
+//        //For debugging purposes
+        Nokia5110_SetCursor(0, 3);         // five leading spaces, bottom row
+        Nokia5110_OutString(Reflectance_String(data));
+    }
+    Reflectance_Counter+= 1;
+}
+
+uint32_t total_bit_count= 0;
+void Reflectance_Handler(void){uint8_t data= 0;
+    test_module();
+    Reflectance_Counter%= ref_latency;
+    if (Reflectance_Counter == 0){
+        Reflectance_Start();
+    }else if (Reflectance_Counter==1){
+        P7->DIR &= 0x00; //Set p7 to Input (0)
+    }
+    else if (Reflectance_Counter >= ref_latency){
+        //Position= Reflectance_Position(Reflectance_End());
+
+        data= Reflectance_End();
+        total_bit_count+= countSetBits(data);
+        Position= Reflectance_Position(data);
+
+        Reflectance_to_input(Position);
+
+        Nokia5110_SetCursor(0, 4);
+        Nokia5110_OutString("Pos: ");
+        Nokia5110_SetCursor(7, 4);
+        Nokia5110_OutSDec(Position);
 
 //        //For debugging purposes
         Nokia5110_SetCursor(0, 3);         // five leading spaces, bottom row
@@ -211,10 +235,60 @@ void BumpCheck(void){
     }
 }
 
+
+void test_module(void){uint8_t touch= 0;//TEST MODE
+    Nokia5110_SetCursor(0, 1);         // five leading spaces, bottom row
+    Nokia5110_OutString("Lat: ");
+    Nokia5110_OutUDec(ref_latency);
+
+    touch= LaunchPad_Input();
+    if (touch== 1){
+        ref_latency+= 5;
+    }else if (touch== 2){
+        ref_latency-= 5;
+    }else if (touch== 3){
+        Spt= &fsm[0];
+        stop_flag= 0;
+    }
+
+    tuning_reflectance();
+}
+
+uint32_t contender_score= 9999;
+uint32_t current_score= 0; //The sum total of number of bits that exist. The final score should probably equal to the deviation from 2*max_tune
+uint32_t tune_count= 0; //the number of times the current tune has been counted
+uint32_t max_tune= 10; //how many times before the score rolls over
+uint8_t tune_complete_flag= 0;
+
+void tuning_reflectance(void){
+    /*
+     * Every check period, sum the total. If too many set bits, increase wait duration. If too little decrease. Stop when the new state counted is not better (go back and set after)
+     * Could implement binary search, but might be too annoying?
+     */
+    if (tune_complete_flag== 0){
+        tune_count++;
+        if (tune_count> max_tune){
+            current_score= abs(2*max_tune- total_bit_count);
+            if (contender_score > current_score){ //smaller one wins
+                ref_latency+= 5;
+                contender_score= current_score;
+                P2->OUT= 0x02;
+            }else{
+                ref_latency-= 5;
+                tune_complete_flag= 1;
+                P2->OUT= 0x06;
+            }
+
+            tune_count= 0;
+            total_bit_count= 0;
+        }
+    }
+}
+
 uint32_t speedMax= 3000;//Test speed //14998; max speed
 uint32_t speedMin= 0;
 
-int main(void){ uint32_t heart=0; //FMS check
+int main_(void){ uint32_t heart=0; //FMS check
   Clock_Init48MHz();
   LaunchPad_Init();
   Nokia5110_Init();
@@ -234,6 +308,7 @@ int main(void){ uint32_t heart=0; //FMS check
 
   Spt = Center;
   while(1){
+    test_module();
     if (stop_flag== 0){
         Output = Spt->out;            // set output from FSM
 
@@ -296,4 +371,48 @@ int main(void){ uint32_t heart=0; //FMS check
     }
   }
 }
+
+int main(void){ uint32_t heart=0;
+  Clock_Init48MHz();
+  LaunchPad_Init();
+  Nokia5110_Init();
+  Nokia5110_ClearBuffer();
+  Nokia5110_Clear();
+
+
+  Bump_Init();
+  Motor_Init();
+  Reflectance_Init();
+
+  PWM_Init34(15000, 5000, 5000); //10 ms period motor set up
+  TimerA1_Init(&BumpCheck,500);  // 1000 Hz bump check
+  TimerA2_Init(&Reflectance_Handler,480);  // Can't use timer A0, because it is being used for the motor PWM; reflectance checking
+
+  EnableInterrupts();
+
+  Nokia5110_SetCursor(0, 0);         // five leading spaces, bottom row
+  Nokia5110_OutString("-Test mode-");
+
+  Spt = Center;
+
+  while(1){
+    Output = Spt->out;            // set output from FSM
+
+    Clock_Delay1ms(Spt->delay);   // wait
+    //Input = LaunchPad_Input();    // read sensors
+
+    Nokia5110_SetCursor(0, 2);         // five leading spaces, bottom row
+    Nokia5110_OutString("In:  ");
+    Nokia5110_OutUDec(Input);
+
+    Spt = Spt->next[Input];       // next depends on input and state
+    heart = heart^1;
+    LaunchPad_LED(heart);         // optional, debugging heartbeat
+
+    Nokia5110_SetCursor(0, 5);         // five leading spaces, bottom row
+    Nokia5110_OutString(Spt->name);
+
+  }
+}
+
 

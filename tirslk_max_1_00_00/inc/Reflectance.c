@@ -155,8 +155,8 @@ uint8_t Reflectance_Center(uint32_t time){
 // Output: position in 0.1mm relative to center of line
 int32_t Reflectance_Position(uint8_t data){
     // write this as part of Lab 6
-    int result=0;
-    int total_count=0;
+    int32_t result=0;
+    int32_t total_count=0;
 
     for (uint8_t n= 0; n< 8; n++){
 //        uint8_t bit_value= ((data | ~(pow(2,n))) == 0xFF); //If the whole thing is 1 after changes?
@@ -170,7 +170,7 @@ int32_t Reflectance_Position(uint8_t data){
     if (total_count> 0){
         return result/total_count;
     }else{
-        return -9999;
+        return -999;
     }
 }
 
@@ -186,6 +186,32 @@ char *Reflectance_String(uint8_t data){
     }
     return answer;
 }
+
+/* Function to get no of set bits in binary
+   representation of positive integer n */
+unsigned int countSetBits(unsigned int n)
+{
+    unsigned int count = 0;
+    while (n) {
+        count += n & 1;
+        n >>= 1;
+    }
+    return count;
+}
+
+//uint8_t Reflectance_Tune_Val(uint8_t data){
+//    /*
+//     * Value returned as follows:
+//     *
+//     * 0 for nothing or more than 3 1's
+//     * 2 1's together
+//     * 3 1's together, or 1' 1
+//     *
+//     * The goal is to eventually find a set of values such that it is consistently 2
+//     *
+//     */
+//}
+
 
 // ------------Reflectance_Start------------
 // Begin the process of reading the eight sensors
