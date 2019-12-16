@@ -160,20 +160,14 @@ uint32_t average(uint32_t *array){uint16_t i=0; uint16_t n= 0;uint16_t sum= 0;
     return sum / n;
 }
 const uint32_t errorThreshold= 3; //Once it passes the error threshold, then it really is zero
-uint32_t error_count= 0;
-
-const uint32_t threshold_min= 50;
-const uint32_t threshold_max= 300;
 const uint16_t threshold_step= 10;
-
-int32_t sum_position= 0;
-int32_t sum_num_pos= 0;
+uint32_t error_count= 0;
 
 uint32_t Try_Tune_Reflectance(uint8_t data){uint32_t count=0;
     count= countSetBits(data);
     if (count < 2){
         ref_latency-= threshold_step;
-    }else if (count>6){
+    }else if (count >4){
         ref_latency+= threshold_step;
     }
 
@@ -195,52 +189,23 @@ void Reflectance_Handler(void){uint8_t data= 0; uint32_t bit_count=0;
         Position= Reflectance_Position(data);
         //Threshold_Position_Finding(Position); //C'mon gimme that sum!
 
-        bit_count= Try_Tune_Reflectance(data);
-        if (error_count< errorThreshold){
-            if (bit_count< 2 || bit_count>7){
-                error_count++;
-            }else{
+        bit_count= countSetBits(data);
+        if (bit_count< 2 || bit_count > 4){
+            error_count++;
+            bit_count= Try_Tune_Reflectance(data);
+            if (error_count> errorThreshold){ //Essentially discounts the reading until tuned
                 error_count= 0;
             }
-        }
-        if (error_count==0){
+        }else{
             Reflectance_to_input(Position);
             SetFSM();
         }
-
         Nokia5110_SetCursor(0, 3);         // five leading spaces, bottom row
         Nokia5110_OutString(Reflectance_String(data));
     }
     Reflectance_Counter+= 1;
 }
 
-void Threshold_pos_reset(void){
-    ref_latency= threshold_min;
-    sum_position= 0;
-    sum_num_pos= 0;
-}
-
-void Threshold_Position_Finding(uint32_t position){
-    /*
-     * It seems like the best solution seems to be to run from a latency of 100 to 200, and finding the average reading between those. This also seems to be doable within the
-     * timeframe of the robot moving
-     */
-    if (position!= -999){
-        sum_position+= position;
-        sum_num_pos+= 1;
-    }
-
-    ref_latency+= threshold_step;
-
-    if (ref_latency >= threshold_max){
-        if (sum_num_pos== 0){
-            Reflectance_to_input(-999);
-        }else{
-            Reflectance_to_input(sum_position/sum_num_pos);
-        }
-        Threshold_pos_reset();
-    }
-}
 
 void BumpCheck(void){
     //P2->OUT = 0x06;
@@ -405,10 +370,6 @@ int main(void){
   Spt = Center;
 
   while(1){
-//      Nokia5110_SetCursor(0, 4);
-//      Nokia5110_OutString("Pos: ");
-//      Nokia5110_SetCursor(7, 4);
-//      Nokia5110_OutSDec(big_boy_pos);
   }
 }
 
