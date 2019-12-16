@@ -134,23 +134,37 @@ void TimedPause(uint32_t time){
   //P2->OUT^=0x06;
 }
 
-//void Reflectance_to_output(uint16_t position){
-//    if (position== 0){
-//        Input= 3;
-//    }else if (){
-//
-//    }else if (){
-//
-//    }else{
-//        Input= 0;
-//    }
-//    Nokia5110_SetCursor(0, 3);         // five leading spaces, bottom row
+void Reflectance_to_input(uint16_t position){
+    if (position > -95 && position < 95){
+        Input= 3;
+    }else if (position <= -95 && position >= -334){
+        Input= 2;
+    }else if (position >= 95 && position <= 334){
+        Input= 1;
+    }else{
+        Input= 0;
+    }
 //    Nokia5110_OutString("In:  ");
 //    Nokia5110_OutUDec(Input);
-//}
+//    Nokia5110_SetCursor(0, 1);         // five leading spaces, bottom row
+//    Nokia5110_SetCursor(7, 1);
+}
 
-void Reflectance_Handler_old(void){uint8_t data= 0;
-    Reflectance_Counter%= 100;
+uint32_t ref_latency= 160; //tuning for the surface
+
+uint32_t snail_counter= 0;
+uint32_t snail_trail[10];
+
+uint32_t average(uint32_t *array){uint16_t i=0; uint16_t n= 0;uint16_t sum= 0;
+    n= sizeof(array);
+    for (i = 0; i < n; ++i) {
+        sum += array[i];
+    }
+    return sum / n;
+}
+
+void Reflectance_Handler(void){uint8_t data= 0;
+    Reflectance_Counter%= ref_latency;
     if (Reflectance_Counter == 0){
         Reflectance_Start();
     }else if (Reflectance_Counter==1){
@@ -160,36 +174,28 @@ void Reflectance_Handler_old(void){uint8_t data= 0;
         //Position= Reflectance_Position(Reflectance_End());
 
         data= Reflectance_End();
+        Position= Reflectance_Position(data);
+
+        //snail_trail[snail_counter]= Position;
+        //snail_counter++;
+
+        if (snail_counter> 10){
+//            snail_counter= 0;
+//            Reflectance_to_input(average(snail_trail));
+//
+//            Nokia5110_SetCursor(0, 4);
+//            Nokia5110_OutString("Pos: ");
+//            Nokia5110_SetCursor(7, 4);
+//            Nokia5110_OutSDec(Position);
+
+            //P2->OUT= 0x02;
+        }
 
 //        //For debugging purposes
         Nokia5110_SetCursor(0, 3);         // five leading spaces, bottom row
         Nokia5110_OutString(Reflectance_String(data));
-
-        Nokia5110_SetCursor(0, 4);
-        Nokia5110_OutString("Pos: ");
-        Nokia5110_SetCursor(7, 4);
-        Nokia5110_OutSDec(Reflectance_Position(data));
     }
     Reflectance_Counter+= 1;
-}
-
-void Reflectance_Handler(void){uint8_t data= 0;
-    if (Reflectance_Counter == 0){
-        Reflectance_Start();
-        P7->DIR &= 0x00; //Set p7 to Input (0)
-        Reflectance_Counter= 1;
-    }else {
-        data= Reflectance_End();
-        Reflectance_Counter= 0;
-
-        Nokia5110_SetCursor(0, 3);         // five leading spaces, bottom row
-        Nokia5110_OutString(Reflectance_String(data));
-
-        Nokia5110_SetCursor(0, 4);
-        Nokia5110_OutString("Pos: ");
-        Nokia5110_SetCursor(7, 4);
-        Nokia5110_OutSDec(Reflectance_Position(data));
-    }
 }
 
 void BumpCheck(void){
@@ -205,7 +211,7 @@ void BumpCheck(void){
     }
 }
 
-uint32_t speedMax= 5000;//Test speed //14998; max speed
+uint32_t speedMax= 3000;//Test speed //14998; max speed
 uint32_t speedMin= 0;
 
 int main(void){ uint32_t heart=0; //FMS check
@@ -271,13 +277,14 @@ int main(void){ uint32_t heart=0; //FMS check
                Motor_Stop();
         }
 
-        LaunchPad_Output(Output);     // do output to two motors
+        //LaunchPad_Output(Output);     // do output to two motors
         //TExaS_Set(Input<<2|Output);   // optional, send data to logic analyzer
 
         Clock_Delay1ms(Spt->delay);   // wait
-        Input = LaunchPad_Input();    // read sensors
+        //Input = LaunchPad_Input();    // read sensors
+
         Nokia5110_SetCursor(0, 2);         // five leading spaces, bottom row
-        Nokia5110_OutString("Out: ");
+        Nokia5110_OutString("In:  ");
         Nokia5110_OutUDec(Input);
 
         Spt = Spt->next[Input];       // next depends on input and state

@@ -166,7 +166,12 @@ int32_t Reflectance_Position(uint8_t data){
         }
     }
 //    printf("Result: %d, total count:%d ", result, total_count);
-    return result/total_count;
+
+    if (total_count> 0){
+        return result/total_count;
+    }else{
+        return -9999;
+    }
 }
 
 char *Reflectance_String(uint8_t data){
