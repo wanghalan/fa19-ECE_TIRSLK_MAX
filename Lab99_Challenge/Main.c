@@ -165,27 +165,27 @@ void Reflectance_Handler(void){uint8_t data= 0;
     Reflectance_Counter%= ref_latency;
 
     if (Reflectance_Counter == 0){
-        P2->OUT= 0x01;//Check that something is being shined
+        //P2->OUT= 0x01;//Check that something is being shined
         Reflectance_Start();
     }else if (Reflectance_Counter==1){
-        P2->OUT&= ~0x01;//close it
+        //P2->OUT&= ~0x01;//close it
         P7->DIR &= 0x00; //Set p7 to Input (0)
     }
     else if (Reflectance_Counter >= ref_latency- 1){
         data= Reflectance_End();
         Position= Reflectance_Position(data);
-        Threshold_Position_Finding(Position); //C'mon gimme that sum
-//
-//        Nokia5110_SetCursor(0, 3);         // five leading spaces, bottom row
-//        Nokia5110_OutString(Reflectance_String(data));
-        Reflectance_Counter= -1; //what a great bug
+        //Threshold_Position_Finding(Position); //C'mon gimme that sum
+        P2->OUT= 0x02;
+
+        Nokia5110_SetCursor(0, 3);         // five leading spaces, bottom row
+        Nokia5110_OutString(Reflectance_String(data));
     }
     Reflectance_Counter+= 1;
 }
 
-const uint32_t threshold_min= 100;
-const uint32_t threshold_max= 200;
-const uint16_t threshold_step= 10;
+const uint32_t threshold_min= 50;
+const uint32_t threshold_max= 300;
+const uint16_t threshold_step= 5;
 
 int32_t sum_position= 0;
 int32_t sum_num_pos= 0;
