@@ -134,26 +134,43 @@ void TimedPause(uint32_t time){
   //P2->OUT^=0x06;
 }
 
+//void Reflectance_to_output(uint16_t position){
+//    if (position== 0){
+//        Input= 3;
+//    }else if (){
+//
+//    }else if (){
+//
+//    }else{
+//        Input= 0;
+//    }
+//    Nokia5110_SetCursor(0, 3);         // five leading spaces, bottom row
+//    Nokia5110_OutString("In:  ");
+//    Nokia5110_OutUDec(Input);
+//}
+
 void Reflectance_Handler(void){
     Reflectance_Counter%= 100;
-
-    //P1->OUT&= ~0x01; //Red LED OFF
-
     if (Reflectance_Counter == 0){
         Reflectance_Start();
     }else if (Reflectance_Counter==1){
         P7->DIR &= 0x00; //Set p7 to Input (0)
     }
     else if (Reflectance_Counter >= 99){
-        Position= Reflectance_Position(Reflectance_End());
+        //Position= Reflectance_Position(Reflectance_End());
+        Nokia5110_SetCursor(0, 4);         // five leading spaces, bottom row
+        Nokia5110_OutString(Reflectance_String(Reflectance_End()));
     }
-    Nokia5110_SetCursor(0, 4);         // five leading spaces, bottom row
-    Nokia5110_OutString("Pos: ");
-    Nokia5110_SetCursor(7, 4);
-    Nokia5110_OutUDec(Position);
+
+    //Input=
 
     Reflectance_Counter+= 1;
-    //printf("Counter: %d, Status: %d, data: %d, Position: %d, Power Percentage: %d\n", Reflectance_Counter, status, data, position, power_percentage);
+
+    //Output to LCD
+
+//    Nokia5110_OutString("Pos: ");
+//    Nokia5110_SetCursor(7, 4);
+//    Nokia5110_OutUDec(Position);
 }
 
 void BumpCheck(void){
@@ -165,11 +182,11 @@ void BumpCheck(void){
         Nokia5110_SetCursor(0, 5);
         Nokia5110_OutString("-BUMP-");
     }else{
-        stop_flag= 0;
+        //stop_flag= 0;
     }
 }
 
-uint32_t speedMax= 14998;
+uint32_t speedMax= 5000;//Test speed //14998; max speed
 uint32_t speedMin= 0;
 
 int main(void){ uint32_t heart=0; //FMS check
@@ -204,24 +221,24 @@ int main(void){ uint32_t heart=0; //FMS check
               Motor_Forward(speedMax/2, speedMax/2);
               break;
 
-           case 'l': //Left 1
-              Motor_Forward(speedMax/2, speedMax);
-              break;
-
            case 'r': //Right 1
-              Motor_Forward(speedMax, speedMax/2);
-              break;
-
-           case 'L': //Left 2
-              Motor_Left(speedMax, speedMin);
+              Motor_Forward(speedMin, speedMax/2);
               break;
 
            case 'R': //Right 2
-              Motor_Right(speedMin, speedMax);
+               Motor_Forward(speedMin, speedMax/2);
+              break;
+
+           case 'l': //Left 1
+              Motor_Forward(speedMax/2, speedMin);
+              break;
+
+           case 'L': //Left 2
+               Motor_Forward(speedMax/2, speedMin);
               break;
 
            case 'Q': //E Left
-              Motor_Right(speedMax, speedMax);
+              Motor_Left(speedMax, speedMax);
               break;
 
            case 'E': //E RIght
@@ -236,10 +253,14 @@ int main(void){ uint32_t heart=0; //FMS check
         }
 
         LaunchPad_Output(Output);     // do output to two motors
-        TExaS_Set(Input<<2|Output);   // optional, send data to logic analyzer
+        //TExaS_Set(Input<<2|Output);   // optional, send data to logic analyzer
 
         Clock_Delay1ms(Spt->delay);   // wait
         Input = LaunchPad_Input();    // read sensors
+        Nokia5110_SetCursor(0, 2);         // five leading spaces, bottom row
+        Nokia5110_OutString("Out: ");
+        Nokia5110_OutUDec(Input);
+
         Spt = Spt->next[Input];       // next depends on input and state
         heart = heart^1;
         LaunchPad_LED(heart);         // optional, debugging heartbeat
@@ -248,35 +269,5 @@ int main(void){ uint32_t heart=0; //FMS check
         Nokia5110_OutString(Spt->name);
     }
   }
-}
-
-
-int main_(void){
-    // write a main program that uses PWM to move the robot
-    // like Program13_1, but uses TimerA1 to periodically
-    // check the bump switches, stopping the robot on a collision
-
-    Clock_Init48MHz();
-    LaunchPad_Init(); // built-in switches and LEDs
-    Bump_Init();      // bump switches
-    Motor_Init();
-    Reflectance_Init();
-
-    PWM_Init34(15000, 5000, 5000); //10 ms period
-    TimerA1_Init(&BumpCheck,500);  // 1000 Hz
-    TimerA2_Init(&Reflectance_Handler,480);  // Can't use timer A0, because it is being used for the motor PWM
-
-    EnableInterrupts();
-
-    while(1){
-
-        //TimedPause(1000);
-        //P2->OUT= 0x02; //Green
-        if (stop_flag== 0){
-            //P2->OUT= 0x01; //Red
-            Spt = Spt->next[Input]; // next depends on input and state
-            //Motor_Forward(1000,1000);  // your function
-        }
-    }
 }
 

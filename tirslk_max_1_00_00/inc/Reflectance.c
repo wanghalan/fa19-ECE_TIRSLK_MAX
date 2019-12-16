@@ -169,6 +169,20 @@ int32_t Reflectance_Position(uint8_t data){
     return result/(total_count); //
 }
 
+char *Reflectance_String(uint8_t data){
+    static char answer[8];
+    for (uint8_t n= 0; n< 8; n++){
+//        uint8_t bit_value= ((data | ~(pow(2,n))) == 0xFF); //If the whole thing is 1 after changes?
+        if ((data & HexPos[n]) == HexPos[n]){ //Anding the mask with a 1 in the specific area
+            answer[7-n]= '1';
+        }else{
+            answer[7-n]= '0';
+        }
+    }
+
+    //printf(answer);
+    return answer;
+}
 
 // ------------Reflectance_Start------------
 // Begin the process of reading the eight sensors
