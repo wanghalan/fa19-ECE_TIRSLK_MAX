@@ -144,6 +144,7 @@ void Reflectance_to_input(int16_t position){
     }else{
         Input= 0;
     }
+    SetFSM();//Only change state once reflectance is set
 }
 
 uint32_t ref_latency= 140; //160 for table, 295 for the groundfrom testing
@@ -159,45 +160,9 @@ uint32_t average(uint32_t *array){uint16_t i=0; uint16_t n= 0;uint16_t sum= 0;
     return sum / n;
 }
 
-void Reflectance_Handler_extra(void){uint8_t data= 0;
-    Reflectance_Counter%= ref_latency;
-    if (Reflectance_Counter == 0){
-        Reflectance_Start();
-    }else if (Reflectance_Counter==1){
-        P7->DIR &= 0x00; //Set p7 to Input (0)
-    }
-    else if (Reflectance_Counter >= 99){
-        //Position= Reflectance_Position(Reflectance_End());
-
-        data= Reflectance_End();
-        Position= Reflectance_Position(data);
-
-        snail_trail[snail_counter]= Position;
-        snail_counter++;
-
-        if (snail_counter> 5){
-            snail_counter= 0;
-            Reflectance_to_input(average(snail_trail));
-
-            Nokia5110_SetCursor(0, 4);
-            Nokia5110_OutString("Pos: ");
-            Nokia5110_SetCursor(7, 4);
-            Nokia5110_OutSDec(Position);
-        }
-
-//        //For debugging purposes
-        Nokia5110_SetCursor(0, 3);         // five leading spaces, bottom row
-        Nokia5110_OutString(Reflectance_String(data));
-    }
-    Reflectance_Counter+= 1;
-}
-
 uint32_t total_bit_count= 0;
 void Reflectance_Handler(void){uint8_t data= 0;
     Reflectance_Counter%= ref_latency;
-
-//    Nokia5110_SetCursor(0, 4);
-//    Nokia5110_OutString("Pos: ");
 
     if (Reflectance_Counter == 0){
         Reflectance_Start();
@@ -208,10 +173,10 @@ void Reflectance_Handler(void){uint8_t data= 0;
         //Position= Reflectance_Position(Reflectance_End());
 
         data= Reflectance_End();
-        total_bit_count+= countSetBits(data);
+        //total_bit_count+= countSetBits(data);
         Position= Reflectance_Position(data);
+        Threshold_Position_Finding(Position);
 
-        Reflectance_to_input(Position);
         Nokia5110_SetCursor(7, 4);
         Nokia5110_OutSDec(Position);
 
@@ -220,6 +185,40 @@ void Reflectance_Handler(void){uint8_t data= 0;
         Nokia5110_OutString(Reflectance_String(data));
     }
     Reflectance_Counter+= 1;
+}
+
+const uint32_t threshold_min= 100;
+const uint32_t threshold_max= 200;
+const uint16_t threshold_step= 5;
+
+int sum_position= 0;
+uint32_t sum_num_pos= 0;
+int big_boy_pos= 0;
+
+void Threshold_pos_reset(void){
+    ref_latency= threshold_min;
+    sum_position= 0;
+    sum_num_pos= 0;
+}
+
+void Threshold_Position_Finding(uint32_t position){
+    /*
+     * It seems like the best solution seems to be to run from a latency of 100 to 200, and finding the average reading between those. This also seems to be doable within the
+     * timeframe of the robot moving
+     */
+    if (position!= -999){
+        sum_position+= position;
+        sum_num_pos+= 1;
+    }
+
+    ref_latency+= threshold_step;
+
+    if (ref_latency >= threshold_max){
+        big_boy_pos= sum_position/sum_num_pos;
+        Reflectance_to_input(big_boy_pos);
+        Threshold_pos_reset();
+    }
+
 }
 
 void BumpCheck(void){
@@ -250,40 +249,8 @@ void test_module(void){uint8_t touch= 0;//TEST MODE
         Spt= &fsm[0];
         stop_flag= 0;
     }
-
-    //tuning_reflectance();
 }
 
-uint32_t contender_score= 9999;
-uint32_t current_score= 0; //The sum total of number of bits that exist. The final score should probably equal to the deviation from 2*max_tune
-uint32_t tune_count= 0; //the number of times the current tune has been counted
-uint32_t max_tune= 10; //how many times before the score rolls over
-uint8_t tune_complete_flag= 0;
-
-void tuning_reflectance(void){
-    /*
-     * Every check period, sum the total. If too many set bits, increase wait duration. If too little decrease. Stop when the new state counted is not better (go back and set after)
-     * Could implement binary search, but might be too annoying?
-     */
-    if (tune_complete_flag== 0){
-        tune_count++;
-        if (tune_count> max_tune){
-            current_score= abs(2*max_tune- total_bit_count);
-            if (contender_score > current_score){ //smaller one wins
-                ref_latency+= 5;
-                contender_score= current_score;
-                P2->OUT= 0x02;
-            }else{
-                ref_latency-= 5;
-                tune_complete_flag= 1;
-                P2->OUT= 0x06;
-            }
-
-            tune_count= 0;
-            total_bit_count= 0;
-        }
-    }
-}
 
 uint32_t speedMax= 3000;//Test speed //14998; max speed
 uint32_t speedMin= 0;
@@ -372,7 +339,26 @@ int main_(void){ uint32_t heart=0; //FMS check
   }
 }
 
-int main(void){ uint32_t heart=0;
+void SetFSM(void){uint32_t heart=0;
+    P2->OUT= 0x02;
+    Output = Spt->out;            // set output from FSM
+    Clock_Delay1ms(Spt->delay);   // wait
+    //Input = LaunchPad_Input();    // read sensors
+
+    Nokia5110_SetCursor(0, 2);         // five leading spaces, bottom row
+    Nokia5110_OutString("In:  ");
+    Nokia5110_OutUDec(Input);
+
+    Spt = Spt->next[Input];       // next depends on input and state
+    heart = heart^1;
+    LaunchPad_LED(heart);         // optional, debugging heartbeat
+
+    Nokia5110_SetCursor(0, 5);         // five leading spaces, bottom row
+    Nokia5110_OutString(Spt->name);
+    P2->OUT&= ~0x02;
+}
+
+int main(void){
   Clock_Init48MHz();
   LaunchPad_Init();
   Nokia5110_Init();
@@ -398,22 +384,9 @@ int main(void){ uint32_t heart=0;
   Spt = Center;
 
   while(1){
-    Output = Spt->out;            // set output from FSM
-
-    Clock_Delay1ms(Spt->delay);   // wait
-    //Input = LaunchPad_Input();    // read sensors
-
-    Nokia5110_SetCursor(0, 2);         // five leading spaces, bottom row
-    Nokia5110_OutString("In:  ");
-    Nokia5110_OutUDec(Input);
-
-    Spt = Spt->next[Input];       // next depends on input and state
-    heart = heart^1;
-    LaunchPad_LED(heart);         // optional, debugging heartbeat
-
-//    Nokia5110_SetCursor(0, 5);         // five leading spaces, bottom row
-//    Nokia5110_OutString(Spt->name);
-
+      Nokia5110_SetCursor(0, 4);
+      Nokia5110_OutString("Pos: ");
+      Nokia5110_OutSDec(big_boy_pos);
   }
 }
 
