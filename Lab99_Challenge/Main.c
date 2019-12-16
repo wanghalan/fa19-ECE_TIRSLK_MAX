@@ -212,32 +212,23 @@ void Tune_Handler(void){uint8_t data= 0; uint32_t bit_count=0;
 
 void Reflectance_Handler(void){uint8_t data= 0; uint32_t bit_count=0;
     Reflectance_Counter%= ref_latency;
-
     if (Reflectance_Counter == 0){
-        P2->OUT= 0x01;//Check that something is being shined
+        //P2->OUT= 0x01;//Check that something is being shined
         Reflectance_Start();
     }else if (Reflectance_Counter==1){
-        P2->OUT&= ~0x01;//close it
+        //P2->OUT&= ~0x01;//close it
         P7->DIR &= 0x00; //Set p7 to Input (0)
     }
     else if (Reflectance_Counter >= ref_latency- 1){
+        P2->OUT= 0x06;
         data= Reflectance_End();
         Position= Reflectance_Position(data);
-        //Threshold_Position_Finding(Position); //C'mon gimme that sum!
-
-        bit_count= countSetBits(data);
-        if (bit_count< 2 || bit_count > 4){
-            error_count++;
-            bit_count= Try_Tune_Reflectance(data);
-            if (error_count> errorThreshold){ //Essentially discounts the reading until tuned
-                error_count= 0;
-            }
-        }else{
-            Reflectance_to_input(Position);
-            SetFSM();
-        }
+        Reflectance_to_input(Position);
+        //SetFSM();
         Nokia5110_SetCursor(0, 3);         // five leading spaces, bottom row
+        Nokia5110_OutString("L: ");
         Nokia5110_OutString(Reflectance_String(data));
+        P2->OUT= ~0x06;
     }
     Reflectance_Counter+= 1;
 }
@@ -257,7 +248,7 @@ void BumpCheck(void){
 }
 
 
-void test_module(void){uint8_t touch= 0;//TEST MODE
+void hand_tuning_module(void){uint8_t touch= 0;//TEST MODE
     Nokia5110_SetCursor(0, 1);         // five leading spaces, bottom row
     Nokia5110_OutString("Lat: ");
     Nokia5110_OutUDec(ref_latency);
@@ -277,7 +268,7 @@ void test_module(void){uint8_t touch= 0;//TEST MODE
 uint32_t speedMax= 3000;//Test speed //14998; max speed
 uint32_t speedMin= 0;
 
-int main(void){ uint32_t heart=0; //FMS check
+int main_(void){ uint32_t heart=0; //FMS check
   Clock_Init48MHz();
   LaunchPad_Init();
   Nokia5110_Init();
@@ -288,89 +279,97 @@ int main(void){ uint32_t heart=0; //FMS check
   Bump_Init();
   Motor_Init();
   Reflectance_Init();
+  EnableInterrupts();
+
+
+//  TimerA1_Init(&hand_tuning_module,4800);  // Hand tuning
+//  TimerA2_Init(&Reflectance_Handler,480);  // Can't use timer A0, because it is being used for the motor PWM; reflectance checking
+//
+//  while (LaunchPad_Input()!= 3){
+//      //P2->OUT= 0x06;
+//  }
 
   PWM_Init34(15000, 5000, 5000); //10 ms period motor set up
   TimerA1_Init(&BumpCheck,480);  // 1000 Hz bump check
   TimerA2_Init(&Tune_Handler,480);  // Can't use timer A0, because it is being used for the motor PWM; reflectance checking
 
-  EnableInterrupts();
+  while (1){
+      while (tuned_flag< 5){ //Tune the line sensor first; assuming the lighting conditions would be pretty even
+      }
+      TimerA2_Init(&Reflectance_Handler,480);  // Can't use timer A0, because it is being used for the motor PWM; reflectance checking
+      tuned_flag= 0;
 
+      Spt = Center;
+      while(1){
+        //test_module();
+        if (stop_flag== 0){
+            Output = Spt->out;            // set output from FSM
 
-  while (tuned_flag< 5){ //Tune the line sensor first; assuming the lighting conditions would be pretty even
-  }
-  TimerA2_Init(&Reflectance_Handler,480);  // Can't use timer A0, because it is being used for the motor PWM; reflectance checking
+            switch(Spt->uid) {
+               case 'c': //0 to 14,998
+                  Motor_Forward(speedMax, speedMax);
+                  break;
 
+               case 'C':
+                  Motor_Forward(speedMax/2, speedMax/2);
+                  break;
 
-  Spt = Center;
-  while(1){
-    //test_module();
-    if (stop_flag== 0){
-        Output = Spt->out;            // set output from FSM
+               case 'r': //Right 1
+                  Motor_Forward(speedMin, speedMax/2);
+                  break;
 
-        switch(Spt->uid) {
-           case 'c': //0 to 14,998
-              Motor_Forward(speedMax, speedMax);
-              break;
+               case 'R': //Right 2
+                   Motor_Forward(speedMin, speedMax/2);
+                  break;
 
-           case 'C':
-              Motor_Forward(speedMax/2, speedMax/2);
-              break;
+               case 'l': //Left 1
+                  Motor_Forward(speedMax/2, speedMin);
+                  break;
 
-           case 'r': //Right 1
-              Motor_Forward(speedMin, speedMax/2);
-              break;
+               case 'L': //Left 2
+                   Motor_Forward(speedMax/2, speedMin);
+                  break;
 
-           case 'R': //Right 2
-               Motor_Forward(speedMin, speedMax/2);
-              break;
+               case 'Q': //E Left
+                  Motor_Left(speedMax, speedMax);
+                  break;
 
-           case 'l': //Left 1
-              Motor_Forward(speedMax/2, speedMin);
-              break;
+               case 'E': //E RIght
+                  Motor_Right(speedMax, speedMax);
+                  break;
 
-           case 'L': //Left 2
-               Motor_Forward(speedMax/2, speedMin);
-              break;
+               case 's':
+                   Motor_Stop();
+                   break;
+               default :
+                   Motor_Stop();
+            }
 
-           case 'Q': //E Left
-              Motor_Left(speedMax, speedMax);
-              break;
+            //LaunchPad_Output(Output);     // do output to two motors
+            //TExaS_Set(Input<<2|Output);   // optional, send data to logic analyzer
 
-           case 'E': //E RIght
-              Motor_Right(speedMax, speedMax);
-              break;
+            //Clock_Delay1ms(Spt->delay);   // wait
+            //Input = LaunchPad_Input();    // read sensors
 
-           case 's':
-               Motor_Stop();
-               break;
-           default :
-               Motor_Stop();
+            Nokia5110_SetCursor(0, 2);         // five leading spaces, bottom row
+            Nokia5110_OutString("In:  ");
+            Nokia5110_OutUDec(Input);
+
+            Spt = Spt->next[Input];       // next depends on input and state
+            heart = heart^1;
+            LaunchPad_LED(heart);         // optional, debugging heartbeat
+
+            Nokia5110_SetCursor(0, 5);         // five leading spaces, bottom row
+            Nokia5110_OutString(Spt->name);
         }
-
-        //LaunchPad_Output(Output);     // do output to two motors
-        //TExaS_Set(Input<<2|Output);   // optional, send data to logic analyzer
-
-        Clock_Delay1ms(Spt->delay);   // wait
-        //Input = LaunchPad_Input();    // read sensors
-
-        Nokia5110_SetCursor(0, 2);         // five leading spaces, bottom row
-        Nokia5110_OutString("In:  ");
-        Nokia5110_OutUDec(Input);
-
-        Spt = Spt->next[Input];       // next depends on input and state
-        heart = heart^1;
-        LaunchPad_LED(heart);         // optional, debugging heartbeat
-
-        Nokia5110_SetCursor(0, 5);         // five leading spaces, bottom row
-        Nokia5110_OutString(Spt->name);
-    }
+      }
   }
 }
 
 void SetFSM(void){uint32_t heart=0;
-    P2->OUT= 0x02;
+    //P2->OUT= 0x02;
     Output = Spt->out;            // set output from FSM
-    Clock_Delay1ms(Spt->delay);   // wait
+    //Clock_Delay1ms(Spt->delay);   // wait
     //Input = LaunchPad_Input();    // read sensors
 
     Nokia5110_SetCursor(0, 2);         // five leading spaces, bottom row
@@ -383,10 +382,10 @@ void SetFSM(void){uint32_t heart=0;
 
     Nokia5110_SetCursor(0, 5);         // five leading spaces, bottom row
     Nokia5110_OutString(Spt->name);
-    P2->OUT&= ~0x02;
+    //P2->OUT&= ~0x02;
 }
 
-int main_(void){
+int main(void){
   Clock_Init48MHz();
   LaunchPad_Init();
   Nokia5110_Init();
@@ -401,7 +400,7 @@ int main_(void){
   PWM_Init34(15000, 5000, 5000); //10 ms period motor set up
   //TimerA1_Init(&BumpCheck,500);  // 1000 Hz bump check
 
-  TimerA1_Init(&test_module, 48000);
+  TimerA1_Init(&hand_tuning_module, 48000);
   TimerA2_Init(&Reflectance_Handler,480);  // Can't use timer A0, because it is being used for the motor PWM; reflectance checking
 
   EnableInterrupts();
