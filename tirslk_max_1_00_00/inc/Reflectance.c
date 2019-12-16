@@ -166,7 +166,7 @@ int32_t Reflectance_Position(uint8_t data){
         }
     }
 //    printf("Result: %d, total count:%d ", result, total_count);
-    return result/(total_count); //
+    return result/total_count;
 }
 
 char *Reflectance_String(uint8_t data){
@@ -179,8 +179,6 @@ char *Reflectance_String(uint8_t data){
             answer[7-n]= '0';
         }
     }
-
-    //printf(answer);
     return answer;
 }
 

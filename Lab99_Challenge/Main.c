@@ -149,7 +149,7 @@ void TimedPause(uint32_t time){
 //    Nokia5110_OutUDec(Input);
 //}
 
-void Reflectance_Handler(void){
+void Reflectance_Handler_old(void){uint8_t data= 0;
     Reflectance_Counter%= 100;
     if (Reflectance_Counter == 0){
         Reflectance_Start();
@@ -158,19 +158,38 @@ void Reflectance_Handler(void){
     }
     else if (Reflectance_Counter >= 99){
         //Position= Reflectance_Position(Reflectance_End());
-        Nokia5110_SetCursor(0, 4);         // five leading spaces, bottom row
-        Nokia5110_OutString(Reflectance_String(Reflectance_End()));
+
+        data= Reflectance_End();
+
+//        //For debugging purposes
+        Nokia5110_SetCursor(0, 3);         // five leading spaces, bottom row
+        Nokia5110_OutString(Reflectance_String(data));
+
+        Nokia5110_SetCursor(0, 4);
+        Nokia5110_OutString("Pos: ");
+        Nokia5110_SetCursor(7, 4);
+        Nokia5110_OutSDec(Reflectance_Position(data));
     }
-
-    //Input=
-
     Reflectance_Counter+= 1;
+}
 
-    //Output to LCD
+void Reflectance_Handler(void){uint8_t data= 0;
+    if (Reflectance_Counter == 0){
+        Reflectance_Start();
+        P7->DIR &= 0x00; //Set p7 to Input (0)
+        Reflectance_Counter= 1;
+    }else {
+        data= Reflectance_End();
+        Reflectance_Counter= 0;
 
-//    Nokia5110_OutString("Pos: ");
-//    Nokia5110_SetCursor(7, 4);
-//    Nokia5110_OutUDec(Position);
+        Nokia5110_SetCursor(0, 3);         // five leading spaces, bottom row
+        Nokia5110_OutString(Reflectance_String(data));
+
+        Nokia5110_SetCursor(0, 4);
+        Nokia5110_OutString("Pos: ");
+        Nokia5110_SetCursor(7, 4);
+        Nokia5110_OutSDec(Reflectance_Position(data));
+    }
 }
 
 void BumpCheck(void){
