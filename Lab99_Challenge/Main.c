@@ -110,11 +110,12 @@ State_t fsm[9]={ //Keeping each state string to 6 characters
   {"ERight", 'E', 0x05, 500, { Rec_Center, Left,   Right, Center }},   // E_Right, pink
   {"E Left", 'Q', 0x05, 500, { Rec_Center, Left,   Right, Center }},   // E_Left, pink
 
-  {"RecCen", 'C', 0x06, 500, { Stop, Left,   Right, Center }},   // Recover_Center, sky blue
+  {"RecCen", 'C', 0x06, 500, { Rec_Center, Left,   Right, Center }},   // Recover_Center, sky blue
   {"-Stop-", 's', 0x07, 500, { Stop, Stop,   Stop, Stop }},   // Stop, white
 };
 
 State_t *Spt;  // pointer to the current state
+State_t *pSpt;  // pointer to the previous state
 uint32_t Input;
 uint32_t Output;
 /*Run FSM continuously
@@ -134,29 +135,30 @@ void TimedPause(uint32_t time){
   //P2->OUT^=0x06;
 }
 
-uint16_t center_thresh= 48; //190
+uint16_t center_thresh= 96; //190
 //uint16_t *position_stream[3];
 uint16_t position_counter= 0;
 uint16_t position_total= 0;
 void Reflectance_to_input(int16_t position){
 
-    position_total+= position;
-    position_counter++;
-
-    if (position_counter==3){
-        if (position > -center_thresh && position < center_thresh){
-            Input= 3;
-        }else if (position <= -center_thresh && position >= -334){
-            Input= 2;
-        }else if (position >= center_thresh && position <= 334){
-            Input= 1;
-        }else{
-            Input= 0;
-        }
-        SetFSM();//Only change state once reflectance is set
-        position_counter= 0;
-        position_total= 0;
+//    position_total+= position;
+//    position_counter++;
+//
+//    if (position_counter==3){
+//
+//        position_counter= 0;
+//        position_total= 0;
+//    }
+    if (position > -center_thresh && position < center_thresh){
+        Input= 3;
+    }else if (position <= -center_thresh && position >= -334){
+        Input= 2;
+    }else if (position >= center_thresh && position <= 334){
+        Input= 1;
+    }else{
+        Input= 0;
     }
+    SetFSM();//Only change state once reflectance is set
 }
 
 uint32_t ref_latency= 450; //140; //160 for table, 295 for the groundfrom testing
@@ -283,9 +285,10 @@ void hand_tuning_module(void){uint8_t touch= 0;//TEST MODE
 }
 
 
-uint32_t speedMax= 2000;//Test speed //14998; max speed
+uint32_t speedMax= 3000;//Test speed //14998; max speed
 uint32_t speedMin= 0;
-uint32_t prev_input= 3;
+uint32_t failure_count= 0; //once failure count exceeds a value, then stop
+uint32_t failure_threshold= 1000;
 
 
 
@@ -336,30 +339,36 @@ int main(void){ uint32_t heart=0; //FMS check
         //test_module();
         if (stop_flag== 0){
             Output = Spt->out;            // set output from FSM
+            pSpt= Spt;
 
             switch(Spt->uid) {
                case 'c': //0 to 14,998
                   Motor_Forward(speedMax, speedMax);
+                  failure_count= 0;
                   break;
 
                case 'C':
-                  Motor_Backward(speedMax/2, speedMax/2);
-                  break;
+                   Motor_Backward(speedMax/4, speedMax/4);
+                   break;
 
                case 'r': //Right 1
-                  Motor_Forward(speedMax/2, speedMin);
+                  Motor_Forward(speedMax/4, speedMax);
+                  failure_count= 0;
                   break;
 
                case 'R': //Right 2
-                   Motor_Forward(speedMax/2, speedMin);
+                   Motor_Forward(speedMax/4, speedMax);
+                   failure_count= 0;
                   break;
 
                case 'l': //Left 1
-                  Motor_Forward(speedMin, speedMax/2);
+                  Motor_Forward(speedMax/4, speedMax);
+                  failure_count= 0;
                   break;
 
                case 'L': //Left 2
-                   Motor_Forward(speedMin, speedMax/2);
+                   Motor_Forward(speedMax/4, speedMax);
+                   failure_count= 0;
                   break;
 
                case 'Q': //E Left
@@ -370,11 +379,12 @@ int main(void){ uint32_t heart=0; //FMS check
                   Motor_Right(speedMax, speedMax);
                   break;
 
-               case 's':
-                   Motor_Stop();
-                   break;
-               default :
-                   Motor_Stop();
+//               case 's':
+//                   Motor_Stop();
+//                   break;
+//               default :
+//                   Motor_Stop();
+//                   break;
             }
 
             //LaunchPad_Output(Output);     // do output to two motors
