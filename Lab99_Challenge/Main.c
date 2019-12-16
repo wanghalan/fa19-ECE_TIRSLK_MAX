@@ -194,14 +194,17 @@ void Reflectance_Handler_extra(void){uint8_t data= 0;
 
 uint32_t total_bit_count= 0;
 void Reflectance_Handler(void){uint8_t data= 0;
-    test_module();
     Reflectance_Counter%= ref_latency;
+
+//    Nokia5110_SetCursor(0, 4);
+//    Nokia5110_OutString("Pos: ");
+
     if (Reflectance_Counter == 0){
         Reflectance_Start();
     }else if (Reflectance_Counter==1){
         P7->DIR &= 0x00; //Set p7 to Input (0)
     }
-    else if (Reflectance_Counter >= ref_latency){
+    else if (Reflectance_Counter >= ref_latency- 1){
         //Position= Reflectance_Position(Reflectance_End());
 
         data= Reflectance_End();
@@ -209,9 +212,6 @@ void Reflectance_Handler(void){uint8_t data= 0;
         Position= Reflectance_Position(data);
 
         Reflectance_to_input(Position);
-
-        Nokia5110_SetCursor(0, 4);
-        Nokia5110_OutString("Pos: ");
         Nokia5110_SetCursor(7, 4);
         Nokia5110_OutSDec(Position);
 
@@ -243,15 +243,15 @@ void test_module(void){uint8_t touch= 0;//TEST MODE
 
     touch= LaunchPad_Input();
     if (touch== 1){
-        ref_latency+= 5;
+        ref_latency+= 1;
     }else if (touch== 2){
-        ref_latency-= 5;
+        ref_latency-= 1;
     }else if (touch== 3){
         Spt= &fsm[0];
         stop_flag= 0;
     }
 
-    tuning_reflectance();
+    //tuning_reflectance();
 }
 
 uint32_t contender_score= 9999;
@@ -385,7 +385,9 @@ int main(void){ uint32_t heart=0;
   Reflectance_Init();
 
   PWM_Init34(15000, 5000, 5000); //10 ms period motor set up
-  TimerA1_Init(&BumpCheck,500);  // 1000 Hz bump check
+  //TimerA1_Init(&BumpCheck,500);  // 1000 Hz bump check
+
+  TimerA1_Init(&test_module, 48000);
   TimerA2_Init(&Reflectance_Handler,480);  // Can't use timer A0, because it is being used for the motor PWM; reflectance checking
 
   EnableInterrupts();
@@ -409,8 +411,8 @@ int main(void){ uint32_t heart=0;
     heart = heart^1;
     LaunchPad_LED(heart);         // optional, debugging heartbeat
 
-    Nokia5110_SetCursor(0, 5);         // five leading spaces, bottom row
-    Nokia5110_OutString(Spt->name);
+//    Nokia5110_SetCursor(0, 5);         // five leading spaces, bottom row
+//    Nokia5110_OutString(Spt->name);
 
   }
 }
